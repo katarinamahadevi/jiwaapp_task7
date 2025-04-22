@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:jiwaapp_task7/pages/menu_page.dart';
+import 'package:jiwaapp_task7/pages/notification_page.dart';
 import 'package:jiwaapp_task7/pages/order_page.dart';
 import 'package:jiwaapp_task7/pages/profile_page.dart';
 import 'package:jiwaapp_task7/widgets/home_page/greetingbar.dart';
 import 'package:jiwaapp_task7/widgets/home_page/home_banner.dart';
 import 'package:jiwaapp_task7/widgets/home_page/info_cards.dart';
 import 'package:jiwaapp_task7/widgets/home_page/order_options.dart';
-import 'package:jiwaapp_task7/widgets/home_page/order_section.dart';
+import 'package:jiwaapp_task7/widgets/home_page/outlet_section.dart';
 import 'package:jiwaapp_task7/widgets/home_page/promo_banners.dart';
 import 'package:jiwaapp_task7/widgets/home_page/quickactions.dart';
 import 'package:jiwaapp_task7/widgets/navbar.dart';
@@ -24,21 +25,21 @@ class _HomePageState extends State<HomePage> {
     if (index == _currentIndex) return;
 
     switch (index) {
-      case 0: 
+      case 0:
         break;
-      case 1: 
+      case 1:
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => const MenuPage()),
         );
         break;
-      case 2: 
+      case 2:
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => const OrderPage()),
         );
         break;
-      case 3: 
+      case 3:
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => const ProfilePage()),
@@ -79,7 +80,17 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
               ),
-              Greetingbar(imageHeight: imageHeight),
+              Greetingbar(
+                imageHeight: imageHeight,
+                onNotificationTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const NotificationPage(),
+                    ),
+                  );
+                },
+              ),
               Column(
                 children: [
                   SizedBox(height: imageHeight + 10),
@@ -97,7 +108,7 @@ class _HomePageState extends State<HomePage> {
                   const SizedBox(height: 20),
                   const Padding(
                     padding: EdgeInsets.symmetric(horizontal: 20),
-                    child: OrderSection(),
+                    child: OutletSection(),
                   ),
 
                   const SizedBox(height: 20),

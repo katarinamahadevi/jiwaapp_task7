@@ -2,8 +2,13 @@ import 'package:flutter/material.dart';
 
 class Greetingbar extends StatelessWidget {
   final double imageHeight;
+  final VoidCallback onNotificationTap;
 
-  const Greetingbar({Key? key, required this.imageHeight}) : super(key: key);
+  const Greetingbar({
+    Key? key, 
+    required this.imageHeight,
+    required this.onNotificationTap,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +43,10 @@ class Greetingbar extends StatelessWidget {
                   color: Colors.black87,
                 ),
               ),
-              _buildNotificationBadge(),
+              GestureDetector(
+                onTap: onNotificationTap,
+                child: _buildNotificationBadge(),
+              ),
             ],
           ),
         ),

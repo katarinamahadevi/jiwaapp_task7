@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jiwaapp_task7/pages/my_voucher_page.dart';
 import 'package:jiwaapp_task7/widgets/home_page/info_card.dart';
 
 class InfoCards extends StatelessWidget {
@@ -7,13 +8,19 @@ class InfoCards extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-      children: const [
+      children: [
         Expanded(
           child: InfoCard(
             title: "Voucher Kamu",
             subtitle: "19 Voucher",
             icon: Icons.card_giftcard,
             marginRight: 8,
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const MyVoucherPage()),
+              );
+            },
           ),
         ),
         Expanded(
@@ -22,6 +29,8 @@ class InfoCards extends StatelessWidget {
             subtitle: "Undang Temanmu",
             icon: Icons.share,
             marginLeft: 8,
+            onTap: () {
+            },
           ),
         ),
       ],

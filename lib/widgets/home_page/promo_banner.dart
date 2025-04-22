@@ -6,6 +6,8 @@ class PromoBanner extends StatelessWidget {
   final String imagePath;
   final Color fallbackColor;
   final String fallbackText;
+    final VoidCallback? onTap;
+
 
   const PromoBanner({
     Key? key,
@@ -14,6 +16,8 @@ class PromoBanner extends StatelessWidget {
     required this.imagePath,
     required this.fallbackColor,
     required this.fallbackText,
+        this.onTap,
+
   }) : super(key: key);
 
   @override
@@ -29,7 +33,12 @@ class PromoBanner extends StatelessWidget {
             color: Colors.black87,
           ),
         ),
-
+        const SizedBox(height: 8),
+        if (description.isNotEmpty)
+          Text(
+            description,
+            style: const TextStyle(fontSize: 14, color: Colors.black),
+          ),
         const SizedBox(height: 10),
         ClipRRect(
           borderRadius: BorderRadius.circular(16),

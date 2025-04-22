@@ -5,6 +5,9 @@ import 'package:jiwaapp_task7/pages/order_page.dart';
 import 'package:jiwaapp_task7/pages/profile_page.dart';
 import 'package:jiwaapp_task7/theme/color.dart';
 import 'package:jiwaapp_task7/widgets/navbar.dart';
+import 'package:jiwaapp_task7/widgets/searchbar.dart';
+
+//sliver
 
 class MenuPage extends StatefulWidget {
   const MenuPage({Key? key}) : super(key: key);
@@ -97,7 +100,7 @@ class _MenuPageState extends State<MenuPage> {
       imageUrl: 'assets/image/menu_latte.png',
     ),
     MenuItem(
-      title: 'Kopi Hazelnut',
+      title: 'Kopi Susu Hazelnut',
       price: 'Rp15.000',
       originalPrice: 'Rp25.000',
       imageUrl: 'assets/image/image_menu.png',
@@ -124,142 +127,170 @@ class _MenuPageState extends State<MenuPage> {
         selectedIndex: _currentIndex,
         onItemTapped: _onItemTapped,
       ),
-      body: Column(
+      body: Stack(
         children: [
           Container(
             width: double.infinity,
             height: 40,
             color: const Color(0xFFE56257),
           ),
-          Expanded(
-            child: SafeArea(
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16.0,
-                      vertical: 2.0,
-                    ),
-                    child: Container(
+          SafeArea(
+            child: NestedScrollView(
+              headerSliverBuilder: (context, innerBoxIsScrolled) {
+                return [
+                  SliverAppBar(
+                    backgroundColor: BaseColors.white,
+                    elevation: 0.0,
+                    floating: true,
+                    pinned: false, // Changed to false so it scrolls away
+                    automaticallyImplyLeading: false,
+                    title: Container(
+                      height: 50,
                       decoration: BoxDecoration(
-                        border: Border.all(color: Color(0xFFE5E5E5)),
+                        border: Border.all(color: const Color(0xFFE5E5E5)),
                         color: Colors.grey[100],
                         borderRadius: BorderRadius.circular(50),
+                        boxShadow:
+                            innerBoxIsScrolled
+                                ? [
+                                  BoxShadow(
+                                    color: Colors.grey.withOpacity(0.3),
+                                    spreadRadius: 1,
+                                    blurRadius: 3,
+                                    offset: Offset(0, 2),
+                                  ),
+                                ]
+                                : null,
                       ),
-                      child: Row(
+                      child: Stack(
                         children: [
-                          Expanded(
-                            child: GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  isTakeAwaySelected = true;
-                                });
-                              },
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: 12.0,
-                                ),
-                                decoration: BoxDecoration(
-                                  color:
-                                      isTakeAwaySelected
-                                          ? const Color(0xFFE56257)
-                                          : Colors.transparent,
-                                  borderRadius: BorderRadius.circular(50),
-                                ),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      'Take Away',
-                                      style: TextStyle(
-                                        color:
-                                            isTakeAwaySelected
-                                                ? Colors.white
-                                                : Colors.black,
-                                        fontWeight: FontWeight.normal,
-                                        fontSize: 16,
-                                      ),
-                                    ),
-                                    const SizedBox(width: 8),
-                                    Icon(
-                                      Icons.directions_walk,
-                                      color:
-                                          isTakeAwaySelected
-                                              ? Colors.white
-                                              : const Color(0xFF3B1D52),
-                                      size: 20,
-                                    ),
-                                  ],
-                                ),
+                          AnimatedAlign(
+                            duration: const Duration(milliseconds: 450),
+                            curve: Curves.easeInOut,
+                            alignment:
+                                isTakeAwaySelected
+                                    ? Alignment.centerLeft
+                                    : Alignment.centerRight,
+                            child: Container(
+                              width: MediaQuery.of(context).size.width / 2 - 32,
+                              margin: const EdgeInsets.all(4),
+                              decoration: BoxDecoration(
+                                color: const Color(0xFFE56257),
+                                borderRadius: BorderRadius.circular(50),
                               ),
                             ),
                           ),
-
-                          Expanded(
-                            child: GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  isTakeAwaySelected = false;
-                                });
-                              },
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: 12.0,
-                                ),
-                                decoration: BoxDecoration(
-                                  color:
-                                      !isTakeAwaySelected
-                                          ? const Color(0xFFE56257)
-                                          : Colors.transparent,
-                                  borderRadius: BorderRadius.circular(50),
-                                ),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      'Delivery',
-                                      style: TextStyle(
-                                        color:
-                                            !isTakeAwaySelected
-                                                ? Colors.white
-                                                : Colors.black,
-                                        fontWeight: FontWeight.normal,
-                                        fontSize: 16,
-                                      ),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      isTakeAwaySelected = true;
+                                    });
+                                  },
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          'Take Away',
+                                          style: TextStyle(
+                                            color:
+                                                isTakeAwaySelected
+                                                    ? Colors.white
+                                                    : Colors.black,
+                                            fontWeight: FontWeight.normal,
+                                            fontSize: 16,
+                                          ),
+                                        ),
+                                        const SizedBox(width: 8),
+                                        Icon(
+                                          Icons.directions_walk,
+                                          color:
+                                              isTakeAwaySelected
+                                                  ? Colors.white
+                                                  : const Color(0xFF3B1D52),
+                                          size: 20,
+                                        ),
+                                      ],
                                     ),
-                                    const SizedBox(width: 8),
-                                    Icon(
-                                      Icons.delivery_dining,
-                                      color:
-                                          !isTakeAwaySelected
-                                              ? Colors.white
-                                              : const Color(0xFF3B1D52),
-                                      size: 20,
-                                    ),
-                                  ],
+                                  ),
                                 ),
                               ),
-                            ),
+                              // Delivery Button
+                              Expanded(
+                                child: GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      isTakeAwaySelected = false;
+                                    });
+                                  },
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          'Delivery',
+                                          style: TextStyle(
+                                            color:
+                                                !isTakeAwaySelected
+                                                    ? Colors.white
+                                                    : Colors.black,
+                                            fontWeight: FontWeight.normal,
+                                            fontSize: 16,
+                                          ),
+                                        ),
+                                        const SizedBox(width: 8),
+                                        Icon(
+                                          Icons.delivery_dining,
+                                          color:
+                                              !isTakeAwaySelected
+                                                  ? Colors.white
+                                                  : const Color(0xFF3B1D52),
+                                          size: 20,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
                     ),
                   ),
-
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16.0,
-                      vertical: 8.0,
-                    ),
-                    child: Container(
+                  SliverAppBar(
+                    backgroundColor: BaseColors.white,
+                    elevation: 0.0,
+                    floating: true,
+                    pinned: false, // Changed to false so it scrolls away
+                    automaticallyImplyLeading: false,
+                    title: Container(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 16.0,
                         vertical: 12.0,
                       ),
                       decoration: BoxDecoration(
-                        border: Border.all(color: Color(0xFFE5E5E5)),
+                        border: Border.all(color: const Color(0xFFE5E5E5)),
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(20),
+                        boxShadow:
+                            innerBoxIsScrolled
+                                ? [
+                                  BoxShadow(
+                                    color: Colors.grey.withOpacity(0.3),
+                                    spreadRadius: 1,
+                                    blurRadius: 3,
+                                    offset: Offset(0, 2),
+                                  ),
+                                ]
+                                : null,
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -294,113 +325,89 @@ class _MenuPageState extends State<MenuPage> {
                       ),
                     ),
                   ),
-
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16.0,
-                      vertical: 8.0,
+                  SliverPersistentHeader(
+                    delegate: _SliverSearchBarDelegate(
+                      minHeight: 70.0,
+                      maxHeight: 70.0,
+                      child: Container(
+                        color: BaseColors.white,
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16.0,
+                          vertical: 8.0,
+                        ),
+                        child: CustomSearchBar(
+                          hintText: 'Search menu',
+                          icon: Icons.search,
+                          backgroundColor: Colors.white,
+                          borderColor: Colors.grey.shade200,
+                          iconColor: BaseColors.secondary,
+                          textColor: BaseColors.greyText,
+                          onTap: () {},
+                        ),
+                      ),
                     ),
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16.0,
-                        vertical: 12.0,
-                      ),
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Color(0xFFE5E5E5)),
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(50),
-                      ),
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.search,
-                            color: const Color(0xFF3B1D52),
-                            size: 20,
-                          ),
-                          const SizedBox(width: 12),
-                          Text(
-                            'Search menu',
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w400,
-                              color: Colors.grey[400],
-                            ),
-                          ),
-                        ],
-                      ),
+                    pinned: true, // Searchbar tetap terlihat saat scroll
+                  ),
+                ];
+              },
+              body: Row(
+                children: [
+                  Container(
+                    width: 100,
+                    color: Colors.grey[100],
+                    child: ListView.builder(
+                      padding: EdgeInsets.zero,
+                      itemCount: categories.length,
+                      itemBuilder: (context, index) {
+                        return CategoryListItem(
+                          category: categories[index],
+                          isSelected: index == selectedCategoryIndex,
+                          onTap: () {
+                            setState(() {
+                              selectedCategoryIndex = index;
+                              for (var i = 0; i < categories.length; i++) {
+                                categories[i].isSelected = i == index;
+                              }
+                            });
+                          },
+                        );
+                      },
                     ),
                   ),
-
                   Expanded(
-                    child: Row(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Container(
-                          width: 100,
-                          color: Colors.grey[100],
-                          child: ListView.builder(
-                            padding: EdgeInsets.zero,
-                            itemCount: categories.length,
-                            itemBuilder: (context, index) {
-                              return CategoryListItem(
-                                category: categories[index],
-                                isSelected: index == selectedCategoryIndex,
-                                onTap: () {
-                                  setState(() {
-                                    selectedCategoryIndex = index;
-                                    for (
-                                      var i = 0;
-                                      i < categories.length;
-                                      i++
-                                    ) {
-                                      categories[i].isSelected = i == index;
-                                    }
-                                  });
-                                },
-                              );
-                            },
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(
+                            16.0,
+                            16.0,
+                            16.0,
+                            0,
+                          ),
+                          child: Text(
+                            categories[selectedCategoryIndex].name,
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                            ),
                           ),
                         ),
-
                         Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.fromLTRB(
-                                  16.0,
-                                  16.0,
-                                  16.0,
-                                  0,
+                          child: GridView.builder(
+                            padding: const EdgeInsets.all(12),
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 2,
+                                  childAspectRatio: 0.75,
+                                  crossAxisSpacing: 12,
+                                  mainAxisSpacing: 15,
                                 ),
-                                child: Text(
-                                  categories[selectedCategoryIndex].name,
-                                  style: const TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                              ),
-
-                              Expanded(
-                                child: GridView.builder(
-                                  padding: const EdgeInsets.all(12),
-                                  gridDelegate:
-                                      const SliverGridDelegateWithFixedCrossAxisCount(
-                                        crossAxisCount: 2,
-                                        childAspectRatio: 0.75,
-                                        crossAxisSpacing: 12,
-                                        mainAxisSpacing: 15,
-                                      ),
-                                  itemCount: menuItems.length,
-                                  itemBuilder: (context, index) {
-                                    return MenuItemCard(
-                                      menuItem: menuItems[index],
-                                    );
-                                  },
-                                ),
-                              ),
-                            ],
+                            itemCount: menuItems.length,
+                            itemBuilder: (context, index) {
+                              return MenuItemCard(menuItem: menuItems[index]);
+                            },
                           ),
                         ),
                       ],
@@ -413,6 +420,40 @@ class _MenuPageState extends State<MenuPage> {
         ],
       ),
     );
+  }
+}
+
+class _SliverSearchBarDelegate extends SliverPersistentHeaderDelegate {
+  final double minHeight;
+  final double maxHeight;
+  final Widget child;
+
+  _SliverSearchBarDelegate({
+    required this.minHeight,
+    required this.maxHeight,
+    required this.child,
+  });
+
+  @override
+  double get minExtent => minHeight;
+
+  @override
+  double get maxExtent => maxHeight;
+
+  @override
+  Widget build(
+    BuildContext context,
+    double shrinkOffset,
+    bool overlapsContent,
+  ) {
+    return SizedBox.expand(child: child);
+  }
+
+  @override
+  bool shouldRebuild(_SliverSearchBarDelegate oldDelegate) {
+    return maxHeight != oldDelegate.maxHeight ||
+        minHeight != oldDelegate.minHeight ||
+        child != oldDelegate.child;
   }
 }
 

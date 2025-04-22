@@ -8,4 +8,8 @@ class BaseColors {
   static const Color purple = Color(0xFF310E38);
   static const Color black = Color(0xFF08090B);
   static const Color white = Colors.white;
+  static const Color greyText = Color(0xFFABAEB1);
+  static const Color greenText = Colors.green;
+  static const Color greenContainer = Color(0xFFEFF8EB);
+  static const Color blueContainer = Color(0xFFDFEAFC);
 }

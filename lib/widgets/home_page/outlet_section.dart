@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:jiwaapp_task7/pages/outlet_options_page.dart';
 
-class OrderSection extends StatelessWidget {
-  const OrderSection({Key? key}) : super(key: key);
+class OutletSection extends StatelessWidget {
+  const OutletSection({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +26,7 @@ class OrderSection extends StatelessWidget {
             border: Border.all(color: Colors.grey.shade200, width: 1),
           ),
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -33,7 +34,7 @@ class OrderSection extends StatelessWidget {
                   children: [
                     Container(
                       child: Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.all(5.0),
                         child: Icon(
                           Icons.store,
                           color: Colors.purple,
@@ -78,12 +79,23 @@ class OrderSection extends StatelessWidget {
                     ),
                   ],
                 ),
-                const Text(
-                  "Ubah",
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.normal,
-                    color: Colors.black,
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const OutletOptionsPage(),
+                      ),
+                    );
+                  },
+                  child: const Text(
+                    "Ubah",
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.normal,
+                      color: Colors.black,
+                      decoration: TextDecoration.underline,
+                    ),
                   ),
                 ),
               ],

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:jiwaapp_task7/pages/menu_page.dart';
 import 'package:jiwaapp_task7/pages/home_page.dart';
+import 'package:jiwaapp_task7/pages/order_detail_page.dart';
 import 'package:jiwaapp_task7/pages/profile_page.dart';
+import 'package:jiwaapp_task7/widgets/modal_bottom.dart';
 import 'package:jiwaapp_task7/widgets/navbar.dart';
 
 class OrderPage extends StatefulWidget {
@@ -14,7 +16,7 @@ class OrderPage extends StatefulWidget {
 class _OrderPageState extends State<OrderPage>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
-  int _currentIndex = 2; 
+  int _currentIndex = 2;
 
   @override
   void initState() {
@@ -29,7 +31,7 @@ class _OrderPageState extends State<OrderPage>
   }
 
   void _onItemTapped(int index) {
-    if (index == _currentIndex) return; 
+    if (index == _currentIndex) return;
 
     switch (index) {
       case 0:
@@ -38,19 +40,19 @@ class _OrderPageState extends State<OrderPage>
           MaterialPageRoute(builder: (context) => const HomePage()),
         );
         break;
-      case 1: 
+      case 1:
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => const MenuPage()),
         );
         break;
-      case 2: 
+      case 2:
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => const OrderPage()),
         );
         break;
-      case 3: 
+      case 3:
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => const ProfilePage()),
@@ -368,7 +370,7 @@ class OrderHistoryCard extends StatelessWidget {
                   width: MediaQuery.of(context).size.width * 0.30,
                   height: 35,
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () { showRepeatOrderBottomSheet(context);},
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Color(0xFFFE504F),
                       foregroundColor: Colors.white,
@@ -390,7 +392,14 @@ class OrderHistoryCard extends StatelessWidget {
                   width: MediaQuery.of(context).size.width * 0.30,
                   height: 35,
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const OrderDetailPage(),
+                        ),
+                      );
+                    },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Color(0xFFFE504F),
                       foregroundColor: Colors.white,
