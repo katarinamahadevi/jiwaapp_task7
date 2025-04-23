@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:jiwaapp_task7/pages/subscription_history_page.dart';
+import 'package:jiwaapp_task7/theme/color.dart';
 import 'package:jiwaapp_task7/widgets/appbar_secondary.dart';
 import 'package:jiwaapp_task7/widgets/tabbar_primary.dart';
 
@@ -33,7 +35,12 @@ class _SubscriptionPageState extends State<SubscriptionPage>
         title: 'Subscription',
         rightIcon: Icons.history,
         onRightIconPressed: () {
-          // Navigate to history page or show history details
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const SubscriptionHistoryPage(),
+            ),
+          );
         },
       ),
       body: Column(
@@ -74,7 +81,7 @@ class _SubscriptionPageState extends State<SubscriptionPage>
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            const SizedBox(height: 60), // Geser ke bawah dari atas
+            const SizedBox(height: 60), 
             Container(
               width: 120,
               height: 120,
@@ -122,7 +129,7 @@ class _SubscriptionPageState extends State<SubscriptionPage>
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            const SizedBox(height: 60), // Geser ke bawah dari atas
+            const SizedBox(height: 60), 
             Container(
               width: 120,
               height: 120,
@@ -161,7 +168,7 @@ class _SubscriptionPageState extends State<SubscriptionPage>
             ElevatedButton(
               onPressed: () {},
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFFFE504F),
+                backgroundColor: BaseColors.primary,
                 foregroundColor: Colors.white,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20),
@@ -172,9 +179,22 @@ class _SubscriptionPageState extends State<SubscriptionPage>
                 ),
                 elevation: 0,
               ),
-              child: const Text(
-                'Cari Subscription',
-                style: TextStyle(fontSize: 12, fontWeight: FontWeight.normal),
+              child: GestureDetector(
+                onTap: () {
+                  onTap:
+                  () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => SubscriptionPage(),
+                      ),
+                    );
+                  };
+                },
+                child: const Text(
+                  'Cari Subscription',
+                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.normal),
+                ),
               ),
             ),
           ],

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:jiwaapp_task7/pages/home_page.dart';
 import 'package:jiwaapp_task7/pages/menu_page.dart';
 import 'package:jiwaapp_task7/pages/order_page.dart';
+import 'package:jiwaapp_task7/theme/color.dart';
 import 'package:jiwaapp_task7/widgets/navbar.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -14,7 +15,7 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   int _currentIndex = 3;
   void _onItemTapped(int index) {
-    if (index == _currentIndex) return; 
+    if (index == _currentIndex) return;
 
     switch (index) {
       case 0:
@@ -23,19 +24,19 @@ class _ProfilePageState extends State<ProfilePage> {
           MaterialPageRoute(builder: (context) => const HomePage()),
         );
         break;
-      case 1: 
+      case 1:
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => const MenuPage()),
         );
         break;
-      case 2: 
+      case 2:
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => const OrderPage()),
         );
         break;
-      case 3: 
+      case 3:
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => const ProfilePage()),
@@ -215,37 +216,37 @@ class _ProfilePageState extends State<ProfilePage> {
                           _buildMenuItem(
                             icon: Icons.card_membership,
                             title: 'Subscription',
-                            iconColor: const Color(0xFFFF4343),
+                            iconColor: BaseColors.primary,
                           ),
                           _buildDivider(),
                           _buildMenuItem(
                             icon: Icons.receipt_long,
                             title: 'Riwayat Pesanan',
-                            iconColor: const Color(0xFFFF4343),
+                            iconColor: BaseColors.primary,
                           ),
                           _buildDivider(),
                           _buildMenuItem(
                             icon: Icons.location_on,
                             title: 'Alamat Tersimpan',
-                            iconColor: const Color(0xFFFF4343),
+                            iconColor: BaseColors.primary,
                           ),
                           _buildDivider(),
                           _buildMenuItem(
                             icon: Icons.confirmation_number,
                             title: 'Voucher',
-                            iconColor: const Color(0xFFFF4343),
+                            iconColor: BaseColors.primary,
                           ),
                           _buildDivider(),
                           _buildMenuItem(
                             icon: Icons.volunteer_activism,
                             title: 'Loyalty Membership',
-                            iconColor: const Color(0xFFFF4343),
+                            iconColor: BaseColors.primary,
                           ),
                           _buildDivider(),
                           _buildMenuItem(
                             icon: Icons.people,
                             title: 'Referral',
-                            iconColor: const Color(0xFFFF4343),
+                            iconColor: BaseColors.primary,
                           ),
                         ],
                       ),
@@ -263,19 +264,19 @@ class _ProfilePageState extends State<ProfilePage> {
                           _buildMenuItem(
                             icon: Icons.support_agent,
                             title: 'Jiwa Care',
-                            iconColor: const Color(0xFFFF4343),
+                            iconColor: BaseColors.primary,
                           ),
                           _buildDivider(),
                           _buildMenuItem(
                             icon: Icons.shield,
                             title: 'Kebijakan Privasi',
-                            iconColor: const Color(0xFFFF4343),
+                            iconColor: BaseColors.primary,
                           ),
                           _buildDivider(),
                           _buildMenuItem(
                             icon: Icons.power_settings_new,
                             title: 'Keluar',
-                            iconColor: const Color(0xFFFF4343),
+                            iconColor: BaseColors.primary,
                           ),
                         ],
                       ),

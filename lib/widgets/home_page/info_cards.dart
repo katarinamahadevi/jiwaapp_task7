@@ -13,7 +13,7 @@ class InfoCards extends StatelessWidget {
           child: InfoCard(
             title: "Voucher Kamu",
             subtitle: "19 Voucher",
-            icon: Icons.card_giftcard,
+            iconAsset: 'assets/image/image_voucher.png',
             marginRight: 8,
             onTap: () {
               Navigator.push(
@@ -27,7 +27,7 @@ class InfoCards extends StatelessWidget {
           child: InfoCard(
             title: "Referral",
             subtitle: "Undang Temanmu",
-            icon: Icons.share,
+            iconAsset: 'assets/image/image_referral.png',
             marginLeft: 8,
             onTap: () {
             },

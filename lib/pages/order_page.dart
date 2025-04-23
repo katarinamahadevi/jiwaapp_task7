@@ -3,7 +3,8 @@ import 'package:jiwaapp_task7/pages/menu_page.dart';
 import 'package:jiwaapp_task7/pages/home_page.dart';
 import 'package:jiwaapp_task7/pages/order_detail_page.dart';
 import 'package:jiwaapp_task7/pages/profile_page.dart';
-import 'package:jiwaapp_task7/widgets/modal_bottom.dart';
+import 'package:jiwaapp_task7/theme/color.dart';
+import 'package:jiwaapp_task7/widgets/modal_bottom_order.dart';
 import 'package:jiwaapp_task7/widgets/navbar.dart';
 
 class OrderPage extends StatefulWidget {
@@ -76,7 +77,6 @@ class _OrderPageState extends State<OrderPage>
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const SizedBox(height: 8),
-                      // Order Title
                       const Text(
                         'Order',
                         style: TextStyle(
@@ -92,12 +92,12 @@ class _OrderPageState extends State<OrderPage>
                           controller: _tabController,
                           indicator: UnderlineTabIndicator(
                             borderSide: BorderSide(
-                              color: Color(0xFFFD514F),
+                              color: BaseColors.primary,
                               width: 3.0,
                             ),
                             insets: EdgeInsets.symmetric(horizontal: 0),
                           ),
-                          labelColor: Color(0xFFFD514F),
+                          labelColor: BaseColors.primary,
                           unselectedLabelColor: Colors.black,
                           labelStyle: TextStyle(
                             fontSize: 18,
@@ -149,7 +149,7 @@ class HistoryOrderContent extends StatelessWidget {
           OrderHistoryCard(
             orderStatus: 'Order Completed',
             deliveryMethod: 'Delivery',
-            deliveryIcon: Icons.delivery_dining,
+            deliveryIconAsset: 'assets/image/image_take_away.png',
             price: 'Rp41.500',
             orderId: 'J+202512617405493000001',
             dateTime: '26 Feb 2025 | 12:55',
@@ -163,7 +163,7 @@ class HistoryOrderContent extends StatelessWidget {
           OrderHistoryCard(
             orderStatus: 'Order Completed',
             deliveryMethod: 'Take Away',
-            deliveryIcon: Icons.directions_walk,
+            deliveryIconAsset: 'assets/image/image_delivery.png',
             price: 'Rp65.000',
             orderId: 'J+202511417395185983261',
             dateTime: '14 Feb 2025 | 14:36',
@@ -182,7 +182,7 @@ class HistoryOrderContent extends StatelessWidget {
 class OrderHistoryCard extends StatelessWidget {
   final String orderStatus;
   final String deliveryMethod;
-  final IconData deliveryIcon;
+  final String deliveryIconAsset;
   final String price;
   final String orderId;
   final String dateTime;
@@ -194,7 +194,7 @@ class OrderHistoryCard extends StatelessWidget {
   const OrderHistoryCard({
     required this.orderStatus,
     required this.deliveryMethod,
-    required this.deliveryIcon,
+    required this.deliveryIconAsset,
     required this.price,
     required this.orderId,
     required this.dateTime,
@@ -207,6 +207,8 @@ class OrderHistoryCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: double.infinity,
+      constraints: BoxConstraints(maxWidth: 600),
       decoration: BoxDecoration(
         border: Border.all(color: Color(0xFFDDE1E4)),
         color: Colors.white,
@@ -222,10 +224,11 @@ class OrderHistoryCard extends StatelessWidget {
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
         children: [
           Container(
             width: double.infinity,
-            padding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+            padding: EdgeInsets.symmetric(vertical: 10, horizontal: 16),
             decoration: BoxDecoration(
               color: Color(0xFF46234C),
               borderRadius: BorderRadius.only(
@@ -238,24 +241,31 @@ class OrderHistoryCard extends StatelessWidget {
               style: TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
-                fontSize: 16,
+                fontSize: 18,
               ),
             ),
           ),
           Padding(
-            padding: EdgeInsets.all(8),
+            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Row(
                   children: [
                     Container(
-                      padding: EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        color: Color(0xFFFE504F),
+                      width: 30,
+                      height: 30,
+                      decoration: const BoxDecoration(
                         shape: BoxShape.circle,
+                        color: Color(0xFFE65952),
                       ),
-                      child: Icon(deliveryIcon, color: Colors.white, size: 20),
+                      child: Padding(
+                        padding: const EdgeInsets.all(5),
+                        child: Image.asset(
+                          deliveryIconAsset,
+                          fit: BoxFit.contain,
+                        ),
+                      ),
                     ),
                     SizedBox(width: 12),
                     Text(
@@ -274,105 +284,131 @@ class OrderHistoryCard extends StatelessWidget {
               ],
             ),
           ),
-          Divider(height: 1, thickness: 1, color: Colors.grey.withOpacity(0.2)),
+
+          Divider(),
+
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Row(
-                  children: [
-                    Text(
-                      'Order ID: ',
-                      style: TextStyle(color: Colors.black, fontSize: 12),
-                    ),
-                    Text(orderId, style: TextStyle(fontSize: 12)),
-                    SizedBox(width: 4),
-                    Icon(Icons.copy_outlined, size: 14),
-                  ],
+                Expanded(
+                  child: Row(
+                    children: [
+                      Text(
+                        'Order ID: ',
+                        style: TextStyle(color: Colors.black, fontSize: 12),
+                      ),
+                      Expanded(
+                        child: Text(
+                          orderId,
+                          style: TextStyle(fontSize: 12),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      SizedBox(width: 4),
+                      Icon(Icons.copy, size: 14),
+                    ],
+                  ),
                 ),
                 Text(dateTime, style: TextStyle(fontSize: 12)),
               ],
             ),
           ),
+
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 0),
+            padding: EdgeInsets.symmetric(horizontal: 16),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Row(
-                  children: [
-                    Container(
-                      padding: EdgeInsets.all(4),
-                      child: Icon(Icons.store, size: 18),
-                    ),
-                    SizedBox(width: 8),
-                    Text(
-                      restaurant,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
+                Expanded(
+                  child: Row(
+                    children: [
+                      Container(
+                        padding: EdgeInsets.all(4),
+                        child: Image.asset(
+                          'assets/image/image_outlet.png',
+                          width: 15,
+                          height: 15,
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                  child: Text(
-                    itemCount,
-                    style: TextStyle(color: Colors.grey, fontSize: 12),
+                      SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          restaurant,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
                   ),
+                ),
+                Text(
+                  itemCount,
+                  style: TextStyle(color: Colors.grey, fontSize: 12),
                 ),
               ],
             ),
           ),
+
           if (promo.isNotEmpty)
             Padding(
-              padding: EdgeInsets.only(left: 16, right: 16, top: 4, bottom: 8),
+              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
               child: Text(
                 promo,
                 style: TextStyle(color: Colors.grey, fontSize: 13),
+                overflow: TextOverflow.ellipsis,
               ),
             ),
+
           if (address.isNotEmpty)
-            Container(
-              margin: EdgeInsets.only(left: 16, right: 16, top: 8),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
                     width: 22,
                     height: 22,
                     decoration: BoxDecoration(
-                      color: Color(0xFFFE504F),
+                      color: BaseColors.primary,
                       shape: BoxShape.circle,
                     ),
-                    child: Icon(Icons.flag, color: Colors.white, size: 14),
+                    child: Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: Icon(Icons.flag, size: 14, color: Colors.white),
+                    ),
                   ),
                   SizedBox(width: 8),
                   Expanded(
                     child: Text(
                       address,
                       style: TextStyle(fontSize: 14, color: Colors.black87),
-                      maxLines: 1,
                       overflow: TextOverflow.ellipsis,
+                      maxLines: 2,
                     ),
                   ),
                 ],
               ),
             ),
-          Container(
-            margin: EdgeInsets.fromLTRB(16, 16, 16, 16),
+
+          Padding(
+            padding: EdgeInsets.all(16),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Container(
-                  width: MediaQuery.of(context).size.width * 0.30,
+                SizedBox(
+                  width: 110,
                   height: 35,
                   child: ElevatedButton(
-                    onPressed: () { showRepeatOrderBottomSheet(context);},
+                    onPressed: () {
+                      showRepeatOrderBottomSheet(context);
+                    },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xFFFE504F),
+                      backgroundColor: BaseColors.primary,
                       foregroundColor: Colors.white,
                       elevation: 0,
                       shape: RoundedRectangleBorder(
@@ -381,6 +417,7 @@ class OrderHistoryCard extends StatelessWidget {
                     ),
                     child: Text(
                       'Pesan Ulang',
+                      textAlign: TextAlign.center,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 12,
@@ -388,8 +425,8 @@ class OrderHistoryCard extends StatelessWidget {
                     ),
                   ),
                 ),
-                Container(
-                  width: MediaQuery.of(context).size.width * 0.30,
+                SizedBox(
+                  width: 124,
                   height: 35,
                   child: ElevatedButton(
                     onPressed: () {
@@ -401,7 +438,7 @@ class OrderHistoryCard extends StatelessWidget {
                       );
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xFFFE504F),
+                      backgroundColor: BaseColors.primary,
                       foregroundColor: Colors.white,
                       elevation: 0,
                       shape: RoundedRectangleBorder(
@@ -410,6 +447,7 @@ class OrderHistoryCard extends StatelessWidget {
                     ),
                     child: Text(
                       'Detail Pesanan',
+                      textAlign: TextAlign.center,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 12,
@@ -437,35 +475,16 @@ class EmptyOrderState extends StatelessWidget {
           Container(
             width: 120,
             height: 120,
-            decoration: BoxDecoration(
-              color: Color(0xFFFD514F),
+            decoration: const BoxDecoration(
               shape: BoxShape.circle,
+              color: Color(0xFFE65952),
             ),
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                Icon(
-                  Icons.shopping_bag_outlined,
-                  color: Colors.white,
-                  size: 60,
-                ),
-                Positioned(
-                  top: 30,
-                  right: 22,
-                  child: Container(
-                    padding: EdgeInsets.all(4),
-                    decoration: BoxDecoration(
-                      color: Color(0xFF4A148C),
-                      shape: BoxShape.circle,
-                    ),
-                    child: Icon(
-                      Icons.sentiment_dissatisfied,
-                      color: Colors.white,
-                      size: 22,
-                    ),
-                  ),
-                ),
-              ],
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: Image.asset(
+                'assets/image/image_order.png',
+                fit: BoxFit.contain,
+              ),
             ),
           ),
 
@@ -495,7 +514,7 @@ class EmptyOrderState extends StatelessWidget {
               );
             },
             style: ElevatedButton.styleFrom(
-              backgroundColor: Color(0xFFFD514F),
+              backgroundColor: BaseColors.primary,
               padding: EdgeInsets.symmetric(horizontal: 32, vertical: 12),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(25),

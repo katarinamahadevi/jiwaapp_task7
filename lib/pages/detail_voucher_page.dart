@@ -1,5 +1,7 @@
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
+import 'package:jiwaapp_task7/theme/color.dart';
+import 'package:jiwaapp_task7/widgets/appbar_primary.dart';
 
 class DetailVoucherPage extends StatelessWidget {
   const DetailVoucherPage({Key? key}) : super(key: key);
@@ -8,38 +10,37 @@ class DetailVoucherPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0.5,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-        title: const Text(
-          'Voucher Detail',
-          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-        ),
-      ),
+      appBar: AppbarPrimary(title: 'Voucher Detail'),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Container(
-              color: const Color(0xFFE6F2FA),
-              padding: const EdgeInsets.all(12),
-              child: Row(
-                children: const [
-                  Icon(Icons.info_outline, color: Color(0xFF0D6EFD)),
-                  SizedBox(width: 8),
-                  Expanded(
-                    child: Text(
-                      'Voucher hanya dapat digunakan pada halaman checkout',
-                      style: TextStyle(color: Color(0xFF0D6EFD), fontSize: 13),
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: BaseColors.blueContainer,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                padding: const EdgeInsets.all(12),
+                child: Row(
+                  children: const [
+                    Icon(Icons.info_outline, color: Color(0xFF036FB0)),
+                    SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        'Voucher hanya dapat digunakan pada halaman checkout',
+                        style: TextStyle(
+                          color: Color(0xFF036FB0),
+                          fontSize: 13,
+                        ),
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
+
             Container(
               margin: const EdgeInsets.fromLTRB(16, 16, 16, 8),
               decoration: BoxDecoration(
@@ -54,8 +55,6 @@ class DetailVoucherPage extends StatelessWidget {
                 ),
               ),
             ),
-
-            // Voucher details
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               child: Column(
@@ -79,12 +78,11 @@ class DetailVoucherPage extends StatelessWidget {
               ),
             ),
             SizedBox(height: 10),
-
             DottedLine(
               dashLength: 6.0,
               dashGapLength: 4.0,
               lineThickness: 1.0,
-              dashColor: Colors.grey.shade400,
+              dashColor: BaseColors.border,
             ),
 
             SizedBox(height: 10),
@@ -106,7 +104,7 @@ class DetailVoucherPage extends StatelessWidget {
               ),
             ),
 
-            const Divider(),
+            const Divider(color: BaseColors.border),
             ListTile(
               leading: Container(
                 width: 32,
@@ -132,7 +130,7 @@ class DetailVoucherPage extends StatelessWidget {
               trailing: const Icon(Icons.chevron_right),
               onTap: () {},
             ),
-            const Divider(),
+            const Divider(color: BaseColors.border),
             ListTile(
               leading: Container(
                 width: 32,
@@ -158,7 +156,7 @@ class DetailVoucherPage extends StatelessWidget {
               trailing: const Icon(Icons.chevron_right),
               onTap: () {},
             ),
-            const Divider(),
+            const Divider(color: BaseColors.border),
 
             ListTile(
               leading: Container(
@@ -185,7 +183,6 @@ class DetailVoucherPage extends StatelessWidget {
               trailing: const Icon(Icons.chevron_right),
               onTap: () {},
             ),
-            const Divider(),
 
             const SizedBox(height: 16),
             Padding(
@@ -193,7 +190,7 @@ class DetailVoucherPage extends StatelessWidget {
               child: ElevatedButton(
                 onPressed: () {},
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFFFE504F),
+                  backgroundColor: BaseColors.primary,
                   foregroundColor: Colors.white,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(50),

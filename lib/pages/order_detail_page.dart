@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:jiwaapp_task7/theme/color.dart';
 import 'package:jiwaapp_task7/widgets/appbar_primary.dart';
-import 'package:jiwaapp_task7/widgets/modal_bottom.dart';
+import 'package:jiwaapp_task7/widgets/modal_bottom_order.dart';
 
 class OrderDetailPage extends StatelessWidget {
   const OrderDetailPage({Key? key}) : super(key: key);
@@ -20,7 +20,6 @@ class OrderDetailPage extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Thank you section
                   Container(
                     margin: const EdgeInsets.all(16),
                     padding: const EdgeInsets.all(16),
@@ -92,6 +91,7 @@ class OrderDetailPage extends StatelessWidget {
                                   Text(
                                     'Tanggal: 26 Feb 2025 | 12:55',
                                     style: TextStyle(
+                                      fontWeight: FontWeight.w500,
                                       fontSize: 12,
                                       color: BaseColors.black,
                                     ),
@@ -114,14 +114,16 @@ class OrderDetailPage extends StatelessWidget {
                         Container(
                           width: 60,
                           height: 60,
-                          decoration: BoxDecoration(
-                            color: Color(0xFFE25C4B),
+                          decoration: const BoxDecoration(
                             shape: BoxShape.circle,
+                            color: Color(0xFFE65952),
                           ),
-                          child: Icon(
-                            Icons.shopping_bag_outlined,
-                            color: Colors.white,
-                            size: 30,
+                          child: Padding(
+                            padding: const EdgeInsets.all(12),
+                            child: Image.asset(
+                              'assets/image/image_order.png',
+                              fit: BoxFit.contain,
+                            ),
                           ),
                         ),
                       ],
@@ -155,7 +157,6 @@ class OrderDetailPage extends StatelessWidget {
                           ),
                           child: Column(
                             children: [
-                              // GoSend
                               Row(
                                 children: [
                                   Container(
@@ -234,7 +235,6 @@ class OrderDetailPage extends StatelessWidget {
                                 ),
                               ),
 
-                              // Driver
                               Row(
                                 children: [
                                   Container(
@@ -290,20 +290,21 @@ class OrderDetailPage extends StatelessWidget {
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            // Timeline dots and line
                             Column(
                               children: [
                                 Container(
                                   width: 36,
                                   height: 36,
-                                  decoration: BoxDecoration(
-                                    color: Color(0xFFE25C4B),
+                                  decoration: const BoxDecoration(
                                     shape: BoxShape.circle,
+                                    color: Color(0xFFE65952),
                                   ),
-                                  child: Icon(
-                                    Icons.store,
-                                    color: Colors.white,
-                                    size: 20,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(5),
+                                    child: Image.asset(
+                                      'assets/image/image_outlet_delivery.png',
+                                      fit: BoxFit.contain,
+                                    ),
                                   ),
                                 ),
                                 Container(
@@ -314,20 +315,21 @@ class OrderDetailPage extends StatelessWidget {
                                 Container(
                                   width: 36,
                                   height: 36,
-                                  decoration: BoxDecoration(
-                                    color: Color(0xFFE25C4B),
+                                  decoration: const BoxDecoration(
                                     shape: BoxShape.circle,
+                                    color: Color(0xFFE65952),
                                   ),
-                                  child: Icon(
-                                    Icons.location_on,
-                                    color: Colors.white,
-                                    size: 20,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(5),
+                                    child: Image.asset(
+                                      'assets/image/image_location.png',
+                                      fit: BoxFit.contain,
+                                    ),
                                   ),
                                 ),
                               ],
                             ),
                             const SizedBox(width: 16),
-                            // Location details
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -416,20 +418,15 @@ class OrderDetailPage extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(height: 16),
-
-                        // Promotion and items
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            // Coffee image
                             Image.asset(
                               'assets/image/image_menu.png',
-                              width: 100,
-                              height: 100,
+                              width: 80,
+                              height: 80,
                             ),
                             const SizedBox(width: 16),
-
-                            // Order details
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -506,8 +503,6 @@ class OrderDetailPage extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(height: 16),
-
-                        // Subtotal
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -529,8 +524,6 @@ class OrderDetailPage extends StatelessWidget {
                           ],
                         ),
                         const SizedBox(height: 12),
-
-                        // Takeaway Charge
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -552,8 +545,6 @@ class OrderDetailPage extends StatelessWidget {
                           ],
                         ),
                         const SizedBox(height: 12),
-
-                        // Delivery Fee
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -576,7 +567,6 @@ class OrderDetailPage extends StatelessWidget {
                         ),
                         const SizedBox(height: 12),
 
-                        // JIWA POINT
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -590,16 +580,11 @@ class OrderDetailPage extends StatelessWidget {
                             Row(
                               children: [
                                 Container(
-                                  width: 16,
-                                  height: 16,
-                                  decoration: BoxDecoration(
-                                    color: Colors.amber,
-                                    shape: BoxShape.circle,
-                                  ),
-                                  child: Icon(
-                                    Icons.currency_exchange,
-                                    color: Colors.white,
-                                    size: 10,
+                                  width: 20,
+                                  height: 20,
+
+                                  child: Image.asset(
+                                    'assets/image/image_jiwapoint_white.png',
                                   ),
                                 ),
                                 const SizedBox(width: 4),
@@ -620,7 +605,6 @@ class OrderDetailPage extends StatelessWidget {
                         Divider(color: Colors.grey[300]),
                         const SizedBox(height: 16),
 
-                        // Total Payment
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -644,7 +628,6 @@ class OrderDetailPage extends StatelessWidget {
                         ),
                         const SizedBox(height: 12),
 
-                        // Total Point
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -668,7 +651,6 @@ class OrderDetailPage extends StatelessWidget {
                         ),
                         const SizedBox(height: 12),
 
-                        // Total XP
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -732,7 +714,7 @@ class OrderDetailPage extends StatelessWidget {
                               'Rp31.772',
                               style: TextStyle(
                                 fontSize: 14,
-                                fontWeight: FontWeight.bold,
+                                fontWeight: FontWeight.normal,
                               ),
                             ),
                           ],
@@ -746,14 +728,9 @@ class OrderDetailPage extends StatelessWidget {
                             Container(
                               width: 30,
                               height: 30,
-                              decoration: BoxDecoration(
-                                color: Colors.amber,
-                                shape: BoxShape.circle,
-                              ),
-                              child: Icon(
-                                Icons.currency_exchange,
-                                color: Colors.white,
-                                size: 18,
+
+                              child: Image.asset(
+                                'assets/image/image_jiwapoint_white.png',
                               ),
                             ),
                             const SizedBox(width: 8),
@@ -767,10 +744,9 @@ class OrderDetailPage extends StatelessWidget {
                               '9.728',
                               style: TextStyle(
                                 fontSize: 14,
-                                fontWeight: FontWeight.bold,
+                                fontWeight: FontWeight.normal,
                               ),
                             ),
-                            // const SizedBox(height: 32),
                           ],
                         ),
                       ],
@@ -782,7 +758,6 @@ class OrderDetailPage extends StatelessWidget {
             ),
           ),
 
-          // Fixed buttons at the bottom
           Positioned(
             left: 0,
             right: 0,

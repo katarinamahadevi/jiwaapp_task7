@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:jiwaapp_task7/pages/order_detail_page.dart';
+import 'package:jiwaapp_task7/theme/color.dart';
 import 'package:jiwaapp_task7/widgets/appbar_primary.dart';
 import 'package:jiwaapp_task7/widgets/appbar_secondary.dart';
 import 'package:jiwaapp_task7/widgets/tabbar_primary.dart';
@@ -82,8 +84,8 @@ class _NotificationPageState extends State<NotificationPage>
       backgroundColor: Colors.white,
       appBar: AppbarSecondary(
         title: 'Notifikasi',
+        iconColor: BaseColors.primary,
         rightIcon: Icons.checklist,
-        iconColor: Color(0xFFFD514F),
         onRightIconPressed: () {
           showTopNotification(context);
         },
@@ -115,6 +117,8 @@ class _NotificationPageState extends State<NotificationPage>
                       heading: 'Mendapat XP dari Transaksi',
                       description: 'Anda mendapatkan 16 XP dari transaksi anda',
                     ),
+                    SizedBox(height: 12),
+
                     NotificationItem(
                       title: 'Transaction',
                       dateTime: '26 Feb 2025 | 13:18',
@@ -122,6 +126,8 @@ class _NotificationPageState extends State<NotificationPage>
                       heading: 'Mendapat XP dari Transaksi',
                       description: 'Anda mendapatkan 16 XP dari transaksi anda',
                     ),
+                    SizedBox(height: 12),
+
                     NotificationItem(
                       title: 'Transaction',
                       dateTime: '26 Feb 2025 | 13:18',
@@ -129,6 +135,7 @@ class _NotificationPageState extends State<NotificationPage>
                       heading: 'Mendapat XP dari Transaksi',
                       description: 'Anda mendapatkan 16 XP dari transaksi anda',
                     ),
+                    SizedBox(height: 12),
                     NotificationItem(
                       title: 'Transaction',
                       dateTime: '26 Feb 2025 | 13:18',
@@ -137,7 +144,7 @@ class _NotificationPageState extends State<NotificationPage>
                       description: 'Anda mendapatkan 16 XP dari transaksi anda',
                     ),
                   ],
-                ), // Promo Tab
+                ), 
                 const PromoEmptyState(),
               ],
             ),
@@ -201,142 +208,107 @@ class NotificationItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(8),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 2,
-            offset: const Offset(0, 1),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Header with transaction title and date in green container
-          Container(
-            width: double.infinity,
-            decoration: const BoxDecoration(
-              color: Color(0xFFEDF7EC), // Light green background
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(8),
-                topRight: Radius.circular(8),
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => OrderDetailPage()),
+        );
+      },
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(8),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.05),
+              blurRadius: 2,
+              offset: const Offset(0, 1),
+            ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              width: double.infinity,
+              decoration: const BoxDecoration(
+                color: Color(0xFFEDF7EC), 
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(8),
+                  topRight: Radius.circular(8),
+                ),
+              ),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              child: Row(
+                children: [
+                  const CircleAvatar(
+                    radius: 4,
+                    backgroundColor: Colors.red, 
+                  ),
+                  const SizedBox(width: 10),
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      color: Colors.green,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  const Spacer(),
+                  Text(
+                    dateTime,
+                    style: const TextStyle(
+                      color: Colors.green,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
               ),
             ),
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            child: Row(
-              children: [
-                const CircleAvatar(
-                  radius: 4,
-                  backgroundColor: Colors.red, // Red dot as in the image
-                ),
-                const SizedBox(width: 10),
-                Text(
-                  title,
-                  style: const TextStyle(
-                    color: Colors.green,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    orderId,
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w400,
+                    ),
                   ),
-                ),
-                const Spacer(),
-                Text(
-                  dateTime,
-                  style: const TextStyle(
-                    color: Colors.green,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
+
+                  const SizedBox(height: 8),
+
+                  Text(
+                    heading,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 12,
+                      color: Colors.black87,
+                    ),
                   ),
-                ),
-              ],
+
+                  const SizedBox(height: 4),
+
+                  Text(
+                    description,
+                    style: const TextStyle(
+                      color: Color(0xFFA0A0A0),
+                      fontSize: 12,
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-
-          // White container for the content
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Order ID
-                Text(
-                  orderId,
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
-
-                const SizedBox(height: 8),
-
-                // Notification heading
-                Text(
-                  heading,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 12,
-                    color: Colors.black87,
-                  ),
-                ),
-
-                const SizedBox(height: 4),
-
-                // Notification description
-                Text(
-                  description,
-                  style: const TextStyle(
-                    color: Color(0xFFA0A0A0),
-                    fontSize: 12,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
-}
-
-// Example of adding navigation to the Greetingbar widget
-
-Widget _buildNotificationBadge() {
-  return Stack(
-    children: [
-      Container(
-        width: 32,
-        height: 32,
-        decoration: const BoxDecoration(
-          color: Color(0xFFFD514F),
-          shape: BoxShape.circle,
-        ),
-        child: const Icon(Icons.notifications, color: Colors.white, size: 16),
-      ),
-      Positioned(
-        right: 0,
-        top: 0,
-        child: Container(
-          padding: const EdgeInsets.all(2),
-          decoration: const BoxDecoration(
-            color: Colors.red,
-            shape: BoxShape.circle,
-          ),
-          child: const Text(
-            "46",
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 10,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-      ),
-    ],
-  );
 }

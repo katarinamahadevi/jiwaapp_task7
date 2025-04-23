@@ -13,13 +13,11 @@ class OutletDetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Get outlet data from parameters
     final name = outletData['name'] as String;
     final code = outletData['code'] as String;
     final address = outletData['address'] as String;
     final logos = outletData['logos'] as List<String>;
 
-    // Operating hours data
     final operatingHours = [
       {'day': 'Minggu', 'hours': '07:00 WIB - 22:00 WIB'},
       {'day': 'Senin', 'hours': '07:00 WIB - 22:00 WIB'},
@@ -39,13 +37,12 @@ class OutletDetailPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              margin: const EdgeInsets.all(16), // jarak dari container lain
+              margin: const EdgeInsets.all(16), 
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(16),
-                //
               ),
               clipBehavior:
-                  Clip.antiAlias, // supaya borderRadius bekerja di child
+                  Clip.antiAlias, 
               child: Image.asset(
                 'assets/image/googlemaps_barata.png',
                 height: 250,
@@ -61,7 +58,6 @@ class OutletDetailPage extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  // Outlet Name
                   Text(
                     name,
                     style: TextStyle(
@@ -72,7 +68,6 @@ class OutletDetailPage extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
 
-                  // Outlet Address
                   Text(
                     '$code - $address',
                     style: TextStyle(fontSize: 14, color: Colors.grey[600]),
@@ -81,24 +76,27 @@ class OutletDetailPage extends StatelessWidget {
 
                   const SizedBox(height: 16),
 
-                  // Service Options
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      _buildServiceOption(Icons.directions_walk, 'Take Away'),
+                      _buildServiceOption(
+                        'assets/image/image_take_away.png',
+                        'Take Away',
+                      ),
                       const SizedBox(width: 16),
-                      _buildServiceOption(Icons.delivery_dining, 'Delivery'),
+                      _buildServiceOption(
+                        'assets/image/image_delivery.png',
+                        'Delivery',
+                      ),
                     ],
                   ),
 
                   const SizedBox(height: 20),
 
-                  // Divider
                   DottedLine(dashColor: BaseColors.border),
 
                   const SizedBox(height: 16),
 
-                  // Brand Logos
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children:
@@ -116,61 +114,14 @@ class OutletDetailPage extends StatelessWidget {
 
                   const SizedBox(height: 16),
 
-                  // Divider
                   DottedLine(dashColor: BaseColors.border),
                   const SizedBox(height: 16),
 
-                  // View on Map Button
                   SizedBox(
                     width: 130,
                     child: ElevatedButton(
                       onPressed: () async {
-                        bool serviceEnabled;
-                        LocationPermission permission;
-
-                        // Cek apakah layanan lokasi aktif
-                        serviceEnabled =
-                            await Geolocator.isLocationServiceEnabled();
-                        if (!serviceEnabled) {
-                          return Future.error(
-                            'Location services are disabled.',
-                          );
-                        }
-
-                        // Cek permission
-                        permission = await Geolocator.checkPermission();
-                        if (permission == LocationPermission.denied) {
-                          permission = await Geolocator.requestPermission();
-                          if (permission == LocationPermission.denied) {
-                            return Future.error(
-                              'Location permissions are denied',
-                            );
-                          }
-                        }
-
-                        if (permission == LocationPermission.deniedForever) {
-                          return Future.error(
-                            'Location permissions are permanently denied.',
-                          );
-                        }
-
-                        // Ambil posisi sekarang
-                        Position position = await Geolocator.getCurrentPosition(
-                          desiredAccuracy: LocationAccuracy.high,
-                        );
-
-                        // Buat URL Google Maps
-                        final url =
-                            'https://www.google.com/maps/search/?api=1&query=${position.latitude},${position.longitude}';
-
-                        if (await canLaunchUrl(Uri.parse(url))) {
-                          await launchUrl(
-                            Uri.parse(url),
-                            mode: LaunchMode.externalApplication,
-                          );
-                        } else {
-                          throw 'Could not launch $url';
-                        }
+                        
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: BaseColors.primary,
@@ -210,7 +161,6 @@ class OutletDetailPage extends StatelessWidget {
 
                   const SizedBox(height: 12),
 
-                  // Pickup/Delivery Title
                   Align(
                     alignment: Alignment.centerRight,
                     child: Text(
@@ -225,7 +175,6 @@ class OutletDetailPage extends StatelessWidget {
 
                   const SizedBox(height: 12),
 
-                  // Operating Hours Table
                   for (var item in operatingHours)
                     Padding(
                       padding: const EdgeInsets.only(bottom: 16.0),
@@ -251,7 +200,6 @@ class OutletDetailPage extends StatelessWidget {
                       ),
                     ),
 
-                  // Add some bottom padding
                   SizedBox(height: 24),
                 ],
               ),
@@ -262,17 +210,14 @@ class OutletDetailPage extends StatelessWidget {
     );
   }
 
-  Widget _buildServiceOption(IconData icon, String label) {
+  Widget _buildServiceOption(String imageAsset, String label) {
     return Row(
       children: [
         Container(
-          width: 36,
-          height: 36,
-          decoration: BoxDecoration(
-            color: Color(0xFFF05545),
-            shape: BoxShape.circle,
+          child: CircleAvatar(
+            backgroundColor: BaseColors.primary,
+            child: Image.asset(imageAsset, width: 25, height: 25),
           ),
-          child: Icon(icon, color: Colors.white, size: 20),
         ),
         const SizedBox(width: 8),
         Text(label, style: TextStyle(fontSize: 16, color: Colors.black)),

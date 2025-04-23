@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:carousel_slider/carousel_slider.dart';
 
 class HomeBanner extends StatefulWidget {
   final double height;
@@ -12,21 +12,17 @@ class HomeBanner extends StatefulWidget {
 
 class _HomeBannerState extends State<HomeBanner> {
   int _currentPage = 0;
-  final PageController _pageController = PageController();
+  final carouselController = CarouselController();
 
   final List<String> _bannerImages = [
     'assets/banner/banner1.jpg',
     'assets/banner/banner2.jpg',
+    'assets/banner/banner3.jpg',
+    'assets/banner/banner4.jpg',
   ];
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   void dispose() {
-    _pageController.dispose();
     super.dispose();
   }
 
@@ -42,17 +38,28 @@ class _HomeBannerState extends State<HomeBanner> {
         decoration: const BoxDecoration(color: Color(0xFFFFFFFF)),
         child: Stack(
           children: [
-            PageView.builder(
-              controller: _pageController,
-              onPageChanged: (int page) {
-                setState(() {
-                  _currentPage = page;
-                });
-              },
+            CarouselSlider.builder(
               itemCount: _bannerImages.length,
-              itemBuilder: (context, index) {
-                return Image.asset(_bannerImages[index], fit: BoxFit.cover);
+              itemBuilder: (context, index, realIndex) {
+                return Image.asset(
+                  _bannerImages[index],
+                  fit: BoxFit.cover,
+                  width: double.infinity,
+                );
               },
+              options: CarouselOptions(
+                height: widget.height,
+                viewportFraction: 1.0,
+                enlargeCenterPage: false,
+                autoPlay: true,
+                autoPlayInterval: const Duration(seconds: 3),
+                autoPlayAnimationDuration: const Duration(milliseconds: 800),
+                onPageChanged: (index, reason) {
+                  setState(() {
+                    _currentPage = index;
+                  });
+                },
+              ),
             ),
             Positioned(
               bottom: 20,
@@ -82,8 +89,8 @@ class _HomeBannerState extends State<HomeBanner> {
             shape: BoxShape.circle,
             color:
                 _currentPage == i
-                    ? const Color(0xFFFD514F) 
-                    : Colors.white.withOpacity(0.5), 
+                    ? const Color(0xFFFD514F)
+                    : Colors.white.withOpacity(0.5),
           ),
         ),
       );

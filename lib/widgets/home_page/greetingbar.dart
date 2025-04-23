@@ -5,7 +5,7 @@ class Greetingbar extends StatelessWidget {
   final VoidCallback onNotificationTap;
 
   const Greetingbar({
-    Key? key, 
+    Key? key,
     required this.imageHeight,
     required this.onNotificationTap,
   }) : super(key: key);
@@ -61,7 +61,7 @@ class Greetingbar extends StatelessWidget {
           width: 32,
           height: 32,
           decoration: const BoxDecoration(
-            color: Color(0xFFFD514F),
+            color: Color(0xFFE05D56),
             shape: BoxShape.circle,
           ),
           child: const Icon(Icons.notifications, color: Colors.white, size: 16),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jiwaapp_task7/theme/color.dart';
 
 class DetailMenuPage extends StatefulWidget {
   final String title;
@@ -119,7 +120,7 @@ class _DetailMenuPageState extends State<DetailMenuPage> {
                         Container(
                           padding: const EdgeInsets.all(10),
                           decoration: BoxDecoration(
-                            color: const Color(0xFFE56257),
+                            color: BaseColors.primary,
                             borderRadius: BorderRadius.circular(30),
                           ),
                           child: const Icon(
@@ -189,7 +190,6 @@ class _DetailMenuPageState extends State<DetailMenuPage> {
                   padding: const EdgeInsets.all(16.0),
                   child: Column(
                     children: [
-                      // Temperature
                       _buildOptionRow('Temp', ['Ice'], selectedTemp, (value) {
                         setState(() {
                           selectedTemp = value;
@@ -198,7 +198,6 @@ class _DetailMenuPageState extends State<DetailMenuPage> {
 
                       const SizedBox(height: 24),
 
-                      // Size
                       _buildOptionRow(
                         'Size',
                         ['Large', 'Regular'],
@@ -373,7 +372,7 @@ class _DetailMenuPageState extends State<DetailMenuPage> {
                                 boxShadow: [
                                   BoxShadow(
                                     color: const Color(
-                                      0xFFE56257,
+                                      0xFFFFFFF,
                                     ).withOpacity(0.3),
                                     spreadRadius: 1,
                                     blurRadius: 10,
@@ -384,7 +383,7 @@ class _DetailMenuPageState extends State<DetailMenuPage> {
                               child: ElevatedButton(
                                 onPressed: () {},
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor: const Color(0xFFFE504F),
+                                  backgroundColor: BaseColors.primary,
                                   foregroundColor: Colors.white,
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(50),
@@ -393,8 +392,7 @@ class _DetailMenuPageState extends State<DetailMenuPage> {
                                     vertical: 12,
                                     horizontal: 16,
                                   ),
-                                  elevation:
-                                      0, 
+                                  elevation: 0,
                                 ),
                                 child: const Text(
                                   'Tambah ke Keranjang',

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:jiwaapp_task7/pages/order_detail_page.dart';
+import 'package:jiwaapp_task7/theme/color.dart';
 
 class JiwaPointPage extends StatefulWidget {
   const JiwaPointPage({Key? key}) : super(key: key);
@@ -10,6 +12,7 @@ class JiwaPointPage extends StatefulWidget {
 class _JiwaPointPageState extends State<JiwaPointPage>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
+  bool isLeftSelected = true;
 
   @override
   void initState() {
@@ -26,9 +29,9 @@ class _JiwaPointPageState extends State<JiwaPointPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.red[400],
+      backgroundColor: BaseColors.primary,
       appBar: AppBar(
-        backgroundColor: Colors.red[400],
+        backgroundColor: BaseColors.primary,
         elevation: 0,
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.white),
@@ -53,17 +56,86 @@ class _JiwaPointPageState extends State<JiwaPointPage>
               ),
               child: Column(
                 children: [
-                  // TabBar
-                  TabBar(
-                    controller: _tabController,
-                    labelColor: Colors.red[400],
-                    unselectedLabelColor: Colors.grey,
-                    indicatorColor: Colors.black,
-                    tabs: [
-                      Tab(text: 'Point Didapat'),
-                      Tab(text: 'Point Terpakai'),
-                    ],
+                  Container(
+                    height: 40,
+                    margin: EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: Colors.grey[200],
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    child: Stack(
+                      children: [
+                        AnimatedAlign(
+                          alignment:
+                              isLeftSelected
+                                  ? Alignment.centerLeft
+                                  : Alignment.centerRight,
+                          duration: Duration(milliseconds: 300),
+                          curve: Curves.easeInOut,
+                          child: Container(
+                            width: MediaQuery.of(context).size.width / 2 - 24,
+                            decoration: BoxDecoration(
+                              color: BaseColors.primary,
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                          ),
+                        ),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    isLeftSelected = true;
+                                    _tabController.animateTo(
+                                      0,
+                                    ); 
+                                  });
+                                },
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    'Point Didapat',
+                                    style: TextStyle(
+                                      color:
+                                          isLeftSelected
+                                              ? Colors.white
+                                              : Colors.black,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              child: GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    isLeftSelected = false;
+                                    _tabController.animateTo(1);
+                                  });
+                                },
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    'Point Terpakai',
+                                    style: TextStyle(
+                                      color:
+                                          isLeftSelected
+                                              ? Colors.black
+                                              : Colors.white,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
+                  Divider(color: BaseColors.border, thickness: 3),
                   Expanded(
                     child: TabBarView(
                       controller: _tabController,
@@ -83,34 +155,59 @@ class _JiwaPointPageState extends State<JiwaPointPage>
   }
 
   Widget _buildTotalPointSection() {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+    return Container(
+      color: BaseColors.primary,
+      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 24),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Total Jiwa Point Saat Ini',
-            style: TextStyle(color: Colors.white, fontSize: 16),
+            'Total Jiwa Point Saat ini',
+            style: TextStyle(color: Colors.white, fontSize: 12),
           ),
-          SizedBox(height: 10),
-          Text(
-            '694',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 32,
-              fontWeight: FontWeight.bold,
-            ),
+          SizedBox(height: 8),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Image.asset(
+                'assets/image/image_point.png',
+                width: 35,
+                height: 35,
+              ),
+              SizedBox(width: 8),
+              Text(
+                '694',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 32,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
           ),
-          SizedBox(height: 10),
+          SizedBox(height: 24),
           Container(
-            padding: EdgeInsets.all(8),
+            width: double.infinity,
+            padding: EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.2),
-              borderRadius: BorderRadius.circular(8),
+              color: BaseColors.blueContainer,
+              borderRadius: BorderRadius.circular(12),
             ),
-            child: Text(
-              '694 Jiwa Point akan hangus pada 28 Februari 2026',
-              style: TextStyle(color: Colors.white, fontSize: 12),
-              textAlign: TextAlign.center,
+            child: Row(
+              children: [
+                Icon(Icons.info_outline, color: Color(0xFF0058AA)),
+                SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    '694 Jiwa Point akan hangus pada 28 Februari 2026',
+                    style: TextStyle(
+                      color: Colors.black87,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         ],
@@ -119,30 +216,75 @@ class _JiwaPointPageState extends State<JiwaPointPage>
   }
 
   Widget _buildPointHistoryList({required bool isEarned}) {
-    // Sample point history data
     final earnedPointHistory = [
       {
         'date': '26 Feb 2025 | 15:18',
-        'description':
-            'Bonus Jiwa Point dari Transaksi # J +20251261740549300001',
+        'description': 'Bonus Jiwa Point dari Transaksi #',
+        'transactionId': 'J+20251261740549300001',
         'points': '+694 Jiwa Point',
-        'validUntil': 'berlaku hingga 28 Feb 2026',
+        'validUntil': '28 Feb 2026',
       },
       {
         'date': '15 Feb 2025 | 00:00',
-        'description':
-            'Bonus Jiwa Point dari Transaksi # J +20251141735185983Z6',
+        'description': 'Bonus Jiwa Point dari Transaksi #',
+        'transactionId': 'J+20251141735185983Z6',
         'points': '+2.955 Jiwa Point',
-        'validUntil': 'berlaku hingga 28 Feb 2026',
+        'validUntil': '28 Feb 2026',
+      },
+      {
+        'date': '26 Feb 2025 | 15:18',
+        'description': 'Bonus Jiwa Point dari Transaksi #',
+        'transactionId': 'J+20251261740549300001',
+        'points': '+694 Jiwa Point',
+        'validUntil': '28 Feb 2026',
+      },
+      {
+        'date': '26 Feb 2025 | 15:18',
+        'description': 'Bonus Jiwa Point dari Transaksi #',
+        'transactionId': 'J+20251261740549300001',
+        'points': '+694 Jiwa Point',
+        'validUntil': '28 Feb 2026',
+      },
+      {
+        'date': '26 Feb 2025 | 15:18',
+        'description': 'Bonus Jiwa Point dari Transaksi #',
+        'transactionId': 'J+20251261740549300001',
+        'points': '+694 Jiwa Point',
+        'validUntil': '28 Feb 2026',
+      },
+      {
+        'date': '26 Feb 2025 | 15:18',
+        'description': 'Bonus Jiwa Point dari Transaksi #',
+        'transactionId': 'J+20251261740549300001',
+        'points': '+694 Jiwa Point',
+        'validUntil': '28 Feb 2026',
       },
     ];
 
     final usedPointHistory = [
       {
         'date': '10 Jan 2025 | 14:30',
-        'description': 'Penggunaan Jiwa Point untuk Transaksi',
+        'description': 'Penggunaan Transaksi #J+20251261740549300001',
         'points': '-500 Jiwa Point',
-        'validUntil': 'Telah digunakan',
+        'validUntil': '',
+      },
+      {
+        'date': '10 Jan 2025 | 14:30',
+        'description': 'Penggunaan Transaksi #J+20251261740549300001',
+        'points': '-500 Jiwa Point',
+        'validUntil': '',
+      },
+      {
+        'date': '10 Jan 2025 | 14:30',
+        'description': 'Penggunaan Transaksi #J+20251261740549300001',
+        'points': '-500 Jiwa Point',
+        'validUntil': '',
+      },
+      {
+        'date': '10 Jan 2025 | 14:30',
+        'description': 'Penggunaan Transaksi #J+20251261740549300001',
+        'points': '-500 Jiwa Point',
+        'validUntil': '',
       },
     ];
 
@@ -154,34 +296,65 @@ class _JiwaPointPageState extends State<JiwaPointPage>
       separatorBuilder: (context, index) => Divider(color: Colors.grey[300]),
       itemBuilder: (context, index) {
         final item = pointHistory[index];
+
         return Padding(
-          padding: EdgeInsets.symmetric(vertical: 8),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                item['date']!,
-                style: TextStyle(color: Colors.grey[600], fontSize: 12),
-              ),
-              SizedBox(height: 4),
-              Text(
-                item['description']!,
-                style: TextStyle(fontWeight: FontWeight.w500),
-              ),
-              SizedBox(height: 4),
-              Text(
-                item['points']!,
-                style: TextStyle(
-                  color: isEarned ? Colors.green : Colors.red,
-                  fontWeight: FontWeight.bold,
+          padding: const EdgeInsets.symmetric(vertical: 8),
+          child: GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => OrderDetailPage()),
+              );
+            },
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      item['date']!,
+                      style: TextStyle(color: Colors.grey[600], fontSize: 12),
+                    ),
+                    Text(
+                      item['points']!,
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14,
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-              SizedBox(height: 4),
-              Text(
-                item['validUntil']!,
-                style: TextStyle(color: Colors.grey[600], fontSize: 12),
-              ),
-            ],
+                SizedBox(height: 6),
+                isEarned
+                    ? Text.rich(
+                      TextSpan(
+                        children: [
+                          TextSpan(
+                            text: item['description']! + ' ',
+                            style: TextStyle(fontWeight: FontWeight.w500),
+                          ),
+                          TextSpan(
+                            text: item['transactionId']!,
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                    )
+                    : Text(
+                      item['description']!,
+                      style: TextStyle(fontWeight: FontWeight.w500),
+                    ),
+                SizedBox(height: 4),
+                Text(
+                  isEarned
+                      ? 'berlaku hingga ${item['validUntil']}'
+                      : item['validUntil']!,
+                  style: TextStyle(color: Colors.black, fontSize: 12),
+                ),
+              ],
+            ),
           ),
         );
       },

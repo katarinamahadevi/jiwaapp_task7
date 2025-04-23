@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jiwaapp_task7/pages/detail_voucher_page.dart';
+import 'package:jiwaapp_task7/theme/color.dart';
 import 'package:jiwaapp_task7/widgets/appbar_primary.dart';
 
 class MyVoucherPage extends StatelessWidget {
@@ -42,8 +43,8 @@ class MyVoucherPage extends StatelessWidget {
                         child: const Text(
                           'Gunakan',
                           style: TextStyle(
-                            color: Colors.red,
-                            fontWeight: FontWeight.bold,
+                            color: BaseColors.primary,
+                            fontWeight: FontWeight.normal,
                           ),
                         ),
                       ),
@@ -112,7 +113,7 @@ class MyVoucherPage extends StatelessWidget {
                                 ElevatedButton(
                                   onPressed: () {},
                                   style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.red,
+                                    backgroundColor: BaseColors.primary,
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(20),
                                     ),
@@ -156,14 +157,20 @@ class MyVoucherPage extends StatelessWidget {
 
                             Row(
                               children: [
-                                _buildCategoryIcon(Icons.restaurant, 'ALL'),
-                                const SizedBox(width: 80),
                                 _buildCategoryIcon(
-                                  Icons.shopping_bag_outlined,
+                                  'assets/image/image_delivery_white.png',
                                   'ALL',
                                 ),
                                 const SizedBox(width: 80),
-                                _buildCategoryIcon(Icons.store, 'ALL'),
+                                _buildCategoryIcon(
+                                  'assets/image/image_wallet_white.png',
+                                  'ALL',
+                                ),
+                                const SizedBox(width: 80),
+                                _buildCategoryIcon(
+                                  'assets/image/image_outlet.png',
+                                  'ALL',
+                                ),
                               ],
                             ),
 
@@ -242,7 +249,7 @@ class MyVoucherPage extends StatelessWidget {
                                 ElevatedButton(
                                   onPressed: () {},
                                   style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.red,
+                                    backgroundColor: BaseColors.primary,
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(20),
                                     ),
@@ -286,14 +293,20 @@ class MyVoucherPage extends StatelessWidget {
 
                             Row(
                               children: [
-                                _buildCategoryIcon(Icons.restaurant, 'ALL'),
-                                const SizedBox(width: 80),
                                 _buildCategoryIcon(
-                                  Icons.shopping_bag_outlined,
+                                  'assets/image/image_delivery_white.png',
                                   'ALL',
                                 ),
                                 const SizedBox(width: 80),
-                                _buildCategoryIcon(Icons.store, 'ALL'),
+                                _buildCategoryIcon(
+                                  'assets/image/image_wallet_white.png',
+                                  'ALL',
+                                ),
+                                const SizedBox(width: 80),
+                                _buildCategoryIcon(
+                                  'assets/image/image_outlet.png',
+                                  'ALL',
+                                ),
                               ],
                             ),
 
@@ -320,10 +333,10 @@ class MyVoucherPage extends StatelessWidget {
     );
   }
 
-  Widget _buildCategoryIcon(IconData icon, String label) {
+  Widget _buildCategoryIcon(String imageAsset, String label) {
     return Row(
       children: [
-        Icon(icon, color: Colors.purple.shade800, size: 24),
+        Image.asset(imageAsset, width: 24, height: 24, fit: BoxFit.contain),
         const SizedBox(width: 4),
         Text(
           label,

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:jiwaapp_task7/pages/delivery_page.dart';
+import 'package:jiwaapp_task7/pages/menu_page.dart';
 import 'package:jiwaapp_task7/widgets/home_page/order_option.dart';
 
 class OrderOptions extends StatelessWidget {
@@ -8,19 +10,31 @@ class OrderOptions extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: const [
+      children: [
         Expanded(
           child: OrderOptionButton(
-            icon: Icons.directions_walk,
+            imageAsset: 'assets/image/image_take_away.png',
             label: "TAKE AWAY",
             marginRight: 8,
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => MenuPage()),
+              );
+            },
           ),
         ),
         Expanded(
           child: OrderOptionButton(
-            icon: Icons.delivery_dining,
+            imageAsset: 'assets/image/image_delivery.png',
             label: "DELIVERY",
             marginLeft: 8,
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const DeliveryPage()),
+              );
+            },
           ),
         ),
       ],

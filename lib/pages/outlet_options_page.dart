@@ -40,7 +40,7 @@ class OutletOptionsPage extends StatelessWidget {
             const SizedBox(height: 16),
             CustomSearchBar(
               hintText: 'Cari outlet yang kamu mau di sini',
-              icon: Icons.store,
+              icon: Icons.store_mall_directory_outlined,
               backgroundColor: Colors.white,
               borderColor: Colors.grey.shade200,
               iconColor: BaseColors.primary,
@@ -55,7 +55,7 @@ class OutletOptionsPage extends StatelessWidget {
                   child: Container(
                     height: 35,
                     decoration: BoxDecoration(
-                      color: Color(0xFFE25C4B),
+                      color: BaseColors.primary,
                       borderRadius: BorderRadius.circular(20),
                     ),
                     alignment: Alignment.center,
@@ -94,7 +94,6 @@ class OutletOptionsPage extends StatelessWidget {
 
             const SizedBox(height: 12),
 
-            // Filter Options - Second Row
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Row(
@@ -112,14 +111,12 @@ class OutletOptionsPage extends StatelessWidget {
 
             const SizedBox(height: 12),
 
-            // Brand Filter - Horizontal Scrollable
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Row(
                 children: [
                   _buildBrandChip("Semua Brand", true),
                   const SizedBox(width: 8),
-                  // Map all brand logos to image widgets
                   ...allBrandLogos.map(
                     (logo) => Padding(
                       padding: const EdgeInsets.only(right: 5),
@@ -132,7 +129,6 @@ class OutletOptionsPage extends StatelessWidget {
 
             const SizedBox(height: 20),
 
-            // Outlet Cards
             _buildOutletCard(
               context: context,
               name: 'KANNA HOMESTAY',
@@ -142,7 +138,7 @@ class OutletOptionsPage extends StatelessWidget {
               distance: 0.55,
               address:
                   'Jl. Kelampis Semolo Timur 41 Rt 001 Rw 009\nKelurahan Semolowaru Kecamatan Sukolilo Kode Pos 60119\nSurabaya',
-              logos: kannaLogos, // Custom logos for this outlet
+              logos: kannaLogos, 
               bgColor: Colors.white,
               kmColor: BaseColors.greenContainer,
               outletData: {
@@ -164,7 +160,7 @@ class OutletOptionsPage extends StatelessWidget {
               time: '07:00 - 22:00 WIB',
               distance: 1.92,
               address: 'Jl. Barata Jaya 19 No 52B Surabaya',
-              logos: barataLogos, // Custom logos for this outlet
+              logos: barataLogos, 
               bgColor: Colors.white,
               kmColor: BaseColors.blueContainer,
               outletData: {
@@ -185,10 +181,10 @@ class OutletOptionsPage extends StatelessWidget {
       height: 35,
       padding: const EdgeInsets.symmetric(horizontal: 16),
       decoration: BoxDecoration(
-        color: isSelected ? Color(0xFFE25C4B) : Colors.white,
+        color: isSelected ? BaseColors.primary : Colors.white,
         borderRadius: BorderRadius.circular(18),
         border: Border.all(
-          color: isSelected ? Color(0xFFE25C4B) : Colors.grey.shade300,
+          color: isSelected ? BaseColors.primary : Colors.grey.shade300,
         ),
       ),
       alignment: Alignment.center,
@@ -336,30 +332,24 @@ class OutletOptionsPage extends StatelessWidget {
           Row(
             children: [
               Container(
-                width: 32,
-                height: 32,
-                decoration: BoxDecoration(
-                  color: Color(0xFFF05545),
-                  shape: BoxShape.circle,
-                ),
-                child: Icon(
-                  Icons.directions_walk,
-                  color: Colors.white,
-                  size: 18,
+                child: CircleAvatar(
+                  backgroundColor: BaseColors.primary,
+                  child: Image.asset(
+                    'assets/image/image_take_away.png',
+                    width: 20,
+                    height: 20,
+                  ),
                 ),
               ),
               const SizedBox(width: 8),
               Container(
-                width: 32,
-                height: 32,
-                decoration: BoxDecoration(
-                  color: Color(0xFFF05545),
-                  shape: BoxShape.circle,
-                ),
-                child: Icon(
-                  Icons.delivery_dining,
-                  color: Colors.white,
-                  size: 18,
+                child: CircleAvatar(
+                  backgroundColor: BaseColors.primary,
+                  child: Image.asset(
+                    'assets/image/image_delivery.png',
+                    width: 20,
+                    height: 20,
+                  ),
                 ),
               ),
               const SizedBox(width: 12),
@@ -394,7 +384,6 @@ class OutletOptionsPage extends StatelessWidget {
                   ),
                 ),
                 onPressed: () {
-                  // Navigate to the OutletDetailPage with outlet data
                   Navigator.push(
                     context,
                     MaterialPageRoute(

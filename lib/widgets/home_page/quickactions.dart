@@ -13,12 +13,12 @@ class QuickActions extends StatelessWidget {
       mainAxisSize: MainAxisSize.max,
       children: [
         const ActionButton(
-          icon: Icons.back_hand_outlined,
+          iconAsset: 'assets/image/image_teman_sejiwa.png',
           title: "Teman Sejiwa",
           subtitle: "365/400 Exp",
         ),
         ActionButton(
-          icon: Icons.monetization_on_outlined,
+          iconAsset: 'assets/image/image_jiwapoint.png',
           title: "Jiwa Point",
           subtitle: "694 Points",
           onTap: () {
@@ -29,7 +29,7 @@ class QuickActions extends StatelessWidget {
           },
         ),
         ActionButton(
-          icon: Icons.calendar_month_outlined,
+          iconAsset: 'assets/image/image_subscription.png',
           title: "Subscription",
           subtitle: "0 Subscription",
           onTap: () {

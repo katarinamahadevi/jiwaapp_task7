@@ -2,12 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:jiwaapp_task7/pages/detail_menu_page.dart';
 import 'package:jiwaapp_task7/pages/home_page.dart';
 import 'package:jiwaapp_task7/pages/order_page.dart';
+import 'package:jiwaapp_task7/pages/outlet_options_page.dart';
 import 'package:jiwaapp_task7/pages/profile_page.dart';
 import 'package:jiwaapp_task7/theme/color.dart';
 import 'package:jiwaapp_task7/widgets/navbar.dart';
 import 'package:jiwaapp_task7/widgets/searchbar.dart';
-
-//sliver
 
 class MenuPage extends StatefulWidget {
   const MenuPage({Key? key}) : super(key: key);
@@ -27,19 +26,19 @@ class _MenuPageState extends State<MenuPage> {
           MaterialPageRoute(builder: (context) => const HomePage()),
         );
         break;
-      case 1: // Menu
+      case 1: 
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => const MenuPage()),
         );
         break;
-      case 2: // Pesanan
+      case 2: 
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => const OrderPage()),
         );
         break;
-      case 3: // Profile
+      case 3: 
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => const ProfilePage()),
@@ -132,7 +131,7 @@ class _MenuPageState extends State<MenuPage> {
           Container(
             width: double.infinity,
             height: 40,
-            color: const Color(0xFFE56257),
+            color: BaseColors.primary,
           ),
           SafeArea(
             child: NestedScrollView(
@@ -142,7 +141,7 @@ class _MenuPageState extends State<MenuPage> {
                     backgroundColor: BaseColors.white,
                     elevation: 0.0,
                     floating: true,
-                    pinned: false, // Changed to false so it scrolls away
+                    pinned: false, 
                     automaticallyImplyLeading: false,
                     title: Container(
                       height: 50,
@@ -175,7 +174,7 @@ class _MenuPageState extends State<MenuPage> {
                               width: MediaQuery.of(context).size.width / 2 - 32,
                               margin: const EdgeInsets.all(4),
                               decoration: BoxDecoration(
-                                color: const Color(0xFFE56257),
+                                color: BaseColors.primary,
                                 borderRadius: BorderRadius.circular(50),
                               ),
                             ),
@@ -220,7 +219,6 @@ class _MenuPageState extends State<MenuPage> {
                                   ),
                                 ),
                               ),
-                              // Delivery Button
                               Expanded(
                                 child: GestureDetector(
                                   onTap: () {
@@ -269,59 +267,69 @@ class _MenuPageState extends State<MenuPage> {
                     backgroundColor: BaseColors.white,
                     elevation: 0.0,
                     floating: true,
-                    pinned: false, // Changed to false so it scrolls away
+                    pinned: false,
                     automaticallyImplyLeading: false,
-                    title: Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16.0,
-                        vertical: 12.0,
-                      ),
-                      decoration: BoxDecoration(
-                        border: Border.all(color: const Color(0xFFE5E5E5)),
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(20),
-                        boxShadow:
-                            innerBoxIsScrolled
-                                ? [
-                                  BoxShadow(
-                                    color: Colors.grey.withOpacity(0.3),
-                                    spreadRadius: 1,
-                                    blurRadius: 3,
-                                    offset: Offset(0, 2),
-                                  ),
-                                ]
-                                : null,
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-                              Icon(
-                                Icons.store,
-                                color: Colors.grey[800],
-                                size: 20,
-                              ),
-                              const SizedBox(width: 12),
-                              const Text(
-                                'KANNA HOMESTAY',
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black,
+                    title: GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => OutletOptionsPage(),
+                          ),
+                        );
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16.0,
+                          vertical: 12.0,
+                        ),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: const Color(0xFFE5E5E5)),
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(20),
+                          boxShadow:
+                              innerBoxIsScrolled
+                                  ? [
+                                    BoxShadow(
+                                      color: Colors.grey.withOpacity(0.3),
+                                      spreadRadius: 1,
+                                      blurRadius: 3,
+                                      offset: Offset(0, 2),
+                                    ),
+                                  ]
+                                  : null,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              children: [
+                                Image.asset(
+                                  'assets/image/image_outlet.png',
+                                  width: 16,
+                                  height: 16,
                                 ),
-                              ),
-                            ],
-                          ),
-                          Text(
-                            'Ubah',
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.normal,
-                              color: Colors.black,
+                                const SizedBox(width: 12),
+                                const Text(
+                                  'KANNA HOMESTAY',
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ],
                             ),
-                          ),
-                        ],
+                            Text(
+                              'Ubah',
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.normal,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -346,7 +354,7 @@ class _MenuPageState extends State<MenuPage> {
                         ),
                       ),
                     ),
-                    pinned: true, // Searchbar tetap terlihat saat scroll
+                    pinned: true, 
                   ),
                 ];
               },
@@ -624,7 +632,7 @@ class MenuItemCard extends StatelessWidget {
                                 menuItem.originalPrice,
                                 style: const TextStyle(
                                   fontSize: 12,
-                                  color: Color(0xFFE56257),
+                                  color: BaseColors.primary,
                                   decoration: TextDecoration.lineThrough,
                                 ),
                               ),
@@ -634,7 +642,7 @@ class MenuItemCard extends StatelessWidget {
                             width: 30,
                             height: 30,
                             decoration: const BoxDecoration(
-                              color: Color(0xFFE56257),
+                              color: BaseColors.primary,
                               shape: BoxShape.circle,
                             ),
                             child: const Icon(

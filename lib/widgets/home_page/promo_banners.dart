@@ -23,7 +23,7 @@ class PromoBanners extends StatelessWidget {
           title: "Big Order",
           description:
               "Mau pesen banyak dan dapat discount? Minimal pembelian 100 cup kamu bisa dapetin discount menarik loh, Yuk pesan sekarang!",
-          imagePath: 'assets/banner/banner_promo1.jpg',
+          imagePath: 'assets/image/image_big_order.png',
           fallbackColor: const Color(0xFF8E1F6D),
           fallbackText: "BIG ORDER\nDiskon 15%",
           onTap: _openWhatsApp,

@@ -1,27 +1,25 @@
 import 'package:flutter/material.dart';
 
 class ActionButton extends StatelessWidget {
-  final IconData icon;
+  final String iconAsset; // Ganti dari IconData ke String path asset
   final String title;
   final String subtitle;
   final Color backgroundColor;
-  final Color iconColor;
-  final VoidCallback? onTap;  // Added onTap callback
+  final VoidCallback? onTap;
 
   const ActionButton({
     Key? key,
-    required this.icon,
+    required this.iconAsset, // Gunakan path asset
     required this.title,
-    required this.subtitle, 
-    this.backgroundColor = const Color(0xFFFD514F),
-    this.iconColor = Colors.white,
-    this.onTap,  // Made optional
+    required this.subtitle,
+    this.backgroundColor = const Color(0xFFE05D56),
+    this.onTap,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(  // Wrap in GestureDetector
-      onTap: onTap,  // Use onTap callback
+    return GestureDetector(
+      onTap: onTap,
       child: Column(
         children: [
           Container(
@@ -31,10 +29,9 @@ class ActionButton extends StatelessWidget {
               color: backgroundColor,
               shape: BoxShape.circle,
             ),
-            child: Icon(
-              icon,
-              color: iconColor,
-              size: 30,
+            child: Padding(
+              padding: const EdgeInsets.all(8), // Biar ikon tidak terlalu besar
+              child: Image.asset(iconAsset, fit: BoxFit.contain),
             ),
           ),
           const SizedBox(height: 8),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jiwaapp_task7/pages/menu_page.dart';
+import 'package:jiwaapp_task7/theme/color.dart';
 
 Future<void> showRepeatOrderBottomSheet(BuildContext context) async {
   return showModalBottomSheet(
@@ -14,23 +15,32 @@ Future<void> showRepeatOrderBottomSheet(BuildContext context) async {
         padding: EdgeInsets.only(
           left: 24,
           right: 24,
-          top: 32,
+          top: 20,
           bottom: MediaQuery.of(context).viewInsets.bottom + 32,
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Container(
-              width: 72,
-              height: 72,
+              width: 40,
+              height: 4,
+              margin: const EdgeInsets.only(bottom: 24),
+              decoration: BoxDecoration(
+                color: BaseColors.border,
+                borderRadius: BorderRadius.circular(4),
+              ),
+            ),
+            Container(
+              width: 120,
+              height: 120,
               decoration: const BoxDecoration(
                 shape: BoxShape.circle,
-                color: Color(0xFFE65952), 
+                color: Color(0xFFE65952),
               ),
               child: Padding(
-                padding: const EdgeInsets.all(12),
+                padding: const EdgeInsets.all(20),
                 child: Image.asset(
-                  'assets/image/image_modal_bottom.png', 
+                  'assets/image/image_modal_bottom.png',
                   fit: BoxFit.contain,
                 ),
               ),
@@ -41,7 +51,6 @@ Future<void> showRepeatOrderBottomSheet(BuildContext context) async {
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
-            const SizedBox(height: 12),
             const Text(
               'Keranjang anda sudah terisi dengan produk lain. Pesan ulang akan mengganti isi keranjang anda.',
               textAlign: TextAlign.center,
@@ -53,7 +62,7 @@ Future<void> showRepeatOrderBottomSheet(BuildContext context) async {
                 Expanded(
                   child: OutlinedButton(
                     onPressed: () {
-                      Navigator.of(context).pop(); 
+                      Navigator.of(context).pop();
                     },
                     style: OutlinedButton.styleFrom(
                       shape: RoundedRectangleBorder(

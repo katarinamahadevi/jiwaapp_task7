@@ -3,30 +3,26 @@ import 'package:flutter/material.dart';
 class InfoCard extends StatelessWidget {
   final String title;
   final String subtitle;
-  final IconData icon;
+  final String iconAsset; // Ganti dari IconData ke path asset
   final double marginLeft;
   final double marginRight;
   final Color backgroundColor;
   final Color iconBackgroundColor;
-  final Color iconColor;
-    final VoidCallback? onTap;
-
+  final VoidCallback? onTap;
 
   const InfoCard({
     Key? key,
     required this.title,
     required this.subtitle,
-    required this.icon,
+    required this.iconAsset, // Path ke asset
     this.marginLeft = 0,
     this.marginRight = 0,
     this.backgroundColor = Colors.white,
-    this.iconBackgroundColor = const Color(0xFFFD514F),
-    this.iconColor = Colors.white,
+    this.iconBackgroundColor = const Color(0xFFE05D56),
     this.onTap,
   }) : super(key: key);
-  
 
-   @override
+  @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
@@ -62,13 +58,16 @@ class InfoCard extends StatelessWidget {
                 ],
               ),
               Container(
-                width: 30,
-                height: 30,
+                width: 35,
+                height: 35,
                 decoration: BoxDecoration(
                   color: iconBackgroundColor,
                   shape: BoxShape.circle,
                 ),
-                child: Icon(icon, color: iconColor, size: 15),
+                child: Padding(
+                  padding: const EdgeInsets.all(5), 
+                  child: Image.asset(iconAsset, fit: BoxFit.contain),
+                ),
               ),
             ],
           ),

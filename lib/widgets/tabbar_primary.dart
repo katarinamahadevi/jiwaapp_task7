@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jiwaapp_task7/theme/color.dart';
 
 class TabbarPrimary extends StatelessWidget {
   final TabController controller;
@@ -24,7 +25,7 @@ class TabbarPrimary extends StatelessWidget {
           color: Colors.white,
           child: TabBar(
             controller: controller,
-            labelColor: const Color(0xFFFD514F),
+            labelColor: BaseColors.primary,
             unselectedLabelColor: Colors.black87,
             labelStyle: const TextStyle(fontWeight: FontWeight.w600),
             unselectedLabelStyle: const TextStyle(
@@ -33,7 +34,7 @@ class TabbarPrimary extends StatelessWidget {
             indicator: UnderlineTabIndicator(
               borderSide: const BorderSide(
                 width: 4.0,
-                color: Color(0xFFFD514F),
+                color: BaseColors.primary,
               ),
               insets: EdgeInsets.symmetric(
                 horizontal:
