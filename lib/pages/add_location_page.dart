@@ -51,21 +51,6 @@ class AddLocationPage extends StatelessWidget {
                 onTap: () {},
               ),
             ),
-
-            // Expanded(
-            //   child: Container(
-            //     width: double.infinity,
-            //     margin: const EdgeInsets.only(top: 16),
-            //     color: Colors.grey[200],
-            //     // In a real implementation, you would place your map widget here
-            //     child: Center(
-            //       child: Text(
-            //         'Map will be displayed here',
-            //         style: TextStyle(color: Colors.grey[600]),
-            //       ),
-            //     ),
-            //   ),
-            // ),
           ],
         ),
       ),

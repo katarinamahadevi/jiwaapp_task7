@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ActionButton extends StatelessWidget {
-  final String iconAsset; // Ganti dari IconData ke String path asset
+  final String iconAsset; 
   final String title;
   final String subtitle;
   final Color backgroundColor;
@@ -9,7 +9,7 @@ class ActionButton extends StatelessWidget {
 
   const ActionButton({
     Key? key,
-    required this.iconAsset, // Gunakan path asset
+    required this.iconAsset, 
     required this.title,
     required this.subtitle,
     this.backgroundColor = const Color(0xFFE05D56),
@@ -30,7 +30,7 @@ class ActionButton extends StatelessWidget {
               shape: BoxShape.circle,
             ),
             child: Padding(
-              padding: const EdgeInsets.all(8), // Biar ikon tidak terlalu besar
+              padding: const EdgeInsets.all(8), 
               child: Image.asset(iconAsset, fit: BoxFit.contain),
             ),
           ),

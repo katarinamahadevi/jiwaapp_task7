@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:jiwaapp_task7/pages/subscription_page.dart';
+import 'package:jiwaapp_task7/theme/color.dart';
 import 'package:jiwaapp_task7/widgets/appbar_primary.dart';
 
 class SubscriptionHistoryPage extends StatelessWidget {
@@ -52,9 +54,17 @@ class SubscriptionHistoryPage extends StatelessWidget {
               ),
               const SizedBox(height: 20),
               ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder:
+                          (context) =>
+                              SubscriptionPage(), 
+                    ),
+                  );
+                },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFFFE504F),
+                  backgroundColor: BaseColors.primary,
                   foregroundColor: Colors.white,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20),

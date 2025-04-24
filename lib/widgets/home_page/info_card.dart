@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class InfoCard extends StatelessWidget {
   final String title;
   final String subtitle;
-  final String iconAsset; // Ganti dari IconData ke path asset
+  final String iconAsset; 
   final double marginLeft;
   final double marginRight;
   final Color backgroundColor;
@@ -14,7 +14,7 @@ class InfoCard extends StatelessWidget {
     Key? key,
     required this.title,
     required this.subtitle,
-    required this.iconAsset, // Path ke asset
+    required this.iconAsset, 
     this.marginLeft = 0,
     this.marginRight = 0,
     this.backgroundColor = Colors.white,

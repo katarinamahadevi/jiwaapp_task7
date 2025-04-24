@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jiwaapp_task7/pages/order_detail_page.dart';
 import 'package:jiwaapp_task7/theme/color.dart';
-import 'package:jiwaapp_task7/widgets/appbar_primary.dart';
 import 'package:jiwaapp_task7/widgets/appbar_secondary.dart';
 import 'package:jiwaapp_task7/widgets/tabbar_primary.dart';
 
@@ -144,7 +143,7 @@ class _NotificationPageState extends State<NotificationPage>
                       description: 'Anda mendapatkan 16 XP dari transaksi anda',
                     ),
                   ],
-                ), 
+                ),
                 const PromoEmptyState(),
               ],
             ),
@@ -164,13 +163,13 @@ class PromoEmptyState extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          SizedBox(height: 60),
+          SizedBox(height: 10),
           Image.asset(
             'assets/image/image_notifikasi_promo.png',
-            width: 150,
-            height: 150,
+            width: 200,
+            height: 200,
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 12),
           const Text(
             'Belum ada informasi promo',
             style: TextStyle(
@@ -182,7 +181,7 @@ class PromoEmptyState extends StatelessWidget {
           const SizedBox(height: 8),
           const Text(
             'Informasi promo kamu nanti bisa lihat disini ya!',
-            style: TextStyle(fontSize: 14, color: Colors.black54),
+            style: TextStyle(fontSize: 14, color: Colors.black),
           ),
         ],
       ),
@@ -234,7 +233,7 @@ class NotificationItem extends StatelessWidget {
             Container(
               width: double.infinity,
               decoration: const BoxDecoration(
-                color: Color(0xFFEDF7EC), 
+                color: Color(0xFFEDF7EC),
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(8),
                   topRight: Radius.circular(8),
@@ -243,10 +242,7 @@ class NotificationItem extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               child: Row(
                 children: [
-                  const CircleAvatar(
-                    radius: 4,
-                    backgroundColor: Colors.red, 
-                  ),
+                  const CircleAvatar(radius: 4, backgroundColor: Colors.red),
                   const SizedBox(width: 10),
                   Text(
                     title,

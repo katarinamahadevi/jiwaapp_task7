@@ -248,26 +248,10 @@ class DeliveryPage extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 16),
-                // Delete Button
                 GestureDetector(
                   onTap: () {
                     showModalBottomDelete(context);
                   },
-
-                  // Placeholder for navigation or future implementation
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(
-                  //     builder: (context) => EditLocationPage(
-                  //       addressData: {
-                  //         'title': title,
-                  //         'name': name,
-                  //         'phone': phone,
-                  //         'address': address,
-                  //       },
-                  //     ),
-                  //   ),
-                  // );
                   child: Container(
                     width: 25,
                     height: 25,

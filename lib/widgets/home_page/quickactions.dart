@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:jiwaapp_task7/pages/loyalty_membership_page.dart';
 import 'package:jiwaapp_task7/pages/subscription_page.dart';
-import 'package:jiwaapp_task7/pages/jiwa_point_page.dart'; // <- Tambahkan halaman tujuan
+import 'package:jiwaapp_task7/pages/jiwa_point_page.dart';
 import 'package:jiwaapp_task7/widgets/home_page/action_button.dart';
 
 class QuickActions extends StatelessWidget {
@@ -12,10 +13,18 @@ class QuickActions extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       mainAxisSize: MainAxisSize.max,
       children: [
-        const ActionButton(
+        ActionButton(
           iconAsset: 'assets/image/image_teman_sejiwa.png',
           title: "Teman Sejiwa",
           subtitle: "365/400 Exp",
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const LoyaltyMembershipPage(),
+              ),
+            );
+          },
         ),
         ActionButton(
           iconAsset: 'assets/image/image_jiwapoint.png',

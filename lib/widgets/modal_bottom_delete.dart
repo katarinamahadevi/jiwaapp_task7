@@ -32,14 +32,14 @@ Future<void> showModalBottomDelete(BuildContext context) async {
             ),
 
             Container(
-              width: 72,
-              height: 72,
+              width: 120,
+              height: 120,
               decoration: const BoxDecoration(
                 shape: BoxShape.circle,
                 color: Color(0xFFE65952),
               ),
               child: Padding(
-                padding: const EdgeInsets.all(12),
+                padding: const EdgeInsets.all(20),
                 child: Image.asset(
                   'assets/image/image_modal_bottom_delete.png',
                   fit: BoxFit.contain,

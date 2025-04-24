@@ -1,5 +1,6 @@
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
+import 'package:jiwaapp_task7/pages/menu_page.dart';
 import 'package:jiwaapp_task7/theme/color.dart';
 import 'package:jiwaapp_task7/widgets/appbar_primary.dart';
 
@@ -188,7 +189,15 @@ class DetailVoucherPage extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(16),
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder:
+                          (context) =>
+                              MenuPage(), 
+                    ),
+                  );
+                },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: BaseColors.primary,
                   foregroundColor: Colors.white,
