@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(textTheme: GoogleFonts.lexendDecaTextTheme()),
       debugShowCheckedModeBanner: false,
       title: 'Jiwa Coffee App',
-      home: AddToCartPage(),
+      home: OnboardingPage(),
     );
   }
 }
