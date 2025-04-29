@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:jiwaapp_task7/pages/order_detail_page.dart';
 import 'package:jiwaapp_task7/theme/color.dart';
 
-class JiwaPointPage extends StatefulWidget {
+class JiwaPointPage extends StatefulWidget { //HISTORI JIWA POINT
   const JiwaPointPage({Key? key}) : super(key: key);
 
   @override

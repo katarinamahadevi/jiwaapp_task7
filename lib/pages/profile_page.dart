@@ -3,6 +3,7 @@ import 'package:jiwaapp_task7/pages/delivery_page.dart';
 import 'package:jiwaapp_task7/pages/home_page.dart';
 import 'package:jiwaapp_task7/pages/menu_page.dart';
 import 'package:jiwaapp_task7/pages/my_voucher_page.dart';
+import 'package:jiwaapp_task7/pages/onboarding_page.dart';
 import 'package:jiwaapp_task7/pages/order_page.dart';
 import 'package:jiwaapp_task7/pages/referral_page.dart';
 import 'package:jiwaapp_task7/pages/subscription_page.dart';
@@ -371,7 +372,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => const MenuPage(),
+                                  builder: (context) => OnboardingPage(),
                                 ),
                               );
                             },

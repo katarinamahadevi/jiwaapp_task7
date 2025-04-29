@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:jiwaapp_task7/pages/add_location_page.dart';
+import 'package:jiwaapp_task7/pages/create_address_page.dart';
+import 'package:jiwaapp_task7/pages/search_location_page.dart';
 import 'package:jiwaapp_task7/pages/update_location_page.dart';
 import 'package:jiwaapp_task7/theme/color.dart';
 import 'package:jiwaapp_task7/widgets/appbar_primary.dart';
@@ -74,7 +75,7 @@ class DeliveryPage extends StatelessWidget {
         onTap: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const AddLocationPage()),
+            MaterialPageRoute(builder: (context) => const SearchLocationPage()),
           );
         },
         leading: Container(
@@ -146,11 +147,15 @@ class DeliveryPage extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(width: 12),
-                      Text(
-                        title,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
+                      Expanded(
+                        child: Text(
+                          title,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
                         ),
                       ),
                     ],
@@ -161,6 +166,8 @@ class DeliveryPage extends StatelessWidget {
                   child: Text(
                     '$name - $phone',
                     style: TextStyle(color: Colors.grey.shade400, fontSize: 14),
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
                   ),
                 ),
                 Padding(
@@ -172,6 +179,8 @@ class DeliveryPage extends StatelessWidget {
                       fontSize: 14,
                       height: 1.4,
                     ),
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 3, 
                   ),
                 ),
                 Container(
@@ -192,19 +201,15 @@ class DeliveryPage extends StatelessWidget {
                         size: 18,
                       ),
                       const SizedBox(width: 8),
-                      Text(
-                        'Catatan',
-                        style: TextStyle(
-                          color: Colors.grey.shade500,
-                          fontSize: 14,
-                        ),
-                      ),
-                      const SizedBox(width: 4),
-                      Text(
-                        '-',
-                        style: TextStyle(
-                          color: Colors.grey.shade500,
-                          fontSize: 14,
+                      Expanded(
+                        child: Text(
+                          note != null && note.isNotEmpty ? note : '-',
+                          style: TextStyle(
+                            color: Colors.grey.shade500,
+                            fontSize: 14,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
                         ),
                       ),
                     ],
@@ -247,7 +252,7 @@ class DeliveryPage extends StatelessWidget {
                     ),
                   ),
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 GestureDetector(
                   onTap: () {
                     showModalBottomDelete(context);

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:jiwaapp_task7/pages/detail_menu_page.dart';
+import 'package:jiwaapp_task7/pages/delivery_page.dart';
+import 'package:jiwaapp_task7/pages/detail_menucombo_page.dart';
 import 'package:jiwaapp_task7/pages/home_page.dart';
 import 'package:jiwaapp_task7/pages/order_page.dart';
 import 'package:jiwaapp_task7/pages/outlet_options_page.dart';
@@ -26,19 +27,19 @@ class _MenuPageState extends State<MenuPage> {
           MaterialPageRoute(builder: (context) => const HomePage()),
         );
         break;
-      case 1: 
+      case 1:
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => const MenuPage()),
         );
         break;
-      case 2: 
+      case 2:
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => const OrderPage()),
         );
         break;
-      case 3: 
+      case 3:
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => const ProfilePage()),
@@ -141,7 +142,7 @@ class _MenuPageState extends State<MenuPage> {
                     backgroundColor: BaseColors.white,
                     elevation: 0.0,
                     floating: true,
-                    pinned: false, 
+                    pinned: false,
                     automaticallyImplyLeading: false,
                     title: Container(
                       height: 50,
@@ -269,6 +270,98 @@ class _MenuPageState extends State<MenuPage> {
                     floating: true,
                     pinned: false,
                     automaticallyImplyLeading: false,
+                    toolbarHeight: !isTakeAwaySelected ? kToolbarHeight : 0,
+                    title: AnimatedContainer(
+                      duration: const Duration(milliseconds: 300),
+                      curve: Curves.easeInOut,
+                      height: !isTakeAwaySelected ? null : 0,
+                      child: AnimatedOpacity(
+                        opacity: !isTakeAwaySelected ? 1.0 : 0.0,
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeInOut,
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => DeliveryPage(),
+                              ),
+                            );
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 16.0,
+                              vertical: 12.0,
+                            ),
+                            decoration: BoxDecoration(
+                              border: Border.all(color: BaseColors.border),
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(20),
+                              boxShadow:
+                                  innerBoxIsScrolled
+                                      ? [
+                                        BoxShadow(
+                                          color: Colors.grey.withOpacity(0.3),
+                                          spreadRadius: 1,
+                                          blurRadius: 3,
+                                          offset: Offset(0, 2),
+                                        ),
+                                      ]
+                                      : null,
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Row(
+                                  children: [
+                                    Image.asset(
+                                      'assets/image/image_location_white.png',
+                                      width: 16,
+                                      height: 16,
+                                    ),
+                                    const SizedBox(width: 12),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          'Lokasi Delivery :',
+                                          style: TextStyle(
+                                            fontSize: 10,
+                                            fontWeight: FontWeight.normal,
+                                            color: Colors.grey,
+                                          ),
+                                        ),
+                                        Text(
+                                          'Jilid 358 - RUKO RUNGKUT',
+                                          style: TextStyle(
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                                Icon(
+                                  Icons.keyboard_arrow_down,
+                                  color: Colors.grey,
+                                  size: 20,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  SliverAppBar(
+                    backgroundColor: BaseColors.white,
+                    elevation: 0.0,
+                    floating: true,
+                    pinned: false,
+                    automaticallyImplyLeading: false,
                     title: GestureDetector(
                       onTap: () {
                         Navigator.push(
@@ -310,8 +403,10 @@ class _MenuPageState extends State<MenuPage> {
                                   height: 16,
                                 ),
                                 const SizedBox(width: 12),
-                                const Text(
-                                  'KANNA HOMESTAY',
+                                Text(
+                                  !isTakeAwaySelected
+                                      ? 'RUKO RUNGKUT'
+                                      : 'KANNA HOMESTAY',
                                   style: TextStyle(
                                     fontSize: 12,
                                     fontWeight: FontWeight.bold,
@@ -354,7 +449,7 @@ class _MenuPageState extends State<MenuPage> {
                         ),
                       ),
                     ),
-                    pinned: true, 
+                    pinned: true,
                   ),
                 ];
               },
@@ -567,7 +662,7 @@ class MenuItemCard extends StatelessWidget {
           context,
           MaterialPageRoute(
             builder:
-                (context) => DetailMenuPage(
+                (context) => DetailMenucomboPage(
                   title: menuItem.title,
                   description:
                       'Perpaduan sempurna dari blend biji kopi pilihan, susu, manisnya karamel, dengan krim macchiato lembut di atasnya',

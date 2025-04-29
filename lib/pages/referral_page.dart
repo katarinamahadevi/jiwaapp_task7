@@ -37,7 +37,7 @@ class ReferralPage extends StatelessWidget {
                     ),
                   ),
                 ),
-                const SizedBox(width: 8),
+                const SizedBox(width: 20),
                 const Text(
                   'Referral',
                   style: TextStyle(
@@ -114,9 +114,7 @@ class ReferralPage extends StatelessWidget {
                         width: 240,
                         height: 240,
                         decoration: BoxDecoration(
-                          color: const Color(
-                            0xFFE86B63,
-                          ), 
+                          color: const Color(0xFFE86B63),
                           shape: BoxShape.circle,
                         ),
                       ),
@@ -129,7 +127,7 @@ class ReferralPage extends StatelessWidget {
                     right: 0,
                     child: Center(
                       child: Image.asset(
-                        'assets/image/image_menu.png', 
+                        'assets/image/image_menu.png',
                         width: 280,
                         height: 280,
                         fit: BoxFit.contain,
@@ -182,12 +180,10 @@ class ReferralPage extends StatelessWidget {
             bottom: 0,
             left: 0,
             right: 0,
-            height:
-                MediaQuery.of(context).size.height *
-                0.45, 
+            height: MediaQuery.of(context).size.height * 0.45,
             child: Container(
               decoration: const BoxDecoration(
-                color: Color(0xFFFF9493), 
+                color: Color(0xFFFF9493),
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(25),
                   topRight: Radius.circular(25),
@@ -259,10 +255,10 @@ class ReferralPage extends StatelessWidget {
                         ],
                       ),
                     ),
-                    SizedBox(height: 60),
+                    SizedBox(height: 50),
                     Container(
                       padding: const EdgeInsets.symmetric(
-                        horizontal: 160,
+                        horizontal: 140,
                         vertical: 20,
                       ),
                       decoration: BoxDecoration(
@@ -287,9 +283,7 @@ class ReferralPage extends StatelessWidget {
           Positioned(
             left: 30,
             right: 30,
-            top:
-                MediaQuery.of(context).size.height * 0.5 -
-                60, 
+            top: MediaQuery.of(context).size.height * 0.5 - 60,
             height: 50,
             child: ClipPath(
               clipper: TicketClipper(),
@@ -299,7 +293,7 @@ class ReferralPage extends StatelessWidget {
                   child: Text(
                     'Dapatkan Diskon 50%',
                     style: TextStyle(
-                      color: BaseColors.primary, 
+                      color: BaseColors.primary,
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),

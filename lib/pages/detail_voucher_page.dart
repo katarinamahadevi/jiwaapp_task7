@@ -4,7 +4,7 @@ import 'package:jiwaapp_task7/pages/menu_page.dart';
 import 'package:jiwaapp_task7/theme/color.dart';
 import 'package:jiwaapp_task7/widgets/appbar_primary.dart';
 
-class DetailVoucherPage extends StatelessWidget {
+class DetailVoucherPage extends StatelessWidget { //DETAIL VOUCHER DISKON
   const DetailVoucherPage({Key? key}) : super(key: key);
 
   @override

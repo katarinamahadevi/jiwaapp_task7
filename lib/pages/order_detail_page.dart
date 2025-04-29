@@ -698,16 +698,34 @@ class OrderDetailPage extends StatelessWidget {
                         const SizedBox(height: 16),
                         Row(
                           children: [
-                            Image.asset(
-                              'assets/logo/logo_ovo.png',
-                              width: 50,
-                              height: 50,
+                            SizedBox(
+                              width: 30,
+                              height: 30,
+                              child: Image.asset(
+                                'assets/logo/logo_ovo.png',
+                                fit: BoxFit.contain,
+                              ),
                             ),
-                            const SizedBox(width: 2),
-                            const Expanded(
-                              child: Text(
-                                'OVO | +6282231166895',
-                                style: TextStyle(fontSize: 14),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: const [
+                                  Text(
+                                    'OVO',
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                  Text(
+                                    '+6282231166895',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                             const Text(
@@ -725,15 +743,15 @@ class OrderDetailPage extends StatelessWidget {
                         ),
                         Row(
                           children: [
-                            Container(
+                            SizedBox(
                               width: 30,
                               height: 30,
-
                               child: Image.asset(
                                 'assets/image/image_jiwapoint_white.png',
+                                fit: BoxFit.contain,
                               ),
                             ),
-                            const SizedBox(width: 8),
+                            const SizedBox(width: 12),
                             const Expanded(
                               child: Text(
                                 'Jiwa Point',

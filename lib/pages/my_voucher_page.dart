@@ -3,7 +3,7 @@ import 'package:jiwaapp_task7/pages/detail_voucher_page.dart';
 import 'package:jiwaapp_task7/theme/color.dart';
 import 'package:jiwaapp_task7/widgets/appbar_primary.dart';
 
-class MyVoucherPage extends StatelessWidget {
+class MyVoucherPage extends StatelessWidget { //DISKON
   const MyVoucherPage({Key? key}) : super(key: key);
 
   @override
