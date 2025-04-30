@@ -15,10 +15,10 @@ class SearchLocationPage extends StatelessWidget {
         title: 'Cari alamat',
         rightIcon: Icons.map_outlined,
         onRightIconPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const CreateAddressPage()),
-          );
+          // Navigator.push(
+          //   context,
+          //   MaterialPageRoute(builder: (context) => CreateAddressPage()),
+          // );
         },
       ),
       body: Padding(
@@ -28,27 +28,38 @@ class SearchLocationPage extends StatelessWidget {
             CustomSearchBar(hintText: 'Cari lokasi yang kamu mau...'),
 
             const SizedBox(height: 16),
-            Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(color: Colors.grey[200]!),
-              ),
-              child: ListTile(
-                leading: CircleAvatar(
-                  backgroundColor: BaseColors.primary,
-                  child: Icon(Icons.my_location, color: Colors.white),
+            GestureDetector(
+              onTap:
+                  () => CreateAddressPage(
+                    addressData: {
+                      'title': 'Rumah',
+                      'address': 'Jl. Klampis No. 12, Surabaya',
+                      'name': 'Mahadevi Sabila',
+                      'phone': '081234567890',
+                    },
+                  ),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: Colors.grey[200]!),
                 ),
-                title: Text(
-                  'Lokasimu saat ini',
-                  style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
+                child: ListTile(
+                  leading: CircleAvatar(
+                    backgroundColor: BaseColors.primary,
+                    child: Icon(Icons.my_location, color: Colors.white),
+                  ),
+                  title: Text(
+                    'Lokasimu saat ini',
+                    style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
+                  ),
+                  trailing: Icon(Icons.chevron_right),
+                  contentPadding: EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
+                  onTap: () {},
                 ),
-                trailing: Icon(Icons.chevron_right),
-                contentPadding: EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 8,
-                ),
-                onTap: () {},
               ),
             ),
           ],

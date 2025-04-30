@@ -2,81 +2,27 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:jiwaapp_task7/theme/color.dart';
 
-class BottomPayment extends StatefulWidget {
+class BottomPaymentMethod extends StatefulWidget {
   final VoidCallback onPressed;
   final String assetPath;
 
-  const BottomPayment({
+  const BottomPaymentMethod({
     Key? key,
     required this.onPressed,
     this.assetPath = 'assets/image/image_announcement.png',
   }) : super(key: key);
 
   @override
-  State<BottomPayment> createState() => _BottomPaymentState();
+  State<BottomPaymentMethod> createState() => _BottomPaymentMethodState();
 }
 
-class _BottomPaymentState extends State<BottomPayment> {
+class _BottomPaymentMethodState extends State<BottomPaymentMethod> {
   late TapGestureRecognizer _tapRecognizer;
 
   @override
   void initState() {
     super.initState();
-    _tapRecognizer =
-        TapGestureRecognizer()
-          ..onTap = () {
-            _showBottomSheet();
-          };
-  }
-
-  void _showBottomSheet() {
-    showModalBottomSheet(
-      backgroundColor: Colors.white,
-      context: context,
-      isScrollControlled: true,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      builder: (context) {
-        return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Center(
-                child: Container(
-                  width: 40,
-                  height: 4,
-                  margin: const EdgeInsets.only(bottom: 12),
-                  decoration: BoxDecoration(
-                    color: Colors.grey[300],
-                    borderRadius: BorderRadius.circular(2),
-                  ),
-                ),
-              ),
-              const Text(
-                'Syarat dan Ketentuan Take Away',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 12),
-              const Text(
-                '1. Harap ambil pesanan Anda tidak lebih dari 45 menit setelah melakukan order untuk menghindari penurunan kualitas produk.',
-              ),
-              const SizedBox(height: 8),
-              const Text(
-                '2. Pesanan yang tidak diambil akan dianggap terjual dan tidak dapat di-refund atau digantikan.',
-              ),
-              const SizedBox(height: 8),
-              const Text(
-                '3. Tunjukkan kode pick-up kepada staf/barista saat mengambil pesanan Anda.',
-              ),
-              const SizedBox(height: 60),
-            ],
-          ),
-        );
-      },
-    );
+    _tapRecognizer = TapGestureRecognizer(); // Initialize the recognizer
   }
 
   @override
@@ -134,20 +80,14 @@ class _BottomPaymentState extends State<BottomPayment> {
                       ).textTheme.bodyMedium?.copyWith(color: Colors.white),
                       children: [
                         const TextSpan(
-                          text:
-                              'Dengan membayar pesanan, anda telah menyetujui ',
+                          text: 'Pastikan Saldo Cukup\n',
+                          style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                         TextSpan(
-                          text: 'Syarat Dan Ketentuan',
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            decoration: TextDecoration.underline,
-                            color: Colors.white,
-                            decorationColor: Colors.white,
-                          ),
-                          recognizer: _tapRecognizer,
+                          text:
+                              'Pastikan saldo kamu cukup sebelum melakukan pembayaran',
+                          style: const TextStyle(color: Colors.white),
                         ),
-                        const TextSpan(text: ' Kami'),
                       ],
                     ),
                   ),
@@ -184,7 +124,7 @@ class _BottomPaymentState extends State<BottomPayment> {
                     elevation: 0,
                   ),
                   child: const Text(
-                    'Pilih Pembayaran',
+                    'Konfirmasi',
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -196,7 +136,3 @@ class _BottomPaymentState extends State<BottomPayment> {
     );
   }
 }
-
-
-
-

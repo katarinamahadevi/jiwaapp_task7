@@ -74,12 +74,11 @@ class OnboardingPage extends StatelessWidget {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8),
                         ),
-                        // Tidak perlu set textStyle di sini
                       ),
                       child: const Text(
                         'Login disini',
                         style: TextStyle(
-                          fontSize: 10, // atur ukuran teks khusus ini saja
+                          fontSize: 10, 
                           color: Colors.white,
                         ),
                       ),

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:jiwaapp_task7/pages/delivery_page.dart';
+import 'package:jiwaapp_task7/pages/menu_page.dart';
 import 'package:jiwaapp_task7/pages/my_voucher_page.dart';
 import 'package:jiwaapp_task7/pages/outlet_options_page.dart';
+import 'package:jiwaapp_task7/pages/payment_method_page.dart';
 import 'package:jiwaapp_task7/theme/color.dart';
 import 'package:jiwaapp_task7/widgets/bottom_payment.dart';
 import 'package:jiwaapp_task7/widgets/toggle_cupertino.dart';
@@ -17,6 +19,551 @@ class _AddToCartPageState extends State<AddToCartPage> {
   bool isTakeAwaySelected = true;
   String selectedTime = 'Ambil Sekarang';
   bool _jiwaPointActive = false;
+
+  void _showTimeBottomSheet(BuildContext context) {
+    String selectedOption = 'Ambil Sekarang';
+
+    showModalBottomSheet(
+      backgroundColor: Colors.white,
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return Padding(
+              padding: const EdgeInsets.all(25),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // Drag Indicator
+                  Container(
+                    width: 40,
+                    height: 4,
+                    margin: const EdgeInsets.only(bottom: 16),
+                    decoration: BoxDecoration(
+                      color: Colors.grey[300],
+                      borderRadius: BorderRadius.circular(2),
+                    ),
+                  ),
+                  const Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      'Pilih Waktu',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+
+                  Divider(height: 5, color: BaseColors.border),
+                  const SizedBox(height: 10),
+                  ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    title: const Text('Ambil Sekarang'),
+                    trailing: Radio<String>(
+                      value: 'Ambil Sekarang',
+                      groupValue: selectedOption,
+                      activeColor: Color(0xFFE15B4C),
+                      onChanged: (value) {
+                        setState(() {
+                          selectedOption = value!;
+                        });
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 120),
+                  Divider(height: 5, color: BaseColors.border),
+                  const SizedBox(height: 10),
+
+                  SizedBox(
+                    width: double.infinity,
+                    height: 50,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.pop(context, selectedOption);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: BaseColors.primary,
+                        foregroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                      ),
+                      child: const Text('Konfirmasi'),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  void showCourierSelectionModal(BuildContext context) {
+    showModalBottomSheet(
+      backgroundColor: Colors.white,
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
+      ),
+      builder: (context) {
+        String selectedCourier = 'GrabExpress';
+
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const SizedBox(height: 8),
+                  Container(
+                    height: 4,
+                    width: 40,
+                    decoration: BoxDecoration(
+                      color: Colors.grey[300],
+                      borderRadius: BorderRadius.circular(2),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  const Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      'Pilih Kurir',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+
+                  Divider(color: BaseColors.border),
+
+                  const SizedBox(height: 10),
+                  // Kurir: GrabExpress
+                  InkWell(
+                    onTap:
+                        () => setState(() => selectedCourier = 'GrabExpress'),
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 40,
+                          height: 40,
+                          decoration: const BoxDecoration(
+                            color: Color(0xFFB5D4BA),
+                            shape: BoxShape.circle,
+                          ),
+                          child: Center(
+                            child: Image.asset(
+                              'assets/image/image_grab_express.png',
+                              height: 30,
+                              width: 30,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 16),
+                        const Expanded(
+                          child: Text(
+                            'GrabExpress',
+                            style: TextStyle(fontSize: 14),
+                          ),
+                        ),
+                        Text(
+                          'Rp10.000',
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(width: 10),
+                        Radio<String>(
+                          value: 'GrabExpress',
+                          groupValue: selectedCourier,
+                          activeColor: BaseColors.primary,
+                          onChanged:
+                              (value) =>
+                                  setState(() => selectedCourier = value!),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  const SizedBox(height: 10),
+
+                  // Kurir: GoSend
+                  InkWell(
+                    onTap: () => setState(() => selectedCourier = 'GoSend'),
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 40,
+                          height: 40,
+                          decoration: const BoxDecoration(
+                            color: Color(0xFF0BA90A),
+                            shape: BoxShape.circle,
+                          ),
+
+                          child: Center(
+                            child: Image.asset(
+                              'assets/logo/logo_gosend.jpeg',
+                              height: 30,
+                              width: 30,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 16),
+                        const Expanded(
+                          child: Text('GoSend', style: TextStyle(fontSize: 14)),
+                        ),
+                        Text(
+                          'Rp10.500',
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(width: 10),
+                        Radio<String>(
+                          value: 'GoSend',
+                          groupValue: selectedCourier,
+                          activeColor: BaseColors.primary,
+                          onChanged:
+                              (value) =>
+                                  setState(() => selectedCourier = value!),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  const SizedBox(height: 30),
+                  Divider(color: BaseColors.border),
+
+                  const SizedBox(height: 10),
+                  // Tombol Konfirmasi
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.pop(context, selectedCourier);
+                        // Lakukan sesuatu dengan selectedCourier
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: BaseColors.primary,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                      ),
+                      child: const Text(
+                        'Konfirmasi',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  void showPaymentSummaryModal(BuildContext context) {
+    showModalBottomSheet(
+      backgroundColor: Colors.white,
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) {
+        return Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const SizedBox(height: 8),
+              Container(
+                height: 4,
+                width: 40,
+                decoration: BoxDecoration(
+                  color: Colors.grey[300],
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+              const SizedBox(height: 20),
+              const Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  'Ringkasan Pembayaran',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                ),
+              ),
+              const SizedBox(height: 16),
+              Divider(color: BaseColors.border),
+              const SizedBox(height: 16),
+              const Text(
+                '1. Penggunaan voucher hanya akan mengurangi harga product non-bundling (promo)',
+              ),
+              const SizedBox(height: 10),
+              const Text(
+                '2. Perhitungan diskon dihitung dari total nominal pembelian produk tanpa bundling.',
+              ),
+              const SizedBox(height: 10),
+              const Text(
+                '3. Perhitungan diskon delivery dihitung dari total nominal pembelian produk tanpa bundling setelah dikurangi diskon voucher lainnya.',
+              ),
+              const SizedBox(height: 10),
+              const Text(
+                '4. Maksimal nominal diskon delivery adalah sebesar delivery fee yang telah ditetapkan.',
+              ),
+              const SizedBox(height: 10),
+              const Text(
+                '5. Jiwa point hanya dapat digunakan maksimal 50% dari nilai Total Tagihan setelah dikurangi oleh voucher yang digunakan tanpa memperhitungkan tarif pengiriman kurir',
+              ),
+              const SizedBox(height: 30),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  void showJiwaPointInfoModal(BuildContext context) {
+    showModalBottomSheet(
+      backgroundColor: Colors.white,
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) {
+        return Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const SizedBox(height: 8),
+                Container(
+                  height: 4,
+                  width: 40,
+                  decoration: BoxDecoration(
+                    color: Colors.grey[300],
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                const Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    'Informasi Jiwa Point',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                const Text(
+                  '1. Jiwa Point yang tertulis pada halaman Checkout merupakan potensi Jiwa Point yang akan didapatkan.',
+                ),
+                const SizedBox(height: 10),
+                const Text(
+                  '2. Potensi Jiwa Point dihitung dari total nominal yang dibayarkan diluar pemakaian Jiwa Point.',
+                ),
+                const SizedBox(height: 10),
+                const Text(
+                  '3. Nominal Potensi dan Limit Jiwa Point yang dapat diperoleh akan berbeda untuk setiap levelnya dan dapat mengacu pada tabel di bawah ini:',
+                ),
+                const SizedBox(height: 20),
+                Table(
+                  border: TableBorder.all(width: 1, color: Colors.black),
+                  columnWidths: const {
+                    0: FlexColumnWidth(2),
+                    1: FlexColumnWidth(2),
+                    2: FlexColumnWidth(2),
+                    3: FlexColumnWidth(2),
+                  },
+                  children: const [
+                    TableRow(
+                      decoration: BoxDecoration(color: BaseColors.primary),
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Text(
+                            textAlign: TextAlign.center,
+                            'Level',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Text(
+                            textAlign: TextAlign.center,
+
+                            '% Jiwa Point',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Text(
+                            textAlign: TextAlign.center,
+
+                            'Limit/\nTransaksi',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Text(
+                            textAlign: TextAlign.center,
+
+                            'Limit/\nHari',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    TableRow(
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Text('Jiwa', textAlign: TextAlign.center),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Text('2,5%', textAlign: TextAlign.center),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Text('5.000', textAlign: TextAlign.center),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Text('25.000', textAlign: TextAlign.center),
+                        ),
+                      ],
+                    ),
+                    TableRow(
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Text(
+                            'Teman Sejiwa',
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Text('5%', textAlign: TextAlign.center),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Text('7.500', textAlign: TextAlign.center),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Text('37.500', textAlign: TextAlign.center),
+                        ),
+                      ],
+                    ),
+                    TableRow(
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Text(
+                            'Sahabat Sejiwa',
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Text('7,5%', textAlign: TextAlign.center),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Text('7.500', textAlign: TextAlign.center),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Text('37.500', textAlign: TextAlign.center),
+                        ),
+                      ],
+                    ),
+                    TableRow(
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Text(
+                            'Saudara Sejiwa',
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Text('10%', textAlign: TextAlign.center),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Text('15.000', textAlign: TextAlign.center),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Text('75.000', textAlign: TextAlign.center),
+                        ),
+                      ],
+                    ),
+                    TableRow(
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Text(
+                            'Belahan Jiwa',
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Text('15%', textAlign: TextAlign.center),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Text('15.000', textAlign: TextAlign.center),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Text('75.000', textAlign: TextAlign.center),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 30),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -189,17 +736,24 @@ class _AddToCartPageState extends State<AddToCartPage> {
                                 shape: BoxShape.circle,
                               ),
                               child: Center(
-                                child: Image.asset(
-                                  'assets/image/image_take_away.png',
-                                  width: 28,
-                                  height: 28,
-                                ),
+                                child:
+                                    isTakeAwaySelected
+                                        ? Image.asset(
+                                          'assets/image/image_take_away.png',
+                                          width: 28,
+                                          height: 28,
+                                        )
+                                        : Image.asset(
+                                          'assets/image/image_delivery.png',
+                                          width: 28,
+                                          height: 28,
+                                        ),
                               ),
                             ),
                             const SizedBox(width: 8),
-                            const Text(
-                              'Take Away',
-                              style: TextStyle(
+                            Text(
+                              isTakeAwaySelected ? 'Take Away' : 'Delivery',
+                              style: const TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -280,64 +834,261 @@ class _AddToCartPageState extends State<AddToCartPage> {
                   ),
                 ),
 
-                // Time Selection Section
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'Pilih Waktu',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
+                // Time Selection or Delivery Address Section
+                !isTakeAwaySelected
+                    ? Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(20),
                         ),
-                        const SizedBox(height: 12),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 16,
-                            vertical: 12,
-                          ),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            border: Border.all(color: Colors.grey.shade300),
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: Row(
-                            children: [
-                              const Icon(
-                                Icons.access_time,
-                                color: BaseColors.secondary,
-                                size: 20,
-                              ),
-                              const SizedBox(width: 12),
-                              const Expanded(
-                                child: Text(
-                                  'Ambil Sekarang',
+                        padding: const EdgeInsets.all(20),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // Header Alamat + Tombol Ubah
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const Text(
+                                  'Alamat Delivery',
                                   style: TextStyle(
-                                    fontSize: 14,
+                                    fontSize: 16,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
+                                OutlinedButton(
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => DeliveryPage(),
+                                      ),
+                                    );
+                                  },
+                                  style: OutlinedButton.styleFrom(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(30),
+                                    ),
+                                    side: const BorderSide(color: Colors.black),
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 16,
+                                      vertical: 8,
+                                    ),
+                                  ),
+                                  child: const Text(
+                                    'Ubah Alamat',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 16),
+                            // Konten Alamat
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: const [
+                                Text(
+                                  'Jalan semolowaru selatan V no.7',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                SizedBox(height: 6),
+                                Text(
+                                  'Mahadevi Katarina - 6287853591966',
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                                SizedBox(height: 4),
+                                Text(
+                                  'Jl. Semolowaru Selatan V No.7, RT.004/RW.03, Semolowaru, '
+                                  'Kec. Sukolilo, Surabaya, Jawa Timur 60119, Indonesia',
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 20),
+                            // Box Catatan Alamat
+                            Container(
+                              width: double.infinity,
+                              padding: const EdgeInsets.all(12),
+                              decoration: BoxDecoration(
+                                color: BaseColors.greyBG,
+                                borderRadius: BorderRadius.circular(12),
                               ),
-                              Icon(
-                                Icons.keyboard_arrow_down,
-                                color: Colors.grey.shade600,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Text(
+                                    'Catatan Alamat',
+                                    style: TextStyle(
+                                      color: Colors.grey,
+                                      fontWeight: FontWeight.normal,
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 8),
+                                  Row(
+                                    children: const [
+                                      Icon(
+                                        Icons.article,
+                                        color: Colors.grey,
+                                        size: 20,
+                                      ),
+                                      SizedBox(width: 8),
+                                      Text(
+                                        '-',
+                                        style: TextStyle(color: Colors.grey),
+                                      ),
+                                    ],
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
+                            ),
+                            const SizedBox(height: 16),
+                            const Text(
+                              'Pilih Kurir',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(height: 12),
+                            GestureDetector(
+                              onTap: () => showCourierSelectionModal(context),
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 20,
+                                  vertical: 10,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  border: Border.all(
+                                    color: Colors.grey.shade300,
+                                  ),
+                                  borderRadius: BorderRadius.circular(30),
+                                ),
+                                child: Row(
+                                  children: [
+                                    Container(
+                                      width: 40,
+                                      height: 40,
+                                      decoration: const BoxDecoration(
+                                        color: Color(0xFFB5D4BA),
+                                        shape: BoxShape.circle,
+                                      ),
+                                      child: Center(
+                                        child: Image.asset(
+                                          'assets/image/image_grab_express.png', // You'll need to add this asset
+                                          width: 30,
+                                          height: 30,
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(width: 12),
+                                    const Expanded(
+                                      child: Text(
+                                        'GrabExpress',
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                    const Text(
+                                      'Rp10.000',
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 8),
+                                    Icon(
+                                      Icons.keyboard_arrow_down,
+                                      color: Colors.grey.shade600,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
+                      ),
+                    )
+                    : Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        padding: const EdgeInsets.all(16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              'Pilih Waktu',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(height: 12),
+                            GestureDetector(
+                              onTap: () => _showTimeBottomSheet(context),
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 16,
+                                  vertical: 12,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  border: Border.all(
+                                    color: Colors.grey.shade300,
+                                  ),
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: Row(
+                                  children: [
+                                    const Icon(
+                                      Icons.access_time,
+                                      color: BaseColors.secondary,
+                                      size: 20,
+                                    ),
+                                    const SizedBox(width: 12),
+                                    const Expanded(
+                                      child: Text(
+                                        'Ambil Sekarang',
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                    Icon(
+                                      Icons.keyboard_arrow_down,
+                                      color: Colors.grey.shade600,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
-                  ),
-                ),
+
                 // Order Items Section
                 Container(
                   margin: const EdgeInsets.symmetric(horizontal: 16),
@@ -362,7 +1113,12 @@ class _AddToCartPageState extends State<AddToCartPage> {
                           ),
                           ElevatedButton(
                             onPressed: () {
-                              // Add menu functionality
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => MenuPage(),
+                                ),
+                              );
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: BaseColors.primary,
@@ -389,7 +1145,7 @@ class _AddToCartPageState extends State<AddToCartPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Image.asset(
-                            'assets/image/image_menu.png', // Update with your actual asset path
+                            'assets/image/image_menu.png', 
                             width: 80,
                             height: 80,
                           ),
@@ -460,7 +1216,6 @@ class _AddToCartPageState extends State<AddToCartPage> {
                                   height: 20,
                                 ),
                                 onPressed: () {
-                                  // Edit functionality
                                 },
                               ),
                               IconButton(
@@ -470,7 +1225,6 @@ class _AddToCartPageState extends State<AddToCartPage> {
                                   height: 20,
                                 ),
                                 onPressed: () {
-                                  // Delete functionality
                                 },
                               ),
                               SizedBox(width: 10),
@@ -581,9 +1335,7 @@ class _AddToCartPageState extends State<AddToCartPage> {
                                         decoration: BoxDecoration(
                                           color: Colors.white,
                                           border: Border.all(
-                                            color:
-                                                Colors
-                                                    .grey, // ganti BaseColors.border kalau ada
+                                            color: Colors.grey,
                                             width: 1.5,
                                           ),
                                           borderRadius: BorderRadius.circular(
@@ -613,7 +1365,7 @@ class _AddToCartPageState extends State<AddToCartPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Row(
-                              children: const [
+                              children: [
                                 Text(
                                   'Ringkasan Pembayaran',
                                   style: TextStyle(
@@ -622,10 +1374,13 @@ class _AddToCartPageState extends State<AddToCartPage> {
                                   ),
                                 ),
                                 SizedBox(width: 6),
-                                Icon(
-                                  Icons.info_outline,
-                                  color: BaseColors.primary,
-                                  size: 18,
+                                GestureDetector(
+                                  onTap: () => showPaymentSummaryModal(context),
+                                  child: Icon(
+                                    Icons.info_outline,
+                                    color: BaseColors.primary,
+                                    size: 18,
+                                  ),
                                 ),
                               ],
                             ),
@@ -662,10 +1417,15 @@ class _AddToCartPageState extends State<AddToCartPage> {
                                       style: TextStyle(color: Colors.green),
                                     ),
                                     const SizedBox(width: 6),
-                                    const Icon(
-                                      Icons.info_outline,
-                                      color: BaseColors.primary,
-                                      size: 18,
+                                    GestureDetector(
+                                      onTap:
+                                          () => showJiwaPointInfoModal(context),
+
+                                      child: const Icon(
+                                        Icons.info_outline,
+                                        color: BaseColors.primary,
+                                        size: 18,
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -799,12 +1559,12 @@ class _AddToCartPageState extends State<AddToCartPage> {
               right: 0,
               child: BottomPayment(
                 onPressed: () {
-                  // Navigasi ke halaman pembayaran
-                  print('Navigasi ke halaman pembayaran');
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(builder: (context) => PaymentMethodPage()),
-                  // );
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => PaymentMethodPage(),
+                    ),
+                  );
                 },
               ),
             ),

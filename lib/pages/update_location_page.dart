@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:jiwaapp_task7/theme/color.dart';
 import 'package:jiwaapp_task7/widgets/appbar_primary.dart';
+import 'package:jiwaapp_task7/widgets/button_primary.dart';
+import 'package:jiwaapp_task7/widgets/modal_bottom_pin.dart';
 
 class UpdateLocationPage extends StatefulWidget {
   final Map<String, String> addressData;
@@ -105,24 +108,7 @@ class _UpdateLocationPageState extends State<UpdateLocationPage> {
               _buildPhoneField(),
 
               const SizedBox(height: 24),
-
-              ElevatedButton(
-                onPressed: _saveAddress,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: BaseColors.primary,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                  padding: const EdgeInsets.symmetric(vertical: 15),
-                ),
-                child: const Text(
-                  'Simpan',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ),
+              ButtonPrimary(label: 'Simpan', onPressed: _saveAddress),
             ],
           ),
         ),
@@ -190,7 +176,7 @@ class _UpdateLocationPageState extends State<UpdateLocationPage> {
           Container(
             width: 30,
             height: 30,
-            
+
             child: CircleAvatar(
               backgroundColor: BaseColors.primary,
               child: Image.asset(
@@ -230,68 +216,70 @@ class _UpdateLocationPageState extends State<UpdateLocationPage> {
   }
 
   Widget _buildPhoneField() {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.grey.shade300),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Padding(
-            padding: EdgeInsets.only(left: 16, top: 8),
-            child: Text(
-              'Nomor Ponsel',
-              style: TextStyle(
-                fontWeight: FontWeight.normal,
-                fontSize: 12,
-                color: Colors.black,
+    return Padding(
+      padding: const EdgeInsets.all(4),
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.grey.shade300),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(12),
+              child: Text(
+                'Nomor Ponsel',
+                style: TextStyle(color: Colors.black, fontSize: 12),
               ),
             ),
-          ),
-          TextField(
-            controller: _phoneController,
-            keyboardType: TextInputType.phone,
-            decoration: InputDecoration(
-              prefixIcon: Padding(
-                padding: const EdgeInsets.only(left: 12, right: 8),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        border: Border.all(color: BaseColors.border),
-                      ),
-                      child: Image.asset(
-                        fit: BoxFit.fill,
-                        'assets/image/image_bendera_indonesia.png',
-                        width: 20,
-                        height: 20,
+            Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 12,
+                  ),
+                  child: Container(
+                    width: 32,
+                    height: 32,
+                    decoration: BoxDecoration(
+                      border: Border.all(color: BaseColors.border),
+                      shape: BoxShape.circle,
+                      image: DecorationImage(
+                        image: AssetImage(
+                          'assets/image/image_bendera_indonesia.png',
+                        ),
+                        fit: BoxFit.cover,
                       ),
                     ),
-                    const SizedBox(width: 8),
-                    const Text(
-                      '+62',
-                      style: TextStyle(
-                        fontWeight: FontWeight.normal,
-                        color: Colors.black,
-                        fontSize: 16,
-                      ),
-                    ),
-                    Icon(Icons.keyboard_arrow_down, color: BaseColors.black),
-
-                    const SizedBox(width: 8),
-                    Container(height: 24, width: 1, color: BaseColors.black),
-                  ],
+                  ),
                 ),
-              ),
-              hintText: 'Masukkan nomor ponsel',
-              hintStyle: TextStyle(color: Colors.grey.shade400),
-              contentPadding: const EdgeInsets.symmetric(vertical: 16),
+                Text('+62', style: TextStyle(color: Colors.black)),
+                const Icon(Icons.keyboard_arrow_down, color: Colors.black),
+                Container(
+                  height: 30,
+                  width: 1,
+                  color: Colors.black,
+                  margin: EdgeInsets.symmetric(horizontal: 8),
+                ),
+                Expanded(
+                  child: TextField(
+                    controller: _phoneController,
+                    keyboardType: TextInputType.phone,
+                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                    decoration: const InputDecoration(
+                      border: InputBorder.none,
+                      contentPadding: EdgeInsets.symmetric(vertical: 12),
+                      hintText: '',
+                    ),
+                    style: const TextStyle(fontSize: 16),
+                  ),
+                ),
+              ],
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:jiwaapp_task7/theme/color.dart';
 import 'package:jiwaapp_task7/widgets/appbar_primary.dart';
-import 'package:jiwaapp_task7/widgets/modal_bottom_order.dart';
+import 'package:jiwaapp_task7/widgets/bottom_status_payment.dart';
 
-class OrderDetailPage extends StatelessWidget {
-  const OrderDetailPage({Key? key}) : super(key: key);
+class OrderStatusPage extends StatelessWidget {
+  const OrderStatusPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +16,7 @@ class OrderDetailPage extends StatelessWidget {
         children: [
           SingleChildScrollView(
             child: Padding(
-              padding: const EdgeInsets.only(bottom: 80),
+              padding: const EdgeInsets.only(bottom: 0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -38,7 +38,7 @@ class OrderDetailPage extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   const Text(
-                                    'Terima kasih #temansejiwa!',
+                                    'Menunggu Pembayaran',
                                     style: TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold,
@@ -47,7 +47,7 @@ class OrderDetailPage extends StatelessWidget {
                                   ),
                                   const SizedBox(height: 4),
                                   Text(
-                                    'Selamat menikmati dan terus gunakan JIWA+ ya!',
+                                    'Silahkan buka aplikasi E-Wallet kamu untuk melakukan pembayaran',
                                     style: TextStyle(
                                       fontSize: 14,
                                       color: Colors.grey[600],
@@ -91,8 +91,8 @@ class OrderDetailPage extends StatelessWidget {
                             ),
                             const SizedBox(width: 16),
                             Container(
-                              width: 70,
-                              height: 70,
+                              width: 60,
+                              height: 60,
                               decoration: const BoxDecoration(
                                 shape: BoxShape.circle,
                                 color: Color(0xFFE65952),
@@ -100,7 +100,7 @@ class OrderDetailPage extends StatelessWidget {
                               child: Padding(
                                 padding: const EdgeInsets.all(12),
                                 child: Image.asset(
-                                  'assets/image/image_order.png',
+                                  'assets/image/image_awaiting_payment.png',
                                   fit: BoxFit.contain,
                                 ),
                               ),
@@ -133,145 +133,7 @@ class OrderDetailPage extends StatelessWidget {
                       ],
                     ),
                   ),
-                  Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 16),
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'Informasi Kurir',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
-                          ),
-                        ),
-                        const SizedBox(height: 12),
-
-                        Container(
-                          padding: const EdgeInsets.all(16),
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey.shade300),
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Column(
-                            children: [
-                              Row(
-                                children: [
-                                  Container(
-                                    width: 40,
-                                    height: 40,
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: Color(0xFF0BA90A),
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(3),
-                                      child: Image.asset(
-                                        'assets/logo/logo_gosend.jpeg',
-                                        fit: BoxFit.contain,
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(width: 12),
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        const Text(
-                                          'GoSend',
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w500,
-                                          ),
-                                        ),
-                                        Row(
-                                          children: [
-                                            const Text(
-                                              'GK-11-804875780',
-                                              style: TextStyle(fontSize: 14),
-                                            ),
-                                            const SizedBox(width: 4),
-                                            InkWell(
-                                              onTap: () {
-                                                Clipboard.setData(
-                                                  const ClipboardData(
-                                                    text: 'GK-11-804875780',
-                                                  ),
-                                                );
-                                                ScaffoldMessenger.of(
-                                                  context,
-                                                ).showSnackBar(
-                                                  const SnackBar(
-                                                    content: Text(
-                                                      'Tracking ID copied to clipboard',
-                                                    ),
-                                                    duration: Duration(
-                                                      seconds: 1,
-                                                    ),
-                                                  ),
-                                                );
-                                              },
-                                              child: const Icon(
-                                                Icons.copy,
-                                                size: 14,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-
-                              const Padding(
-                                padding: EdgeInsets.symmetric(vertical: 16),
-                                child: Divider(
-                                  height: 1,
-                                  color: Color(0xFFDDDDDD),
-                                ),
-                              ),
-
-                              Row(
-                                children: [
-                                  Container(
-                                    width: 40,
-                                    height: 40,
-                                    decoration: BoxDecoration(
-                                      color: Colors.grey[300],
-                                      shape: BoxShape.circle,
-                                    ),
-                                    child: Icon(
-                                      Icons.person,
-                                      color: Colors.grey[700],
-                                      size: 24,
-                                    ),
-                                  ),
-                                  const SizedBox(width: 12),
-                                  const Text(
-                                    'santri Hengki Purnomo',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 16),
                   Container(
                     margin: const EdgeInsets.symmetric(horizontal: 16),
                     padding: const EdgeInsets.all(16),
@@ -283,7 +145,7 @@ class OrderDetailPage extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const Text(
-                          'Detail Delivery',
+                          'Detail Take Away',
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
@@ -326,7 +188,7 @@ class OrderDetailPage extends StatelessWidget {
                                   child: Padding(
                                     padding: const EdgeInsets.all(5),
                                     child: Image.asset(
-                                      'assets/image/image_location.png',
+                                      'assets/image/image_time.png',
                                       fit: BoxFit.contain,
                                     ),
                                   ),
@@ -341,8 +203,9 @@ class OrderDetailPage extends StatelessWidget {
                                   Text(
                                     'Lokasi Outlet',
                                     style: TextStyle(
-                                      fontSize: 14,
+                                      fontSize: 12,
                                       color: BaseColors.black,
+                                      fontWeight: FontWeight.bold,
                                     ),
                                   ),
                                   const Text(
@@ -361,38 +224,26 @@ class OrderDetailPage extends StatelessWidget {
                                   ),
                                   const SizedBox(height: 40),
                                   Text(
-                                    'Alamat Pengiriman',
+                                    'Waktu Pick Up',
                                     style: TextStyle(
-                                      fontSize: 14,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.bold,
                                       color: BaseColors.black,
                                     ),
                                   ),
                                   Row(
                                     children: [
                                       const Text(
-                                        'Mahadevi Katarina',
+                                        '30 Apr 2025 | 09.25',
                                         style: TextStyle(
                                           fontSize: 16,
-                                          fontWeight: FontWeight.w500,
-                                          color: Colors.grey,
-                                        ),
-                                      ),
-                                      Text(
-                                        ' - 628223116895',
-                                        style: TextStyle(
-                                          fontSize: 14,
-                                          color: Colors.grey[600],
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.black,
                                         ),
                                       ),
                                     ],
                                   ),
-                                  Text(
-                                    'Taman Jemursari Selatan I, Jemur Wonosari, Surabaya, Jawa Timur, Indonesia',
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      color: Colors.grey[600],
-                                    ),
-                                  ),
+                                  //
                                 ],
                               ),
                             ),
@@ -527,83 +378,6 @@ class OrderDetailPage extends StatelessWidget {
                             ),
                           ],
                         ),
-                        const SizedBox(height: 12),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'Takeaway Charge',
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: Colors.black,
-                              ),
-                            ),
-                            Text(
-                              'Rp3.500',
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500,
-                                color: Colors.black,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 12),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'Delivery Fee',
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: Colors.black,
-                              ),
-                            ),
-                            Text(
-                              'Rp13.000',
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500,
-                                color: Colors.black,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 12),
-
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'JIWA POINT',
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: Color(0xFFE25C4B),
-                              ),
-                            ),
-                            Row(
-                              children: [
-                                Container(
-                                  width: 20,
-                                  height: 20,
-
-                                  child: Image.asset(
-                                    'assets/image/image_jiwapoint_white.png',
-                                  ),
-                                ),
-                                const SizedBox(width: 4),
-                                Text(
-                                  '-9.728',
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w500,
-                                    color: Color(0xFFE25C4B),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
 
                         const SizedBox(height: 16),
                         Divider(color: Colors.grey[300]),
@@ -631,52 +405,6 @@ class OrderDetailPage extends StatelessWidget {
                           ],
                         ),
                         const SizedBox(height: 12),
-
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'Total Point',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 14,
-                                color: Colors.green,
-                              ),
-                            ),
-                            Text(
-                              '694',
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500,
-                                color: Colors.green,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 12),
-
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'Total XP',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-
-                                fontSize: 14,
-                                color: Colors.green,
-                              ),
-                            ),
-                            Text(
-                              '16 XP',
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500,
-                                color: Colors.green,
-                              ),
-                            ),
-                          ],
-                        ),
                       ],
                     ),
                   ),
@@ -774,64 +502,53 @@ class OrderDetailPage extends StatelessWidget {
                       ],
                     ),
                   ),
-                  const SizedBox(height: 80),
+                  const SizedBox(height: 200),
                 ],
               ),
             ),
           ),
-
           Positioned(
             left: 0,
             right: 0,
             bottom: 0,
-            child: Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(color: Colors.white),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: OutlinedButton(
-                      onPressed: () {},
-                      style: OutlinedButton.styleFrom(
-                        side: BorderSide(color: BaseColors.black),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30),
+            child: BottomStatusPayment(
+              timeoutSeconds: 270, // 4:30 as shown in the image
+              onCancelPayment: () {
+                // Handle cancel payment
+                showDialog(
+                  context: context,
+                  builder:
+                      (context) => AlertDialog(
+                        title: const Text('Konfirmasi'),
+                        content: const Text(
+                          'Apakah Anda yakin ingin membatalkan pembayaran?',
                         ),
-                        padding: EdgeInsets.symmetric(vertical: 15),
+                        actions: [
+                          TextButton(
+                            onPressed: () => Navigator.pop(context),
+                            child: const Text('Tidak'),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                              // Additional cancel logic
+                            },
+                            child: const Text('Ya'),
+                          ),
+                        ],
                       ),
-                      child: const Text(
-                        'Bantuan',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ),
+                );
+              },
+              onContinuePayment: () {
+                // Handle continue payment
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Melanjutkan ke pembayaran...'),
+                    duration: Duration(seconds: 2),
                   ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: ElevatedButton(
-                      onPressed: () {
-                        showRepeatOrderBottomSheet(context);
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Color(0xFFE25C4B),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                        padding: EdgeInsets.symmetric(vertical: 15),
-                      ),
-                      child: const Text(
-                        'Pesan Ulang',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+                );
+                // Navigate to payment gateway or next step
+              },
             ),
           ),
         ],

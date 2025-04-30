@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:jiwaapp_task7/pages/delivery_page.dart';
 import 'package:jiwaapp_task7/pages/home_page.dart';
+import 'package:jiwaapp_task7/pages/loyalty_membership_page.dart';
 import 'package:jiwaapp_task7/pages/menu_page.dart';
 import 'package:jiwaapp_task7/pages/my_voucher_page.dart';
 import 'package:jiwaapp_task7/pages/onboarding_page.dart';
 import 'package:jiwaapp_task7/pages/order_page.dart';
 import 'package:jiwaapp_task7/pages/referral_page.dart';
 import 'package:jiwaapp_task7/pages/subscription_page.dart';
+import 'package:jiwaapp_task7/pages/update_profile_page.dart';
 import 'package:jiwaapp_task7/theme/color.dart';
+import 'package:jiwaapp_task7/widgets/modal_bottom_privacy_license.dart';
 import 'package:jiwaapp_task7/widgets/navbar.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -50,6 +54,41 @@ class _ProfilePageState extends State<ProfilePage> {
     }
   }
 
+  void _openJiwaCare(BuildContext context) async {
+    final Uri JiwaCareAppUri = Uri.parse(
+      'https://api.whatsapp.com/send/?phone=628118891915&text&type=phone_number&app_absent=0',
+    );
+    final Uri JiwaCareWebUri = Uri.parse(
+      'https://api.whatsapp.com/send/?phone=628118891915&text&type=phone_number&app_absent=0',
+    );
+
+    try {
+      bool launched = await launchUrl(
+        JiwaCareAppUri,
+        mode: LaunchMode.externalNonBrowserApplication,
+      );
+
+      // Jika gagal, buka di browser
+      if (!launched) {
+        launched = await launchUrl(
+          JiwaCareWebUri,
+          mode: LaunchMode.externalApplication,
+        );
+      }
+
+      if (!launched) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Tidak dapat membuka Instagram')),
+        );
+      }
+    } catch (e) {
+      print('Error membuka Instagram: $e');
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Error: $e')));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -72,60 +111,69 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(16, 5, 16, 10),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Row(
-                      children: [
-                        Container(
-                          child: const Icon(
-                            Icons.person_outline,
-                            color: Color(0xFF2D1143),
-                            size: 40,
+              GestureDetector(
+                onTap:
+                    () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => UpdateProfilePage(),
+                      ),
+                    ),
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 5, 16, 10),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Row(
+                        children: [
+                          Container(
+                            child: const Icon(
+                              Icons.person_outline,
+                              color: Color(0xFF2D1143),
+                              size: 40,
+                            ),
                           ),
-                        ),
-                        const SizedBox(width: 16),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: const [
-                              Text(
-                                'Mahadevi Katarina',
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                  color: Color(0xFF2D1143),
+                          const SizedBox(width: 16),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: const [
+                                Text(
+                                  'Mahadevi Katarina',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xFF2D1143),
+                                  ),
                                 ),
-                              ),
-                              SizedBox(height: 4),
-                              Text(
-                                '6287853591966',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  color: Colors.grey,
+                                SizedBox(height: 4),
+                                Text(
+                                  '6287853591966',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.grey,
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
-                        ),
-                        Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            shape: BoxShape.circle,
+                          Container(
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              shape: BoxShape.circle,
+                            ),
+                            child: const Icon(
+                              Icons.mode_edit_outline,
+                              color: Color(0xFF2D1143),
+                              size: 24,
+                            ),
                           ),
-                          child: const Icon(
-                            Icons.mode_edit_outline,
-                            color: Color(0xFF2D1143),
-                            size: 24,
-                          ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -302,7 +350,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => const MenuPage(),
+                                  builder: (context) => LoyaltyMembershipPage(),
                                 ),
                               );
                             },
@@ -340,28 +388,16 @@ class _ProfilePageState extends State<ProfilePage> {
                           _buildMenuItem(
                             imageAssetPath:
                                 'assets/image/image_jiwacare_profile.png',
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const MenuPage(),
-                                ),
-                              );
-                            },
+                            onTap: () => _openJiwaCare(context),
+
                             title: 'Jiwa Care',
                             iconColor: BaseColors.primary,
                           ),
                           _buildDivider(),
                           _buildMenuItem(
                             imageAssetPath: 'assets/image/image_privacy.png',
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const MenuPage(),
-                                ),
-                              );
-                            },
+                            onTap: () {},
+
                             title: 'Kebijakan Privasi',
                             iconColor: BaseColors.primary,
                           ),

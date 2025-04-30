@@ -6,8 +6,7 @@ class PromoBanner extends StatelessWidget {
   final String imagePath;
   final Color fallbackColor;
   final String fallbackText;
-    final VoidCallback? onTap;
-
+  final VoidCallback? onTap;
 
   const PromoBanner({
     Key? key,
@@ -16,13 +15,12 @@ class PromoBanner extends StatelessWidget {
     required this.imagePath,
     required this.fallbackColor,
     required this.fallbackText,
-        this.onTap,
-
+    this.onTap,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    Widget bannerContent = Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
@@ -71,5 +69,12 @@ class PromoBanner extends StatelessWidget {
         ),
       ],
     );
+
+    // Tambahkan interaksi tap jika onTap disediakan
+    if (onTap != null) {
+      return GestureDetector(onTap: onTap, child: bannerContent);
+    }
+
+    return bannerContent;
   }
 }

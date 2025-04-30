@@ -11,6 +11,39 @@ class OutletDetailPage extends StatelessWidget {
   const OutletDetailPage({Key? key, required this.outletData})
     : super(key: key);
 
+  void _openMaps(BuildContext context) async {
+    final Uri MapsUri = Uri.parse('https://maps.app.goo.gl/Jvg6V5taxaVWQXsz9');
+    final Uri MapsWebUri = Uri.parse(
+      'https://maps.app.goo.gl/Jvg6V5taxaVWQXsz9',
+    );
+
+    try {
+      bool launched = await launchUrl(
+        MapsUri,
+        mode: LaunchMode.externalNonBrowserApplication,
+      );
+
+      // Jika gagal, buka di browser
+      if (!launched) {
+        launched = await launchUrl(
+          MapsWebUri,
+          mode: LaunchMode.externalApplication,
+        );
+      }
+
+      if (!launched) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Tidak dapat membuka Instagram')),
+        );
+      }
+    } catch (e) {
+      print('Error membuka Instagram: $e');
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Error: $e')));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final name = outletData['name'] as String;
@@ -37,12 +70,11 @@ class OutletDetailPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              margin: const EdgeInsets.all(16), 
+              margin: const EdgeInsets.all(16),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(16),
               ),
-              clipBehavior:
-                  Clip.antiAlias, 
+              clipBehavior: Clip.antiAlias,
               child: Image.asset(
                 'assets/image/googlemaps_barata.png',
                 height: 250,
@@ -121,7 +153,7 @@ class OutletDetailPage extends StatelessWidget {
                     width: 130,
                     child: ElevatedButton(
                       onPressed: () async {
-                        
+                        _openMaps(context);
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: BaseColors.primary,

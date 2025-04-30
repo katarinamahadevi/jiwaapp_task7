@@ -66,7 +66,7 @@ class _LoginPageState extends State<LoginPage> {
       isScrollControlled: true,
       builder: (context) {
         return SizedBox(
-          height: MediaQuery.of(context).size.height * 0.6, // Tinggi 60% layar
+          height: MediaQuery.of(context).size.height * 0.6, 
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
@@ -288,18 +288,16 @@ class _LoginPageState extends State<LoginPage> {
                     onTap:
                         isButtonEnabled
                             ? () {
-                              // Aksi saat tombol diklik
                               print(
                                 'Masuk dengan nomor: ${phoneController.text}',
                               );
 
-                              // Navigasi ke halaman lain
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                   builder:
                                       (context) =>
-                                          PinVerificationPage(), // Ganti dengan nama halamanmu
+                                          PinVerificationPage(), 
                                 ),
                               );
                             }

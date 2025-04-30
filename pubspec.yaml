@@ -15,6 +15,9 @@ dependencies:
   carousel_slider: ^5.0.0
   google_fonts: ^6.2.1
   intl: ^0.20.2
+  # google_maps_flutter: ^2.12.1
+  # google_maps_flutter_platform_interface: ^2.11.1
+  # google_maps_flutter_android: ^2.16.1
 
 dev_dependencies:
   flutter_test:
