@@ -14,116 +14,28 @@ class _LoginPageState extends State<LoginPage> {
     'assets/banner/banner2.jpg',
     'assets/banner/banner3.jpg',
   ];
-  String selectedCountry = 'Indonesia';
-  String selectedDialCode = '+62';
-  String selectedFlagAsset = 'assets/image/image_bendera_indonesia.png';
-  final List<Map<String, String>> countries = [
-    {
-      'name': 'Afghanistan',
-      'code': '+93',
-      'flag': 'assets/image/image_bendera_indonesia.png',
-    },
-    {
-      'name': 'Albania',
-      'code': '+355',
-      'flag': 'assets/image/image_bendera_indonesia.png',
-    },
-    {
-      'name': 'Algeria',
-      'code': '+213',
-      'flag': 'assets/image/image_bendera_indonesia.png',
-    },
-    {
-      'name': 'American Samoa',
-      'code': '+1684',
-      'flag': 'assets/image/image_bendera_indonesia.png',
-    },
-    {
-      'name': 'Indonesia',
-      'code': '+62',
-      'flag': 'assets/image/image_bendera_indonesia.png',
-    },
-  ];
 
-  final TextEditingController phoneController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
   bool isChecked = false;
   bool isButtonEnabled = false;
 
   void validateForm() {
-    String phone = phoneController.text;
+    String email = emailController.text.trim();
+    final emailRegex = RegExp(r'^.+@.+\..+$'); 
     setState(() {
-      isButtonEnabled = phone.length >= 9 && isChecked;
+      isButtonEnabled = emailRegex.hasMatch(email) && isChecked;
     });
-  }
-
-  void showCountryPicker() {
-    showModalBottomSheet(
-      backgroundColor: Colors.white,
-      context: context,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-      ),
-      isScrollControlled: true,
-      builder: (context) {
-        return SizedBox(
-          height: MediaQuery.of(context).size.height * 0.6, 
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              SizedBox(height: 16),
-              Container(
-                height: 4,
-                width: 40,
-                decoration: BoxDecoration(
-                  color: Colors.grey[400],
-                  borderRadius: BorderRadius.circular(2),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Text(
-                  'Masukkan nama negara',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                ),
-              ),
-              Expanded(
-                child: ListView.builder(
-                  itemCount: countries.length,
-                  itemBuilder: (context, index) {
-                    final country = countries[index];
-                    return ListTile(
-                      leading: Image.asset(country['flag']!, width: 32),
-                      title: Text(country['name']!),
-                      trailing: Text(country['code']!),
-                      onTap: () {
-                        setState(() {
-                          selectedCountry = country['name']!;
-                          selectedDialCode = country['code']!;
-                          selectedFlagAsset = country['flag']!;
-                        });
-                        Navigator.pop(context);
-                      },
-                    );
-                  },
-                ),
-              ),
-            ],
-          ),
-        );
-      },
-    );
   }
 
   @override
   void initState() {
     super.initState();
-    phoneController.addListener(validateForm);
+    emailController.addListener(validateForm);
   }
 
   @override
   void dispose() {
-    phoneController.dispose();
+    emailController.dispose();
     super.dispose();
   }
 
@@ -132,28 +44,26 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       body: Stack(
         children: [
-          Container(
-            child: CarouselSlider(
-              options: CarouselOptions(
-                height: MediaQuery.of(context).size.height * 0.3,
-                autoPlay: true,
-                enlargeCenterPage: true,
-                viewportFraction: 1.0,
-                autoPlayInterval: Duration(seconds: 4),
-              ),
-              items:
-                  bannerImages.map((imagePath) {
-                    return Builder(
-                      builder: (BuildContext context) {
-                        return Image.asset(
-                          imagePath,
-                          fit: BoxFit.cover,
-                          width: double.infinity,
-                        );
-                      },
-                    );
-                  }).toList(),
+          CarouselSlider(
+            options: CarouselOptions(
+              height: MediaQuery.of(context).size.height * 0.3,
+              autoPlay: true,
+              enlargeCenterPage: true,
+              viewportFraction: 1.0,
+              autoPlayInterval: Duration(seconds: 4),
             ),
+            items:
+                bannerImages.map((imagePath) {
+                  return Builder(
+                    builder: (BuildContext context) {
+                      return Image.asset(
+                        imagePath,
+                        fit: BoxFit.cover,
+                        width: double.infinity,
+                      );
+                    },
+                  );
+                }).toList(),
           ),
 
           Align(
@@ -181,7 +91,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   SizedBox(height: 8),
                   Text(
-                    'Silahkan masuk dengan nomor ponsel yang terdaftar. Pastikan nomor kamu aktif.',
+                    'Silahkan masuk dengan alamat email yang terdaftar. Pastikan email kamu aktif.',
                     style: TextStyle(fontSize: 14, color: Colors.black54),
                   ),
                   SizedBox(height: 24),
@@ -192,35 +102,13 @@ class _LoginPageState extends State<LoginPage> {
                       borderRadius: BorderRadius.circular(12),
                       color: Colors.white,
                     ),
-                    child: Row(
-                      children: [
-                        GestureDetector(
-                          onTap: showCountryPicker,
-                          child: Row(
-                            children: [
-                              Image.asset(selectedFlagAsset, width: 24),
-                              SizedBox(width: 6),
-                              Text(
-                                selectedDialCode,
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                              Icon(Icons.keyboard_arrow_down),
-                            ],
-                          ),
-                        ),
-
-                        SizedBox(width: 12),
-                        Expanded(
-                          child: TextField(
-                            controller: phoneController,
-                            keyboardType: TextInputType.phone,
-                            decoration: InputDecoration(
-                              hintText: 'Nomor Ponsel',
-                              border: InputBorder.none,
-                            ),
-                          ),
-                        ),
-                      ],
+                    child: TextField(
+                      controller: emailController,
+                      keyboardType: TextInputType.emailAddress,
+                      decoration: InputDecoration(
+                        hintText: 'Alamat Email',
+                        border: InputBorder.none,
+                      ),
                     ),
                   ),
                   SizedBox(height: 20),
@@ -282,22 +170,18 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ],
                   ),
-
                   SizedBox(height: 24),
                   GestureDetector(
                     onTap:
                         isButtonEnabled
                             ? () {
                               print(
-                                'Masuk dengan nomor: ${phoneController.text}',
+                                'Masuk dengan email: ${emailController.text}',
                               );
-
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder:
-                                      (context) =>
-                                          PinVerificationPage(), 
+                                  builder: (context) => PinVerificationPage(),
                                 ),
                               );
                             }

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:jiwaapp_task7/pages/detail_referral_page.dart';
 import 'package:jiwaapp_task7/theme/color.dart';
 import 'package:jiwaapp_task7/widgets/modal_bottom_referral.dart';
+import 'package:share_plus/share_plus.dart';
 
 class ReferralPage extends StatelessWidget {
   const ReferralPage({Key? key}) : super(key: key);
@@ -245,7 +247,17 @@ class ReferralPage extends StatelessWidget {
                           ),
                           const SizedBox(width: 12),
                           GestureDetector(
-                            onTap: () {},
+                            onTap: () {
+                              Clipboard.setData(
+                                const ClipboardData(text: 'MK5US6'),
+                              );
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('Kode disalin ke clipboard'),
+                                ),
+                              );
+                            },
+
                             child: const Icon(
                               Icons.copy,
                               color: Colors.black,
@@ -256,21 +268,29 @@ class ReferralPage extends StatelessWidget {
                       ),
                     ),
                     SizedBox(height: 50),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 140,
-                        vertical: 20,
-                      ),
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.white),
-                        borderRadius: BorderRadius.circular(50),
-                      ),
-                      child: const Text(
-                        'Share',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                          color: Colors.white,
+                    GestureDetector(
+                      onTap: () {
+                        // ignore: deprecated_member_use
+                        Share.share(
+                          'Hai, coba order menu favoritmu pakai JIWA+, yuk!',
+                        );
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 140,
+                          vertical: 20,
+                        ),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.white),
+                          borderRadius: BorderRadius.circular(50),
+                        ),
+                        child: const Text(
+                          'Share',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                            color: Colors.white,
+                          ),
                         ),
                       ),
                     ),

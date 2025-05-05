@@ -3,13 +3,20 @@ import 'package:flutter/material.dart';
 import 'package:jiwaapp_task7/pages/menu_page.dart';
 import 'package:jiwaapp_task7/theme/color.dart';
 import 'package:jiwaapp_task7/widgets/appbar_primary.dart';
+import 'package:jiwaapp_task7/widgets/button_primary.dart';
+import 'package:jiwaapp_task7/widgets/modal_bottom_tnc_voucher.dart';
 
-class DetailVoucherPage extends StatelessWidget { //DETAIL VOUCHER DISKON
+class DetailVoucherPage extends StatelessWidget {
+  //DETAIL VOUCHER DISKON
   const DetailVoucherPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      bottomNavigationBar: ButtonPrimary(
+        label: 'Pakai Voucer',
+        onPressed: () => MenuPage(),
+      ),
       backgroundColor: Colors.white,
       appBar: AppbarPrimary(title: 'Voucher Detail'),
       body: SingleChildScrollView(
@@ -129,7 +136,17 @@ class DetailVoucherPage extends StatelessWidget { //DETAIL VOUCHER DISKON
                 style: TextStyle(fontSize: 12),
               ),
               trailing: const Icon(Icons.chevron_right),
-              onTap: () {},
+              onTap: () {
+                showTNCVoucherBottomSheet(
+                  context: context,
+                  title: "Syarat & Ketentuan",
+                  terms: [
+                    "Voucher berlaku di semua outlet",
+                    "Diskon maksimal Rp14.000",
+                    "Tanpa minimum transaksi",
+                  ],
+                );
+              },
             ),
             const Divider(color: BaseColors.border),
             ListTile(
@@ -155,7 +172,17 @@ class DetailVoucherPage extends StatelessWidget { //DETAIL VOUCHER DISKON
                 style: TextStyle(fontSize: 12),
               ),
               trailing: const Icon(Icons.chevron_right),
-              onTap: () {},
+              onTap: () {
+                showTNCVoucherBottomSheet(
+                  context: context,
+                  title: "Cara Pakai Voucher",
+                  terms: [
+                    "Masuk ke halaman homepage",
+                    "Pilih menu yang akan di pesan kemudian masukkan ke dalam keranjang/cart ",
+                    "Masuk ke dalamn halaman Detail pesanan tekan tombol Pakai",
+                  ],
+                );
+              },
             ),
             const Divider(color: BaseColors.border),
 
@@ -182,40 +209,17 @@ class DetailVoucherPage extends StatelessWidget { //DETAIL VOUCHER DISKON
                 style: TextStyle(fontSize: 12),
               ),
               trailing: const Icon(Icons.chevron_right),
-              onTap: () {},
+              onTap: () {
+                showTNCVoucherBottomSheet(
+                  context: context,
+                  title: "Partisipasi Outlet",
+                  terms: ["Berlaku di semua outlet"],
+                );
+              },
             ),
 
             const SizedBox(height: 16),
-            Padding(
-              padding: const EdgeInsets.all(16),
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder:
-                          (context) =>
-                              MenuPage(), 
-                    ),
-                  );
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: BaseColors.primary,
-                  foregroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(50),
-                  ),
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 12,
-                    horizontal: 16,
-                  ),
-                  elevation: 0,
-                ),
-                child: const Text(
-                  'Pakai Voucher',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
-                ),
-              ),
-            ),
+            // ButtonPrimary(label: 'Pakai Voucher', onPressed: () => MenuPage()),
           ],
         ),
       ),

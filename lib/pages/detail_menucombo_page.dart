@@ -544,7 +544,7 @@ class _DetailMenucomboPageState extends State<DetailMenucomboPage> {
                                       ),
                                     );
                                   },
-                                  icon:  Icon(
+                                  icon: Icon(
                                     Icons.edit,
                                     size: 20,
                                     color: Color(0xFF3B1D52),

@@ -38,7 +38,6 @@ class _AddToCartPageState extends State<AddToCartPage> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  // Drag Indicator
                   Container(
                     width: 40,
                     height: 4,
@@ -148,7 +147,6 @@ class _AddToCartPageState extends State<AddToCartPage> {
                   Divider(color: BaseColors.border),
 
                   const SizedBox(height: 10),
-                  // Kurir: GrabExpress
                   InkWell(
                     onTap:
                         () => setState(() => selectedCourier = 'GrabExpress'),
@@ -195,7 +193,6 @@ class _AddToCartPageState extends State<AddToCartPage> {
 
                   const SizedBox(height: 10),
 
-                  // Kurir: GoSend
                   InkWell(
                     onTap: () => setState(() => selectedCourier = 'GoSend'),
                     child: Row(
@@ -241,13 +238,11 @@ class _AddToCartPageState extends State<AddToCartPage> {
                   Divider(color: BaseColors.border),
 
                   const SizedBox(height: 10),
-                  // Tombol Konfirmasi
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
                       onPressed: () {
                         Navigator.pop(context, selectedCourier);
-                        // Lakukan sesuatu dengan selectedCourier
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: BaseColors.primary,
@@ -709,11 +704,8 @@ class _AddToCartPageState extends State<AddToCartPage> {
         body: Stack(
           children: [
             ListView(
-              padding: const EdgeInsets.only(
-                bottom: 200,
-              ), // Tambahkan padding di bawah
+              padding: const EdgeInsets.only(bottom: 200),
               children: [
-                // Location Section
                 Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Container(
@@ -725,7 +717,6 @@ class _AddToCartPageState extends State<AddToCartPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // Row Take Away + Distance
                         Row(
                           children: [
                             Container(
@@ -781,7 +772,6 @@ class _AddToCartPageState extends State<AddToCartPage> {
 
                         const SizedBox(height: 16),
 
-                        // Container Kanna Homestay
                         Container(
                           padding: const EdgeInsets.symmetric(
                             horizontal: 16,
@@ -834,7 +824,6 @@ class _AddToCartPageState extends State<AddToCartPage> {
                   ),
                 ),
 
-                // Time Selection or Delivery Address Section
                 !isTakeAwaySelected
                     ? Padding(
                       padding: const EdgeInsets.all(16.0),
@@ -847,7 +836,6 @@ class _AddToCartPageState extends State<AddToCartPage> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            // Header Alamat + Tombol Ubah
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -888,7 +876,6 @@ class _AddToCartPageState extends State<AddToCartPage> {
                               ],
                             ),
                             const SizedBox(height: 16),
-                            // Konten Alamat
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: const [
@@ -919,7 +906,6 @@ class _AddToCartPageState extends State<AddToCartPage> {
                               ],
                             ),
                             const SizedBox(height: 20),
-                            // Box Catatan Alamat
                             Container(
                               width: double.infinity,
                               padding: const EdgeInsets.all(12),
@@ -990,7 +976,7 @@ class _AddToCartPageState extends State<AddToCartPage> {
                                       ),
                                       child: Center(
                                         child: Image.asset(
-                                          'assets/image/image_grab_express.png', // You'll need to add this asset
+                                          'assets/image/image_grab_express.png',
                                           width: 30,
                                           height: 30,
                                         ),
@@ -1089,7 +1075,6 @@ class _AddToCartPageState extends State<AddToCartPage> {
                       ),
                     ),
 
-                // Order Items Section
                 Container(
                   margin: const EdgeInsets.symmetric(horizontal: 16),
                   padding: const EdgeInsets.all(16.0),
@@ -1145,7 +1130,7 @@ class _AddToCartPageState extends State<AddToCartPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Image.asset(
-                            'assets/image/image_menu.png', 
+                            'assets/image/image_menu.png',
                             width: 80,
                             height: 80,
                           ),
@@ -1215,8 +1200,7 @@ class _AddToCartPageState extends State<AddToCartPage> {
                                   width: 20,
                                   height: 20,
                                 ),
-                                onPressed: () {
-                                },
+                                onPressed: () {},
                               ),
                               IconButton(
                                 icon: Image.asset(
@@ -1224,8 +1208,7 @@ class _AddToCartPageState extends State<AddToCartPage> {
                                   width: 20,
                                   height: 20,
                                 ),
-                                onPressed: () {
-                                },
+                                onPressed: () {},
                               ),
                               SizedBox(width: 10),
                               Row(
@@ -1280,7 +1263,6 @@ class _AddToCartPageState extends State<AddToCartPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // --- Tambahan Order ---
                       Container(
                         decoration: BoxDecoration(
                           color: Colors.white,
@@ -1354,7 +1336,6 @@ class _AddToCartPageState extends State<AddToCartPage> {
 
                       const SizedBox(height: 16),
 
-                      // --- Ringkasan Pembayaran ---
                       Container(
                         decoration: BoxDecoration(
                           color: Colors.white,
@@ -1406,7 +1387,9 @@ class _AddToCartPageState extends State<AddToCartPage> {
                                 ),
                               ],
                             ),
-                            const SizedBox(height: 16),
+                            const Divider(height: 20),
+
+                            const SizedBox(height: 10),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -1465,7 +1448,6 @@ class _AddToCartPageState extends State<AddToCartPage> {
 
                       const SizedBox(height: 16),
 
-                      // --- Container Promo & Jiwa Point ---
                       Container(
                         padding: EdgeInsets.symmetric(
                           horizontal: 5,
@@ -1509,14 +1491,13 @@ class _AddToCartPageState extends State<AddToCartPage> {
                                     builder: (context) => MyVoucherPage(),
                                   ),
                                 );
-                                // Aksi jika klik promo
                               },
                             ),
                             const Padding(
                               padding: EdgeInsets.symmetric(
                                 horizontal: 20,
                                 vertical: 5,
-                              ), // Atur sesuai desain kamu
+                              ),
                               child: Divider(
                                 height: 1,
                                 color: BaseColors.greyText,

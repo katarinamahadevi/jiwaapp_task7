@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:jiwaapp_task7/pages/delivery_page.dart';
 import 'package:jiwaapp_task7/pages/home_page.dart';
 import 'package:jiwaapp_task7/pages/loyalty_membership_page.dart';
@@ -12,6 +13,7 @@ import 'package:jiwaapp_task7/pages/update_profile_page.dart';
 import 'package:jiwaapp_task7/theme/color.dart';
 import 'package:jiwaapp_task7/widgets/modal_bottom_privacy_license.dart';
 import 'package:jiwaapp_task7/widgets/navbar.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -188,7 +190,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
                       ),
-                      margin: EdgeInsets.only(top: 30),
+                      margin: EdgeInsets.only(top: 70),
                       child: Column(
                         children: [
                           Container(
@@ -209,13 +211,29 @@ class _ProfilePageState extends State<ProfilePage> {
                               children: [
                                 Row(
                                   children: [
-                                    Text(
-                                      'MK5US6',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 28,
-                                        fontWeight: FontWeight.bold,
-                                        letterSpacing: 2,
+                                    GestureDetector(
+                                      onTap: () {
+                                        Clipboard.setData(
+                                          const ClipboardData(text: 'MK5US6'),
+                                        );
+                                        ScaffoldMessenger.of(
+                                          context,
+                                        ).showSnackBar(
+                                          const SnackBar(
+                                            content: Text(
+                                              'Kode disalin ke clipboard',
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                      child: Text(
+                                        'MK5US6',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 28,
+                                          fontWeight: FontWeight.bold,
+                                          letterSpacing: 2,
+                                        ),
                                       ),
                                     ),
                                     const SizedBox(width: 10),
@@ -226,12 +244,20 @@ class _ProfilePageState extends State<ProfilePage> {
                                     ),
                                   ],
                                 ),
-                                SizedBox(
-                                  width: 36,
-                                  height: 36,
-                                  child: Image.asset(
-                                    'assets/image/image_referral_profile.png',
-                                    fit: BoxFit.contain,
+                                GestureDetector(
+                                  onTap: () {
+                                    // ignore: deprecated_member_use
+                                    Share.share(
+                                      'Hai, coba order menu favoritmu pakai JIWA+, yuk!',
+                                    );
+                                  },
+                                  child: SizedBox(
+                                    width: 36,
+                                    height: 36,
+                                    child: Image.asset(
+                                      'assets/image/image_referral_profile.png',
+                                      fit: BoxFit.contain,
+                                    ),
                                   ),
                                 ),
                               ],
@@ -241,7 +267,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                     ),
                     Positioned(
-                      top: 0,
+                      top: 15,
                       left: 0,
                       right: 0,
                       child: Container(
@@ -396,7 +422,9 @@ class _ProfilePageState extends State<ProfilePage> {
                           _buildDivider(),
                           _buildMenuItem(
                             imageAssetPath: 'assets/image/image_privacy.png',
-                            onTap: () {},
+                            onTap: () {
+                              showPrivacyLicenseModal(context);
+                            },
 
                             title: 'Kebijakan Privasi',
                             iconColor: BaseColors.primary,

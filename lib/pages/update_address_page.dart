@@ -3,18 +3,17 @@ import 'package:flutter/services.dart';
 import 'package:jiwaapp_task7/theme/color.dart';
 import 'package:jiwaapp_task7/widgets/appbar_primary.dart';
 import 'package:jiwaapp_task7/widgets/button_primary.dart';
-import 'package:jiwaapp_task7/widgets/modal_bottom_pin.dart';
 
-class UpdateLocationPage extends StatefulWidget {
+class UpdateAddressPage extends StatefulWidget {
   final Map<String, String> addressData;
 
-  const UpdateLocationPage({super.key, required this.addressData});
+  const UpdateAddressPage({super.key, required this.addressData});
 
   @override
-  _UpdateLocationPageState createState() => _UpdateLocationPageState();
+  _UpdateAddressPageState createState() => _UpdateAddressPageState();
 }
 
-class _UpdateLocationPageState extends State<UpdateLocationPage> {
+class _UpdateAddressPageState extends State<UpdateAddressPage> {
   late TextEditingController _labelController;
   late TextEditingController _addressController;
   late TextEditingController _noteController;
@@ -48,6 +47,10 @@ class _UpdateLocationPageState extends State<UpdateLocationPage> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppbarPrimary(title: 'Ubah Alamat'),
+      bottomNavigationBar: ButtonPrimary(
+        label: 'Simpan',
+        onPressed: _saveAddress,
+      ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -108,7 +111,6 @@ class _UpdateLocationPageState extends State<UpdateLocationPage> {
               _buildPhoneField(),
 
               const SizedBox(height: 24),
-              ButtonPrimary(label: 'Simpan', onPressed: _saveAddress),
             ],
           ),
         ),

@@ -2,11 +2,94 @@ import 'package:flutter/material.dart';
 import 'package:jiwaapp_task7/pages/jiwa_point_page.dart';
 import 'package:jiwaapp_task7/theme/color.dart';
 
-class LoyaltyMembershipPage extends StatelessWidget { //TEMAN SEJIWA
+class LoyaltyMembershipPage extends StatefulWidget {
   const LoyaltyMembershipPage({super.key});
 
   @override
+  State<LoyaltyMembershipPage> createState() => _LoyaltyMembershipPageState();
+}
+
+class _LoyaltyMembershipPageState extends State<LoyaltyMembershipPage> {
+  late int currentLevelIndex;
+  late PageController _pageController;
+
+  final membershipLevels = [
+    {
+      'name': 'Jiwa',
+      'icon': 'assets/image/image_loyalty_membership.png',
+      'iconLocked': 'assets/image/image_loyalty_membership.png',
+      'current': true,
+      'xp': 100,
+      'maxXp': 100,
+      'description': '',
+      'showProgress': true,
+    },
+    {
+      'name': 'Teman Sejiwa',
+      'icon': 'assets/image/image_teman_sejiwa.png',
+      'iconLocked': 'assets/image/image_teman_sejiwa.png',
+      'current': true,
+      'xp': 362,
+      'maxXp': 400,
+      'description': '',
+      'showProgress': true,
+    },
+    {
+      'name': 'Sahabat Sejiwa',
+      'icon': 'assets/image/image_teman_sejiwa.png',
+      'iconLocked': 'assets/image/image_saudara_sejiwa.png',
+      'current': false,
+      'xp': 0,
+      'maxXp': 100,
+      'description': 'Kurang 38 XP lagi untuk menjadi level ini',
+      'showProgress': false,
+    },
+    {
+      'name': 'Belahan Jiwa',
+      'icon': 'assets/image/image_teman_sejiwa.png',
+      'iconLocked': 'assets/image/image_saudara_sejiwa.png',
+      'current': false,
+      'xp': 0,
+      'maxXp': 0,
+      'description': 'Kurang 100 XP lagi untuk menjadi level ini',
+      'showProgress': false,
+    },
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+
+    currentLevelIndex = membershipLevels.indexWhere(
+      (level) => level['current'] == true && level['xp'] != level['maxXp'],
+    );
+    if (currentLevelIndex == -1) {
+      currentLevelIndex = membershipLevels.lastIndexWhere(
+        (level) => level['current'] == true,
+      );
+    }
+    if (currentLevelIndex == -1) currentLevelIndex = 0;
+
+    _pageController = PageController(
+      viewportFraction: 0.5,
+      initialPage: currentLevelIndex,
+    );
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final purpleContainerHeight = calculatePurpleContainerHeight(
+      currentLevelIndex,
+    );
+    final jiwaPointTopPosition = purpleContainerHeight - 50;
+    final rewardsTopPosition = jiwaPointTopPosition + 120;
+
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
@@ -27,11 +110,11 @@ class LoyaltyMembershipPage extends StatelessWidget { //TEMAN SEJIWA
           children: [
             Container(
               color: BaseColors.white,
-              height: MediaQuery.of(context).size.height * 1.5,
+              height: MediaQuery.of(context).size.height * 1.8,
               width: double.infinity,
             ),
             Container(
-              height: 450,
+              height: purpleContainerHeight,
               width: double.infinity,
               decoration: const BoxDecoration(
                 color: BaseColors.secondary,
@@ -48,7 +131,7 @@ class LoyaltyMembershipPage extends StatelessWidget { //TEMAN SEJIWA
               ),
             ),
             Positioned(
-              top: 400,
+              top: jiwaPointTopPosition,
               left: 20,
               right: 20,
               child: Container(
@@ -131,7 +214,7 @@ class LoyaltyMembershipPage extends StatelessWidget { //TEMAN SEJIWA
               ),
             ),
             Positioned(
-              top: 520,
+              top: rewardsTopPosition,
               left: 20,
               right: 20,
               child: Column(
@@ -197,182 +280,185 @@ class LoyaltyMembershipPage extends StatelessWidget { //TEMAN SEJIWA
     );
   }
 
+  double calculatePurpleContainerHeight(int index) {
+    double baseHeight = 450.0;
+
+    final level = membershipLevels[index];
+
+    if ((level['description'] as String).isNotEmpty) {
+      baseHeight += 20.0;
+    }
+
+    return baseHeight;
+  }
+
   Widget buildMembershipLevelSlider() {
-    final membershipLevels = [
-      {
-        'name': 'Jiwa',
-        'icon': 'assets/image/image_loyalty_membership.png',
-        'iconLocked': 'assets/image/image_loyalty_membership.png',
-        'current': true,
-        'xp': 100,
-        'maxXp': 100,
-        'description': '',
-      },
-      {
-        'name': 'Teman Sejiwa',
-        'icon': 'assets/image/image_teman_sejiwa.png',
-        'iconLocked': 'assets/image/image_teman_sejiwa.png',
-        'current': true,
-        'xp': 100,
-        'maxXp': 100,
-        'description': '',
-      },
-      {
-        'name': 'Sahabat Sejiwa',
-        'icon': 'assets/image/image_teman_sejiwa.png',
-        'iconLocked': 'assets/image/image_teman_sejiwa.png',
-        'current': false,
-        'xp': 100,
-        'maxXp': 100,
-        'description': 'Kurang 38 XP lagi untuk menjadi level ini',
-      },
-      {
-        'name': 'Belahan Jiwa',
-        'icon': 'assets/image/image_teman_sejiwa.png',
-        'iconLocked': 'assets/image/image_teman_sejiwa.png',
-        'current': false,
-        'xp': 0,
-        'maxXp': 0,
-        'description': 'Kurang 100 XP lagi untuk menjadi level ini',
-      },
-    ];
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SizedBox(
+              height: 280,
+              child: PageView.builder(
+                itemCount: membershipLevels.length,
+                controller: _pageController,
+                onPageChanged: (index) {
+                  setState(() {
+                    currentLevelIndex = index;
+                  });
+                },
+                itemBuilder: (context, index) {
+                  final level = membershipLevels[index];
+                  final bool isCurrent = level['current'] == true;
+                  final double progress =
+                      (level['maxXp'] as int) > 0
+                          ? (level['xp'] as int) / (level['maxXp'] as int)
+                          : 0.0;
+                  final bool isComplete = progress >= 1.0;
 
-    int currentLevelIndex = membershipLevels.indexWhere(
-      (level) => level['current'] == true,
-    );
-    if (currentLevelIndex == -1) currentLevelIndex = 0;
+                  bool isCenter = index == currentLevelIndex;
 
-    return Column(
-      children: [
-        SizedBox(
-          height: 220, 
-          child: PageView.builder(
-            itemCount: membershipLevels.length,
-            controller: PageController(viewportFraction: 1.0),
-            padEnds: false,
-            itemBuilder: (context, index) {
-              final level = membershipLevels[index];
-              final bool isCurrent = level['current'] == true;
-              final double progress =
-                  (level['xp'] as int) / (level['maxXp'] as int);
-              final bool isComplete = progress >= 1.0;
-
-              return Container(
-                margin: const EdgeInsets.symmetric(horizontal: 10),
-                child: Column(
-                  children: [
-                    Container(
-                      width: 140,
-                      height: 140,
-                      decoration: BoxDecoration(
-                        color:
-                            isCurrent
-                                ? BaseColors.primary
-                                : const Color(0xFF666B71),
-                        shape: BoxShape.circle,
-                        border: Border.all(color: Colors.white, width: 2),
-                      ),
-                      child: Center(
-                        child: Stack(
-                          alignment: Alignment.center,
-                          children: [
-                            Image.asset(
-                              isCurrent
-                                  ? (isComplete ? level['icon'] : level['icon'])
-                                      as String
-                                  : level['iconLocked'] as String,
-                              width: 100,
-                              height: 100,
+                  return Center(
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 300),
+                      curve: Curves.easeInOut,
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          AnimatedContainer(
+                            duration: const Duration(milliseconds: 300),
+                            curve: Curves.easeInOut,
+                            width: isCenter ? 150 : 120,
+                            height: isCenter ? 150 : 120,
+                            decoration: BoxDecoration(
+                              color:
+                                  isCurrent
+                                      ? BaseColors.primary
+                                      : const Color(0xFF666B71),
+                              shape: BoxShape.circle,
+                              border: Border.all(color: Colors.white, width: 2),
                             ),
-                            if (!isCurrent)
-                              const Icon(
-                                Icons.lock,
+                            child: Center(
+                              child: Stack(
+                                alignment: Alignment.center,
+                                children: [
+                                  Image.asset(
+                                    isCurrent
+                                        ? (isComplete
+                                                ? level['icon']
+                                                : level['icon'])
+                                            as String
+                                        : level['iconLocked'] as String,
+                                    width: isCenter ? 110 : 80,
+                                    height: isCenter ? 110 : 80,
+                                  ),
+                                  if (!isCurrent)
+                                    Icon(
+                                      Icons.lock,
+                                      color: Colors.white,
+                                      size: isCenter ? 40 : 30,
+                                    ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          if (isCenter) ...[
+                            const SizedBox(height: 15),
+                            Text(
+                              level['name'] as String,
+                              style: const TextStyle(
                                 color: Colors.white,
-                                size: 40,
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                            if ((level['description'] as String).isNotEmpty)
+                              Padding(
+                                padding: const EdgeInsets.only(top: 5),
+                                child: Text(
+                                  level['description'] as String,
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 12,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            if (level['showProgress'] == true)
+                              Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  const SizedBox(height: 15),
+                                  Container(
+                                    constraints: BoxConstraints(
+                                      maxWidth: constraints.maxWidth * 0.45,
+                                    ),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        CircleAvatar(
+                                          backgroundColor: BaseColors.primary,
+                                          radius: 12,
+                                          child: Image.asset(
+                                            level['icon'] as String,
+                                            height: 16,
+                                            width: 16,
+                                          ),
+                                        ),
+                                        const SizedBox(width: 6),
+                                        Expanded(
+                                          child: LinearProgressIndicator(
+                                            value: progress,
+                                            backgroundColor: Colors.white38,
+                                            color:
+                                                isCurrent
+                                                    ? BaseColors.primary
+                                                    : Colors.grey,
+                                            minHeight: 5,
+                                            borderRadius:
+                                                const BorderRadius.all(
+                                                  Radius.circular(10),
+                                                ),
+                                          ),
+                                        ),
+                                        const SizedBox(width: 6),
+                                        CircleAvatar(
+                                          backgroundColor: BaseColors.primary,
+                                          radius: 12,
+                                          child: Image.asset(
+                                            level['icon'] as String,
+                                            height: 16,
+                                            width: 16,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  const SizedBox(height: 5),
+                                  Text(
+                                    '${level['xp']} / ${level['maxXp']} XP',
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                ],
                               ),
                           ],
-                        ),
+                        ],
                       ),
                     ),
-                    const SizedBox(height: 15),
-                    Text(
-                      level['name'] as String,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 26,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    if (!isCurrent &&
-                        (level['description'] as String).isNotEmpty)
-                      Padding(
-                        padding: const EdgeInsets.only(top: 5),
-                        child: Text(
-                          level['description'] as String,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 10,
-                          ),
-                        ),
-                      ),
-                  ],
-                ),
-              );
-            },
-          ),
-        ),
-        const SizedBox(height: 10),
-        if (currentLevelIndex < membershipLevels.length - 1)
-          Column(
-            children: [
-              Container(
-                margin: const EdgeInsets.symmetric(horizontal: 100),
-                child: Row(
-                  children: [
-                    CircleAvatar(
-                      backgroundColor: BaseColors.primary,
-                      child: Image.asset(
-                        membershipLevels[currentLevelIndex]['icon'] as String,
-                        height: 24,
-                        width: 24,
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: LinearProgressIndicator(
-                        value:
-                            (membershipLevels[currentLevelIndex]['xp'] as int) /
-                            (membershipLevels[currentLevelIndex]['maxXp']
-                                as int),
-                        backgroundColor: Colors.white38,
-                        color: BaseColors.primary,
-                        minHeight: 5,
-                        borderRadius: const BorderRadius.all(
-                          Radius.circular(10),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    CircleAvatar(
-                      backgroundColor: const Color(0xFF666B71),
-                      child: Image.asset(
-                        membershipLevels[currentLevelIndex + 1]['iconLocked']
-                            as String,
-                        height: 24,
-                        width: 24,
-                      ),
-                    ),
-                  ],
-                ),
+                  );
+                },
               ),
-              const SizedBox(height: 5),
-              Text(
-                '${membershipLevels[currentLevelIndex]['xp']} / ${membershipLevels[currentLevelIndex]['maxXp']} XP',
-                style: const TextStyle(color: Colors.white, fontSize: 14),
-              ),
-            ],
-          ),
-      ],
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -383,7 +469,7 @@ class LoyaltyMembershipPage extends StatelessWidget { //TEMAN SEJIWA
   }) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 8),
-      padding: const EdgeInsets.all(30),
+      padding: const EdgeInsets.all(25),
       decoration: BoxDecoration(
         color: BaseColors.primary,
         borderRadius: BorderRadius.circular(15),
@@ -420,7 +506,7 @@ class LoyaltyMembershipPage extends StatelessWidget { //TEMAN SEJIWA
               ),
             ],
           ),
-          Image.asset(imageAssetPath, width: 50, height: 50),
+          Image.asset(imageAssetPath, width: 40, height: 45),
         ],
       ),
     );

@@ -50,6 +50,8 @@ class _MenuPageState extends State<MenuPage> {
 
   bool isTakeAwaySelected = true;
   int selectedCategoryIndex = 0;
+  final ScrollController _categoryScrollController = ScrollController();
+  final ScrollController _menuScrollController = ScrollController();
 
   final List<CategoryItem> categories = [
     CategoryItem(
@@ -118,6 +120,13 @@ class _MenuPageState extends State<MenuPage> {
       imageUrl: 'assets/image/menu_paketbertiga.png',
     ),
   ];
+
+  @override
+  void dispose() {
+    _categoryScrollController.dispose();
+    _menuScrollController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -455,28 +464,33 @@ class _MenuPageState extends State<MenuPage> {
               },
               body: Row(
                 children: [
-                  Container(
+                  // Category List with separate scroll
+                  SizedBox(
                     width: 100,
-                    color: Colors.grey[100],
-                    child: ListView.builder(
-                      padding: EdgeInsets.zero,
-                      itemCount: categories.length,
-                      itemBuilder: (context, index) {
-                        return CategoryListItem(
-                          category: categories[index],
-                          isSelected: index == selectedCategoryIndex,
-                          onTap: () {
-                            setState(() {
-                              selectedCategoryIndex = index;
-                              for (var i = 0; i < categories.length; i++) {
-                                categories[i].isSelected = i == index;
-                              }
-                            });
-                          },
-                        );
-                      },
+                    child: Container(
+                      color: Colors.grey[100],
+                      child: ListView.builder(
+                        controller: _categoryScrollController,
+                        padding: EdgeInsets.zero,
+                        itemCount: categories.length,
+                        itemBuilder: (context, index) {
+                          return CategoryListItem(
+                            category: categories[index],
+                            isSelected: index == selectedCategoryIndex,
+                            onTap: () {
+                              setState(() {
+                                selectedCategoryIndex = index;
+                                for (var i = 0; i < categories.length; i++) {
+                                  categories[i].isSelected = i == index;
+                                }
+                              });
+                            },
+                          );
+                        },
+                      ),
                     ),
                   ),
+                  // Menu items with separate scroll
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -486,7 +500,7 @@ class _MenuPageState extends State<MenuPage> {
                             16.0,
                             16.0,
                             16.0,
-                            0,
+                            8.0, // Added bottom padding
                           ),
                           child: Text(
                             categories[selectedCategoryIndex].name,
@@ -499,11 +513,13 @@ class _MenuPageState extends State<MenuPage> {
                         ),
                         Expanded(
                           child: GridView.builder(
+                            controller: _menuScrollController,
                             padding: const EdgeInsets.all(12),
                             gridDelegate:
                                 const SliverGridDelegateWithFixedCrossAxisCount(
                                   crossAxisCount: 2,
-                                  childAspectRatio: 0.75,
+                                  childAspectRatio:
+                                      0.7, // Adjusted for more height
                                   crossAxisSpacing: 12,
                                   mainAxisSpacing: 15,
                                 ),
@@ -622,6 +638,8 @@ class CategoryListItem extends StatelessWidget {
                 fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
                 fontSize: 12,
               ),
+              maxLines: 2, // Limit to 2 lines
+              overflow: TextOverflow.ellipsis, // Add ellipsis for overflow
             ),
           ],
         ),
@@ -677,79 +695,77 @@ class MenuItemCard extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.only(top: 30),
-            child: SizedBox(
-              height: 200,
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(12),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.1),
-                      spreadRadius: 1,
-                      blurRadius: 3,
-                      offset: const Offset(0, 1),
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.1),
+                    spreadRadius: 1,
+                    blurRadius: 3,
+                    offset: const Offset(0, 1),
+                  ),
+                ],
+              ),
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(8, 55, 8, 8),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      menuItem.title,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14, // Slightly reduced font size
+                      ),
+                    ),
+                    const Spacer(), // Use Spacer instead of SizedBox with fixed height
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min, // Use min size
+                          children: [
+                            Text(
+                              menuItem.price,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14,
+                                color: Colors.black,
+                              ),
+                            ),
+                            Text(
+                              menuItem.originalPrice,
+                              style: const TextStyle(
+                                fontSize: 12,
+                                color: BaseColors.primary,
+                                decoration: TextDecoration.lineThrough,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Container(
+                          width: 30,
+                          height: 30,
+                          decoration: const BoxDecoration(
+                            color: BaseColors.primary,
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Icon(
+                            Icons.add,
+                            color: Colors.white,
+                            size: 20,
+                          ),
+                        ),
+                      ],
                     ),
                   ],
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(8, 55, 8, 8),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        menuItem.title,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                        ),
-                      ),
-                      const SizedBox(height: 15),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                menuItem.price,
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 14,
-                                  color: Colors.black,
-                                ),
-                              ),
-                              Text(
-                                menuItem.originalPrice,
-                                style: const TextStyle(
-                                  fontSize: 12,
-                                  color: BaseColors.primary,
-                                  decoration: TextDecoration.lineThrough,
-                                ),
-                              ),
-                            ],
-                          ),
-                          Container(
-                            width: 30,
-                            height: 30,
-                            decoration: const BoxDecoration(
-                              color: BaseColors.primary,
-                              shape: BoxShape.circle,
-                            ),
-                            child: const Icon(
-                              Icons.add,
-                              color: Colors.white,
-                              size: 20,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
                 ),
               ),
             ),

@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:jiwaapp_task7/pages/create_address_page.dart';
 import 'package:jiwaapp_task7/pages/search_location_page.dart';
-import 'package:jiwaapp_task7/pages/update_location_page.dart';
+import 'package:jiwaapp_task7/pages/update_address_page.dart';
 import 'package:jiwaapp_task7/theme/color.dart';
 import 'package:jiwaapp_task7/widgets/appbar_primary.dart';
-import 'package:jiwaapp_task7/widgets/modal_bottom_delete.dart';
+import 'package:jiwaapp_task7/widgets/modal_bottom_delete_address.dart';
 
 class DeliveryPage extends StatelessWidget {
   const DeliveryPage({super.key});
@@ -180,7 +179,7 @@ class DeliveryPage extends StatelessWidget {
                       height: 1.4,
                     ),
                     overflow: TextOverflow.ellipsis,
-                    maxLines: 3, 
+                    maxLines: 3,
                   ),
                 ),
                 Container(
@@ -193,24 +192,38 @@ class DeliveryPage extends StatelessWidget {
                     color: Colors.grey.shade100,
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  child: Row(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Icon(
-                        Icons.article,
-                        color: Colors.grey.shade400,
-                        size: 18,
-                      ),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: Text(
-                          note != null && note.isNotEmpty ? note : '-',
-                          style: TextStyle(
-                            color: Colors.grey.shade500,
-                            fontSize: 14,
-                          ),
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 1,
+                      const Text(
+                        'Catatan',
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.grey,
                         ),
+                      ),
+                      const SizedBox(height: 8),
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.article,
+                            color: Colors.grey.shade400,
+                            size: 18,
+                          ),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Text(
+                              note != null && note.isNotEmpty ? note : '-',
+                              style: TextStyle(
+                                color: Colors.grey.shade500,
+                                fontSize: 14,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
@@ -228,7 +241,7 @@ class DeliveryPage extends StatelessWidget {
                       context,
                       MaterialPageRoute(
                         builder:
-                            (context) => UpdateLocationPage(
+                            (context) => UpdateAddressPage(
                               addressData: {
                                 'title': title,
                                 'name': name,
@@ -255,7 +268,7 @@ class DeliveryPage extends StatelessWidget {
                 const SizedBox(height: 16),
                 GestureDetector(
                   onTap: () {
-                    showModalBottomDelete(context);
+                    showModalBottomDeleteAddress(context);
                   },
                   child: Container(
                     width: 25,

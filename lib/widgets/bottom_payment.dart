@@ -25,11 +25,11 @@ class _BottomPaymentState extends State<BottomPayment> {
     _tapRecognizer =
         TapGestureRecognizer()
           ..onTap = () {
-            _showBottomSheet();
+            _showTNCBottomSheet();
           };
   }
 
-  void _showBottomSheet() {
+  void _showTNCBottomSheet() {
     showModalBottomSheet(
       backgroundColor: Colors.white,
       context: context,

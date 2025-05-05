@@ -4,38 +4,47 @@ import 'package:jiwaapp_task7/theme/color.dart';
 import 'package:jiwaapp_task7/widgets/appbar_primary.dart';
 import 'package:jiwaapp_task7/widgets/searchbar.dart';
 
-class OutletOptionsPage extends StatelessWidget {
+class OutletOptionsPage extends StatefulWidget {
   const OutletOptionsPage({Key? key}) : super(key: key);
 
   @override
+  State<OutletOptionsPage> createState() => _OutletOptionsPageState();
+}
+
+class _OutletOptionsPageState extends State<OutletOptionsPage> {
+  bool isOperatingSelected = true;
+  String selectedFilter = "Semua";
+  String selectedBrand = "Semua Brand";
+
+  final allBrandLogos = [
+    'assets/logo/logo_jiwaplus.png',
+    'assets/logo/logo_janjijiwa.png',
+    'assets/logo/logo_jiwatoast.png',
+    'assets/logo/logo_burgergeber.png',
+    'assets/logo/logo_jiwatea.png',
+    'assets/logo/logo_sejutajiwa.png',
+  ];
+
+  final kannaLogos = [
+    'assets/logo/logo_janjijiwa.png',
+    'assets/logo/logo_jiwatea.png',
+    'assets/logo/logo_burgergeber.png',
+  ];
+
+  final barataLogos = [
+    'assets/logo/logo_janjijiwa.png',
+    'assets/logo/logo_jiwatea.png',
+    'assets/logo/logo_jiwatoast.png',
+  ];
+
+  @override
   Widget build(BuildContext context) {
-    final allBrandLogos = [
-      'assets/logo/logo_jiwaplus.png',
-      'assets/logo/logo_janjijiwa.png',
-      'assets/logo/logo_jiwatoast.png',
-      'assets/logo/logo_burgergeber.png',
-      'assets/logo/logo_jiwatea.png',
-      'assets/logo/logo_sejutajiwa.png',
-    ];
-
-    final kannaLogos = [
-      'assets/logo/logo_janjijiwa.png',
-      'assets/logo/logo_jiwatea.png',
-      'assets/logo/logo_burgergeber.png',
-    ];
-
-    final barataLogos = [
-      'assets/logo/logo_janjijiwa.png',
-      'assets/logo/logo_jiwatea.png',
-      'assets/logo/logo_jiwatoast.png',
-    ];
-
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppbarPrimary(title: 'Pilih Outlet'),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: ListView(
+        child: Column(
           children: [
             const SizedBox(height: 16),
             CustomSearchBar(
@@ -47,128 +56,201 @@ class OutletOptionsPage extends StatelessWidget {
               textColor: Colors.grey,
               onTap: () {},
             ),
-
             const SizedBox(height: 16),
             Row(
               children: [
                 Expanded(
-                  child: Container(
-                    height: 35,
-                    decoration: BoxDecoration(
-                      color: BaseColors.primary,
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    alignment: Alignment.center,
-                    child: const Text(
-                      "Sedang Beroperasi",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
+                  child: GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        isOperatingSelected = true;
+                      });
+                    },
+                    child: Container(
+                      height: 35,
+                      decoration: BoxDecoration(
+                        color:
+                            isOperatingSelected
+                                ? BaseColors.primary
+                                : Colors.white,
+                        borderRadius: BorderRadius.circular(20),
+                        border:
+                            isOperatingSelected
+                                ? null
+                                : Border.all(color: Colors.grey.shade300),
+                      ),
+                      alignment: Alignment.center,
+                      child: Text(
+                        "Sedang Beroperasi",
+                        style: TextStyle(
+                          color:
+                              isOperatingSelected ? Colors.white : Colors.black,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                     ),
                   ),
                 ),
                 const SizedBox(width: 10),
                 Expanded(
-                  child: Container(
-                    height: 35,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(20),
-                      border: Border.all(color: Colors.grey.shade300),
-                    ),
-                    alignment: Alignment.center,
-                    child: const Text(
-                      "Semua Outlet",
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.black,
-                        fontWeight: FontWeight.w500,
+                  child: GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        isOperatingSelected = false;
+                      });
+                    },
+                    child: Container(
+                      height: 35,
+                      decoration: BoxDecoration(
+                        color:
+                            !isOperatingSelected
+                                ? BaseColors.primary
+                                : Colors.white,
+                        borderRadius: BorderRadius.circular(20),
+                        border:
+                            !isOperatingSelected
+                                ? null
+                                : Border.all(color: Colors.grey.shade300),
+                      ),
+                      alignment: Alignment.center,
+                      child: Text(
+                        "Semua Outlet",
+                        style: TextStyle(
+                          fontSize: 14,
+                          color:
+                              !isOperatingSelected
+                                  ? Colors.white
+                                  : Colors.black,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                     ),
                   ),
                 ),
               ],
             ),
-
             const SizedBox(height: 12),
-
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Row(
                 children: [
-                  _buildFilterChip("Semua", true),
+                  _buildFilterChip("Semua", selectedFilter == "Semua"),
                   const SizedBox(width: 10),
-                  _buildFilterChip("Dine In", false),
+                  _buildFilterChip("Dine In", selectedFilter == "Dine In"),
                   const SizedBox(width: 10),
-                  _buildFilterChip("Take Away", false),
+                  _buildFilterChip("Take Away", selectedFilter == "Take Away"),
                   const SizedBox(width: 10),
-                  _buildFilterChip("Delivery", false),
+                  _buildFilterChip("Delivery", selectedFilter == "Delivery"),
                 ],
               ),
             ),
-
             const SizedBox(height: 12),
-
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Row(
                 children: [
-                  _buildBrandChip("Semua Brand", true),
+                  _buildBrandChip(
+                    "Semua Brand",
+                    selectedBrand == "Semua Brand",
+                  ),
                   const SizedBox(width: 8),
                   ...allBrandLogos.map(
                     (logo) => Padding(
                       padding: const EdgeInsets.only(right: 5),
-                      child: _buildBrandImage(logo),
+                      child: _buildBrandImage(logo, selectedBrand == logo),
                     ),
                   ),
                 ],
               ),
             ),
+            const SizedBox(height: 10),
+            Divider(color: BaseColors.border),
+            const SizedBox(height: 10),
 
-            const SizedBox(height: 20),
-
-            _buildOutletCard(
-              context: context,
-              name: 'KANNA HOMESTAY',
-              code: 'Jilid 306',
-              isOpen: true,
-              time: '07:00 - 22:00 WIB',
-              distance: 0.55,
-              address:
-                  'Jl. Kelampis Semolo Timur 41 Rt 001 Rw 009\nKelurahan Semolowaru Kecamatan Sukolilo Kode Pos 60119\nSurabaya',
-              logos: kannaLogos, 
-              bgColor: Colors.white,
-              kmColor: BaseColors.greenContainer,
-              outletData: {
-                'name': 'KANNA HOMESTAY',
-                'code': 'Jilid 306',
-                'address':
-                    'Jl. Kelampis Semolo Timur 41 Rt 001 Rw 009 Kelurahan Semolowaru Kecamatan Sukolilo Kode Pos 60119 Surabaya',
-                'logos': kannaLogos,
-              },
-            ),
-
-            const SizedBox(height: 16),
-
-            _buildOutletCard(
-              context: context,
-              name: 'BARATA',
-              code: 'Jilid 752',
-              isOpen: true,
-              time: '07:00 - 22:00 WIB',
-              distance: 1.92,
-              address: 'Jl. Barata Jaya 19 No 52B Surabaya',
-              logos: barataLogos, 
-              bgColor: Colors.white,
-              kmColor: BaseColors.blueContainer,
-              outletData: {
-                'name': 'BARATA',
-                'code': 'Jilid 00752',
-                'address': 'Jl. Barata Jaya 19 No 52B Surabaya',
-                'logos': barataLogos,
-              },
+            // Scrollable list of outlet cards
+            Expanded(
+              child: ListView(
+                children: [
+                  _buildOutletCard(
+                    context: context,
+                    name: 'KANNA HOMESTAY',
+                    code: 'Jilid 306',
+                    isOpen: true,
+                    time: '07:00 - 22:00 WIB',
+                    distance: 0.55,
+                    address:
+                        'Jl. Kelampis Semolo Timur 41 Rt 001 Rw 009\nKelurahan Semolowaru Kecamatan Sukolilo Kode Pos 60119\nSurabaya',
+                    logos: kannaLogos,
+                    bgColor: Colors.white,
+                    kmColor: BaseColors.greenContainer,
+                    outletData: {
+                      'name': 'KANNA HOMESTAY',
+                      'code': 'Jilid 306',
+                      'address':
+                          'Jl. Kelampis Semolo Timur 41 Rt 001 Rw 009 Kelurahan Semolowaru Kecamatan Sukolilo Kode Pos 60119 Surabaya',
+                      'logos': kannaLogos,
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  _buildOutletCard(
+                    context: context,
+                    name: 'BARATA',
+                    code: 'Jilid 752',
+                    isOpen: true,
+                    time: '07:00 - 22:00 WIB',
+                    distance: 1.92,
+                    address: 'Jl. Barata Jaya 19 No 52B Surabaya',
+                    logos: barataLogos,
+                    bgColor: Colors.white,
+                    kmColor: BaseColors.blueContainer,
+                    outletData: {
+                      'name': 'BARATA',
+                      'code': 'Jilid 00752',
+                      'address': 'Jl. Barata Jaya 19 No 52B Surabaya',
+                      'logos': barataLogos,
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  _buildOutletCard(
+                    context: context,
+                    name: 'BARATA',
+                    code: 'Jilid 752',
+                    isOpen: true,
+                    time: '07:00 - 22:00 WIB',
+                    distance: 1.92,
+                    address: 'Jl. Barata Jaya 19 No 52B Surabaya',
+                    logos: barataLogos,
+                    bgColor: Colors.white,
+                    kmColor: BaseColors.blueContainer,
+                    outletData: {
+                      'name': 'BARATA',
+                      'code': 'Jilid 00752',
+                      'address': 'Jl. Barata Jaya 19 No 52B Surabaya',
+                      'logos': barataLogos,
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  _buildOutletCard(
+                    context: context,
+                    name: 'BARATA',
+                    code: 'Jilid 752',
+                    isOpen: true,
+                    time: '07:00 - 22:00 WIB',
+                    distance: 1.92,
+                    address: 'Jl. Barata Jaya 19 No 52B Surabaya',
+                    logos: barataLogos,
+                    bgColor: Colors.white,
+                    kmColor: BaseColors.blueContainer,
+                    outletData: {
+                      'name': 'BARATA',
+                      'code': 'Jilid 00752',
+                      'address': 'Jl. Barata Jaya 19 No 52B Surabaya',
+                      'logos': barataLogos,
+                    },
+                  ),
+                ],
+              ),
             ),
           ],
         ),
@@ -177,61 +259,87 @@ class OutletOptionsPage extends StatelessWidget {
   }
 
   Widget _buildFilterChip(String label, bool isSelected) {
-    return Container(
-      height: 35,
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      decoration: BoxDecoration(
-        color: isSelected ? BaseColors.primary : Colors.white,
-        borderRadius: BorderRadius.circular(18),
-        border: Border.all(
-          color: isSelected ? BaseColors.primary : Colors.grey.shade300,
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          if (selectedFilter == label) {
+            selectedFilter = "Semua";
+          } else {
+            selectedFilter = label;
+          }
+        });
+      },
+      child: Container(
+        height: 35,
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        decoration: BoxDecoration(
+          color: isSelected ? BaseColors.primary : Colors.white,
+          borderRadius: BorderRadius.circular(18),
+          border: Border.all(
+            color: isSelected ? BaseColors.primary : Colors.grey.shade300,
+          ),
         ),
-      ),
-      alignment: Alignment.center,
-      child: Text(
-        label,
-        style: TextStyle(
-          color: isSelected ? Colors.white : Colors.black,
-          fontWeight: FontWeight.w500,
-          fontSize: 12,
+        alignment: Alignment.center,
+        child: Text(
+          label,
+          style: TextStyle(
+            color: isSelected ? Colors.white : Colors.black,
+            fontWeight: FontWeight.w500,
+            fontSize: 12,
+          ),
         ),
       ),
     );
   }
 
   Widget _buildBrandChip(String label, bool isSelected) {
-    return Container(
-      height: 36,
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      decoration: BoxDecoration(
-        color: isSelected ? Color(0xFFE25C4B) : Colors.white,
-        borderRadius: BorderRadius.circular(18),
-        border: Border.all(
-          color: isSelected ? Color(0xFFE25C4B) : Colors.grey.shade300,
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          selectedBrand = label;
+        });
+      },
+      child: Container(
+        height: 36,
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        decoration: BoxDecoration(
+          color: isSelected ? Color(0xFFE25C4B) : Colors.white,
+          borderRadius: BorderRadius.circular(18),
+          border: Border.all(
+            color: isSelected ? Color(0xFFE25C4B) : Colors.grey.shade300,
+          ),
         ),
-      ),
-      alignment: Alignment.center,
-      child: Text(
-        label,
-        style: TextStyle(
-          color: isSelected ? Colors.white : Colors.black,
-          fontWeight: FontWeight.w500,
-          fontSize: 14,
+        alignment: Alignment.center,
+        child: Text(
+          label,
+          style: TextStyle(
+            color: isSelected ? Colors.white : Colors.black,
+            fontWeight: FontWeight.w500,
+            fontSize: 14,
+          ),
         ),
       ),
     );
   }
 
-  Widget _buildBrandImage(String logoPath) {
-    return Container(
-      height: 36,
-      padding: const EdgeInsets.symmetric(horizontal: 12),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: Colors.grey.shade300),
+  Widget _buildBrandImage(String logoPath, bool isSelected) {
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          selectedBrand = logoPath;
+        });
+      },
+      child: Container(
+        height: 36,
+        width: 90,
+        padding: const EdgeInsets.symmetric(horizontal: 12),
+        decoration: BoxDecoration(
+          color: isSelected ? BaseColors.primary : Colors.white,
+          borderRadius: BorderRadius.circular(18),
+          border: Border.all(color: Colors.grey.shade300, width: 1),
+        ),
+        child: Image.asset(logoPath, height: 30, width: 30),
       ),
-      child: Image.asset(logoPath, height: 20),
     );
   }
 

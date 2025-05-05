@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:jiwaapp_task7/theme/color.dart';
 import 'package:jiwaapp_task7/widgets/appbar_primary.dart';
 import 'package:jiwaapp_task7/widgets/bottom_status_payment.dart';
+import 'package:jiwaapp_task7/widgets/modal_bottom_tnc_voucher.dart';
 
 class OrderStatusPage extends StatelessWidget {
   const OrderStatusPage({super.key});
@@ -47,19 +48,19 @@ class OrderStatusPage extends StatelessWidget {
                                   ),
                                   const SizedBox(height: 4),
                                   Text(
-                                    'Silahkan buka aplikasi E-Wallet kamu untuk melakukan pembayaran',
+                                    'Silahkan buka aplikasi E-Wallet untuk menyelesaikan pembayaran kamu',
                                     style: TextStyle(
                                       fontSize: 14,
                                       color: Colors.grey[600],
                                     ),
                                   ),
-                                  const SizedBox(height: 16),
+                                  const SizedBox(height: 20),
                                   Row(
                                     children: [
                                       const Text(
                                         'ORDER ID: J-202512617405493000001',
                                         style: TextStyle(
-                                          fontSize: 12,
+                                          fontSize: 10,
                                           fontWeight: FontWeight.w500,
                                         ),
                                       ),
@@ -82,7 +83,7 @@ class OrderStatusPage extends StatelessWidget {
                                             ),
                                           );
                                         },
-                                        child: Icon(Icons.copy, size: 12),
+                                        child: Icon(Icons.copy, size: 10),
                                       ),
                                     ],
                                   ),
@@ -91,8 +92,8 @@ class OrderStatusPage extends StatelessWidget {
                             ),
                             const SizedBox(width: 16),
                             Container(
-                              width: 60,
-                              height: 60,
+                              width: 65,
+                              height: 65,
                               decoration: const BoxDecoration(
                                 shape: BoxShape.circle,
                                 color: Color(0xFFE65952),
@@ -115,17 +116,31 @@ class OrderStatusPage extends StatelessWidget {
                               'Tanggal: 30 Apr 2025 | 09:17',
                               style: TextStyle(
                                 fontWeight: FontWeight.w500,
-                                fontSize: 12,
+                                fontSize: 10,
                                 color: Colors.black,
                               ),
                             ),
-                            Text(
-                              'Syarat Dan Ketentuan',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 12,
-                                color: Color(0xFFE25C4B),
-                                decoration: TextDecoration.underline,
+                            GestureDetector(
+                              onTap: () {
+                                showTNCVoucherBottomSheet(
+                                  context: context,
+                                  title: "Syarat dan Ketentuan Delivery",
+                                  terms: [
+                                    'Harap pastikan alamat dan nomor telepon yang dimasukkan sudah benar dan dapat dihubungi oleh driver.',
+                                    'Customer harus mengambil produk yang dikembalikan oleh driver ke outlet jika tidak ada respons dari pembeli saat proses pengantaran. Outlet tidak berkewajiban mengantarkan kembali produk yang dikembalikan oleh driver.',
+                                    'Pesanan yang tidak diambil oleh customer apabila driver mengembalikan produk akan dianggap terjual dan tidak dapat di-refund atau digantikan.',
+                                    'Tunjukkan kode pick up kepada staf/barista saat mengambil pesanan Anda di outlet.',
+                                  ],
+                                );
+                              },
+                              child: Text(
+                                'Syarat Dan Ketentuan',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 12,
+                                  color: Color(0xFFE25C4B),
+                                  decoration: TextDecoration.underline,
+                                ),
                               ),
                             ),
                           ],

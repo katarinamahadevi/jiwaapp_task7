@@ -4,6 +4,7 @@ import 'package:jiwaapp_task7/pages/home_page.dart';
 import 'package:jiwaapp_task7/pages/order_detail_page.dart';
 import 'package:jiwaapp_task7/pages/profile_page.dart';
 import 'package:jiwaapp_task7/theme/color.dart';
+import 'package:jiwaapp_task7/widgets/modal_bottom_filter_order.dart';
 import 'package:jiwaapp_task7/widgets/modal_bottom_order.dart';
 import 'package:jiwaapp_task7/widgets/navbar.dart';
 
@@ -64,77 +65,136 @@ class _OrderPageState extends State<OrderPage>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: SafeArea(
-        child: NestedScrollView(
-          headerSliverBuilder: (context, innerBoxIsScrolled) {
-            return [
-              SliverToBoxAdapter(
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(height: 8),
-                      const Text(
-                        'Order',
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        ),
-                      ),
-                      const SizedBox(height: 24),
-                      Container(
-                        decoration: BoxDecoration(color: Colors.white),
-                        child: TabBar(
-                          controller: _tabController,
-                          indicator: UnderlineTabIndicator(
-                            borderSide: BorderSide(
-                              color: BaseColors.primary,
-                              width: 3.0,
+    return Stack(
+      children: [
+        // Main app scaffold
+        Scaffold(
+          backgroundColor: Colors.white,
+          body: SafeArea(
+            child: NestedScrollView(
+              headerSliverBuilder: (context, innerBoxIsScrolled) {
+                return [
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const SizedBox(height: 8),
+                          const Text(
+                            'Order',
+                            style: TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
                             ),
-                            insets: EdgeInsets.symmetric(horizontal: 0),
                           ),
-                          labelColor: BaseColors.primary,
-                          unselectedLabelColor: Colors.black,
-                          labelStyle: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
+                          const SizedBox(height: 24),
+                          Container(
+                            decoration: BoxDecoration(color: Colors.white),
+                            child: TabBar(
+                              controller: _tabController,
+                              indicator: UnderlineTabIndicator(
+                                borderSide: BorderSide(
+                                  color: BaseColors.primary,
+                                  width: 3.0,
+                                ),
+                                insets: EdgeInsets.symmetric(horizontal: 0),
+                              ),
+                              labelColor: BaseColors.primary,
+                              unselectedLabelColor: Colors.black,
+                              labelStyle: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              unselectedLabelStyle: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              tabs: const [
+                                Tab(text: 'Ongoing'),
+                                Tab(text: 'History'),
+                              ],
+                            ),
                           ),
-                          unselectedLabelStyle: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          tabs: const [
-                            Tab(text: 'Ongoing'),
-                            Tab(text: 'History'),
-                          ],
-                        ),
+                        ],
                       ),
-                    ],
+                    ),
                   ),
+                ];
+              },
+              body: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: TabBarView(
+                  controller: _tabController,
+                  children: [
+                    SingleChildScrollView(child: EmptyOrderState()),
+                    HistoryOrderContent(),
+                  ],
                 ),
               ),
-            ];
-          },
-          body: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: TabBarView(
-              controller: _tabController,
-              children: [
-                SingleChildScrollView(child: EmptyOrderState()),
-                HistoryOrderContent(),
-              ],
+            ),
+          ),
+          bottomNavigationBar: CustomBottomNavBar(
+            selectedIndex: _currentIndex,
+            onItemTapped: _onItemTapped,
+          ),
+        ),
+
+        // Filter button overlay
+        Positioned(
+          bottom: 80, // Adjust as needed to position above navbar
+          left: 0,
+          right: 0,
+          child: Center(
+            child: GestureDetector(
+              onTap: () {
+                showFilterOrderBottomSheet(context);
+              },
+              child: Container(
+                width: 100,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: BaseColors.primary,
+                  borderRadius: BorderRadius.circular(20),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.1),
+                      spreadRadius: 1,
+                      blurRadius: 4,
+                      offset: Offset(0, 2),
+                    ),
+                  ],
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    CircleAvatar(
+                      radius: 10,
+                      backgroundColor: Colors.white,
+                      child: Icon(
+                        Icons.filter_alt_outlined,
+                        color: BaseColors.primary,
+                        size: 18,
+                      ),
+                    ),
+                    SizedBox(width: 8),
+                    Text(
+                      'Filter',
+                      style: TextStyle(
+                        decoration: TextDecoration.none,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
           ),
         ),
-      ),
-      bottomNavigationBar: CustomBottomNavBar(
-        selectedIndex: _currentIndex,
-        onItemTapped: _onItemTapped,
-      ),
+      ],
     );
   }
 }

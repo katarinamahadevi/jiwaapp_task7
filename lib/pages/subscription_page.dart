@@ -81,7 +81,7 @@ class _SubscriptionPageState extends State<SubscriptionPage>
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            const SizedBox(height: 60), 
+            const SizedBox(height: 60),
             Container(
               width: 120,
               height: 120,
@@ -129,7 +129,7 @@ class _SubscriptionPageState extends State<SubscriptionPage>
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            const SizedBox(height: 60), 
+            const SizedBox(height: 60),
             Container(
               width: 120,
               height: 120,
@@ -181,15 +181,10 @@ class _SubscriptionPageState extends State<SubscriptionPage>
               ),
               child: GestureDetector(
                 onTap: () {
-                  onTap:
-                  () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => SubscriptionPage(),
-                      ),
-                    );
-                  };
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => SubscriptionPage()),
+                  );
                 },
                 child: const Text(
                   'Cari Subscription',

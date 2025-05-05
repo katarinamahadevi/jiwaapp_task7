@@ -2,9 +2,47 @@ import 'package:flutter/material.dart';
 import 'package:jiwaapp_task7/pages/login_page.dart';
 import 'package:jiwaapp_task7/pages/register_page.dart';
 import 'package:jiwaapp_task7/theme/color.dart';
+import 'package:jiwaapp_task7/widgets/modal_bottom_privacy_license.dart';
+import 'package:jiwaapp_task7/widgets/modal_bottom_verifyotp.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class OnboardingPage extends StatelessWidget {
   const OnboardingPage({Key? key}) : super(key: key);
+
+  void _openJiwaCare(BuildContext context) async {
+    final Uri JiwaCareAppUri = Uri.parse(
+      'https://api.whatsapp.com/send/?phone=628118891915&text&type=phone_number&app_absent=0',
+    );
+    final Uri JiwaCareWebUri = Uri.parse(
+      'https://api.whatsapp.com/send/?phone=628118891915&text&type=phone_number&app_absent=0',
+    );
+
+    try {
+      bool launched = await launchUrl(
+        JiwaCareAppUri,
+        mode: LaunchMode.externalNonBrowserApplication,
+      );
+
+      // Jika gagal, buka di browser
+      if (!launched) {
+        launched = await launchUrl(
+          JiwaCareWebUri,
+          mode: LaunchMode.externalApplication,
+        );
+      }
+
+      if (!launched) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Tidak dapat membuka Instagram')),
+        );
+      }
+    } catch (e) {
+      print('Error membuka Instagram: $e');
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Error: $e')));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -77,10 +115,7 @@ class OnboardingPage extends StatelessWidget {
                       ),
                       child: const Text(
                         'Login disini',
-                        style: TextStyle(
-                          fontSize: 10, 
-                          color: Colors.white,
-                        ),
+                        style: TextStyle(fontSize: 10, color: Colors.white),
                       ),
                     ),
                   ),
@@ -136,7 +171,7 @@ class OnboardingPage extends StatelessWidget {
                         Icons.chevron_right,
                         color: Colors.black,
                       ),
-                      onTap: () {},
+                      onTap: () => _openJiwaCare(context),
                     ),
                   ),
 
@@ -179,7 +214,9 @@ class OnboardingPage extends StatelessWidget {
                         Icons.chevron_right,
                         color: Colors.black,
                       ),
-                      onTap: () {},
+                      onTap: () {
+                        showPrivacyLicenseModal(context);
+                      },
                     ),
                   ),
                 ],
@@ -198,10 +235,7 @@ class OnboardingPage extends StatelessWidget {
 
             ElevatedButton(
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => RegisterPage()),
-                );
+                showVerifyOTPBottomSheet(context);
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFFE75C55),

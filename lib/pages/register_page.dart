@@ -42,6 +42,120 @@ class _RegisterPageState extends State<RegisterPage> {
     'Other',
   ];
 
+  String selectedCountry = 'Indonesia';
+  String selectedDialCode = '+62';
+  String selectedFlagAsset = 'assets/image/image_bendera_indonesia.png';
+  final List<Map<String, String>> countries = [
+    {
+      'name': 'Afghanistan',
+      'code': '+93',
+      'flag': 'assets/image/image_bendera_indonesia.png',
+    },
+    {
+      'name': 'Albania',
+      'code': '+355',
+      'flag': 'assets/image/image_bendera_indonesia.png',
+    },
+    {
+      'name': 'Algeria',
+      'code': '+213',
+      'flag': 'assets/image/image_bendera_indonesia.png',
+    },
+    {
+      'name': 'American Samoa',
+      'code': '+1684',
+      'flag': 'assets/image/image_bendera_indonesia.png',
+    },
+    {
+      'name': 'Indonesia',
+      'code': '+62',
+      'flag': 'assets/image/image_bendera_indonesia.png',
+    },
+  ];
+
+  final TextEditingController phoneController = TextEditingController();
+  bool isChecked = false;
+  bool isButtonEnabled = false;
+
+  void validateForm() {
+    String phone = phoneController.text;
+    setState(() {
+      isButtonEnabled = phone.length >= 9 && isChecked;
+    });
+  }
+
+  void showCountryPicker() {
+    //negara
+    showModalBottomSheet(
+      backgroundColor: Colors.white,
+      context: context,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      isScrollControlled: true,
+      builder: (context) {
+        return SizedBox(
+          height: MediaQuery.of(context).size.height * 0.6,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SizedBox(height: 16),
+              Container(
+                height: 4,
+                width: 40,
+                decoration: BoxDecoration(
+                  color: Colors.grey[400],
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Text(
+                  'Masukkan nama negara',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                ),
+              ),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: countries.length,
+                  itemBuilder: (context, index) {
+                    final country = countries[index];
+                    return ListTile(
+                      leading: Image.asset(country['flag']!, width: 32),
+                      title: Text(country['name']!),
+                      trailing: Text(country['code']!),
+                      onTap: () {
+                        setState(() {
+                          selectedCountry = country['name']!;
+                          selectedDialCode = country['code']!;
+                          selectedFlagAsset = country['flag']!;
+                        });
+                        Navigator.pop(context);
+                      },
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    phoneController.addListener(validateForm);
+  }
+
+  @override
+  void dispose() {
+    phoneController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -154,7 +268,45 @@ class _RegisterPageState extends State<RegisterPage> {
                 ],
               ),
               const SizedBox(height: 16),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 12),
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.grey),
+                  borderRadius: BorderRadius.circular(8),
+                  color: Colors.white,
+                ),
+                child: Row(
+                  children: [
+                    GestureDetector(
+                      onTap: showCountryPicker,
+                      child: Row(
+                        children: [
+                          Image.asset(selectedFlagAsset, width: 24),
+                          SizedBox(width: 6),
+                          Text(
+                            selectedDialCode,
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          Icon(Icons.keyboard_arrow_down),
+                        ],
+                      ),
+                    ),
 
+                    SizedBox(width: 12),
+                    Expanded(
+                      child: TextField(
+                        controller: phoneController,
+                        keyboardType: TextInputType.phone,
+                        decoration: InputDecoration(
+                          hintText: 'Nomor Ponsel',
+                          border: InputBorder.none,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: 16),
               TextField(
                 controller: _dateController,
                 decoration: InputDecoration(

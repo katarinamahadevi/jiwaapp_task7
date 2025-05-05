@@ -92,8 +92,8 @@ class _ModalBottomPinState extends State<ModalBottomPin> {
               widget.pinLength,
               (index) => Container(
                 margin: const EdgeInsets.symmetric(horizontal: 10),
-                width: 40,
-                height: 40,
+                width: 35,
+                height: 35,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   border: Border.all(color: Colors.grey.shade400, width: 1),

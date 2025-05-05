@@ -14,7 +14,7 @@ class TabbarPrimary extends StatelessWidget {
     required this.tabs,
     this.indicatorWidth = 20,
     this.dividerHeight = 0.5,
-    this.dividerColor = Colors.grey,
+    this.dividerColor = Colors.white,
   }) : super(key: key);
 
   @override
@@ -32,6 +32,7 @@ class TabbarPrimary extends StatelessWidget {
               fontWeight: FontWeight.normal,
             ),
             indicator: UnderlineTabIndicator(
+              borderRadius: BorderRadius.all(Radius.circular(20)),
               borderSide: const BorderSide(
                 width: 4.0,
                 color: BaseColors.primary,

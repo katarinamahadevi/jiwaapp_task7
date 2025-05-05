@@ -13,11 +13,33 @@ class DetailReferralPage extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
+        leading: Padding(
+          padding: const EdgeInsets.all(12.0), // biar tidak terlalu mepet
+          child: GestureDetector(
+            onTap: () {
+              Navigator.pop(context);
+            },
+            child: Container(
+              decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.white,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black12,
+                    blurRadius: 4,
+                    offset: Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: const Center(
+                child: Icon(
+                  Icons.arrow_back,
+                  color: BaseColors.primary,
+                  size: 16, // sesuai gambar
+                ),
+              ),
+            ),
+          ),
         ),
       ),
 
@@ -75,14 +97,37 @@ class DetailReferralPage extends StatelessWidget {
                         ),
                       ),
                       padding: const EdgeInsets.all(16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          _buildFriendItem("Maharani Tasha Nabila", true),
-                          const Divider(color: BaseColors.border),
-
-                          _buildFriendItem("bhagas", true),
-                        ],
+                      child: SingleChildScrollView(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            _buildFriendItem("Maharani Tasha Nabila", true),
+                            const Divider(color: BaseColors.border),
+                            _buildFriendItem("bhagas", true),
+                            const Divider(color: BaseColors.border),
+                            _buildFriendItem("Dewi Kusuma", false),
+                            const Divider(color: BaseColors.border),
+                            _buildFriendItem("Agus Santoso", true),
+                            const Divider(color: BaseColors.border),
+                            _buildFriendItem("Lisa Permata", false),
+                            const SizedBox(height: 16),
+                            const Divider(color: BaseColors.border),
+                            _buildFriendItem("Lisa Permata", false),
+                            const SizedBox(height: 16),
+                            const Divider(color: BaseColors.border),
+                            _buildFriendItem("Lisa Permata", false),
+                            const SizedBox(height: 16),
+                            const Divider(color: BaseColors.border),
+                            _buildFriendItem("Lisa Permata", false),
+                            const SizedBox(height: 16),
+                            const Divider(color: BaseColors.border),
+                            _buildFriendItem("Lisa Permata", false),
+                            const SizedBox(height: 16),
+                            const Divider(color: BaseColors.border),
+                            _buildFriendItem("Lisa Permata", false),
+                            const SizedBox(height: 16),
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -96,6 +141,15 @@ class DetailReferralPage extends StatelessWidget {
   }
 
   Widget _buildFriendItem(String name, bool isActive) {
+    final backgroundColor =
+        isActive
+            ? BaseColors.greenContainer
+            : const Color(0xFFE0E0E0); // abu-abu muda
+    final textColor =
+        isActive
+            ? BaseColors.greenText
+            : const Color(0xFF757575); // abu-abu tua
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -109,15 +163,15 @@ class DetailReferralPage extends StatelessWidget {
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
           decoration: BoxDecoration(
-            color: BaseColors.greenContainer,
+            color: backgroundColor,
             borderRadius: BorderRadius.circular(20),
           ),
           child: Text(
             isActive ? "Active" : "Inactive",
             style: TextStyle(
-              color: BaseColors.greenText,
+              color: textColor,
               fontSize: 12,
-              fontWeight: FontWeight.bold,
+              fontWeight: FontWeight.normal,
             ),
           ),
         ),

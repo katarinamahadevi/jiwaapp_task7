@@ -1,55 +1,61 @@
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:jiwaapp_task7/theme/color.dart';
 import 'package:jiwaapp_task7/widgets/appbar_primary.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class OutletDetailPage extends StatelessWidget {
+class OutletDetailPage extends StatefulWidget {
   final Map<String, dynamic> outletData;
 
   const OutletDetailPage({Key? key, required this.outletData})
     : super(key: key);
 
+  @override
+  State<OutletDetailPage> createState() => _OutletDetailPageState();
+}
+
+class _OutletDetailPageState extends State<OutletDetailPage> {
+  // Default coordinate for outlet (Surabaya example coordinates)
+  // Replace with actual outlet coordinates
+  final LatLng _outletLocation = const LatLng(-7.2575, 112.7521);
+
   void _openMaps(BuildContext context) async {
-    final Uri MapsUri = Uri.parse('https://maps.app.goo.gl/Jvg6V5taxaVWQXsz9');
-    final Uri MapsWebUri = Uri.parse(
-      'https://maps.app.goo.gl/Jvg6V5taxaVWQXsz9',
+    // Create map URL with the coordinates
+    final Uri mapsUri = Uri.parse(
+      'https://www.openstreetmap.org/?mlat=${_outletLocation.latitude}&mlon=${_outletLocation.longitude}&zoom=16',
     );
 
     try {
       bool launched = await launchUrl(
-        MapsUri,
-        mode: LaunchMode.externalNonBrowserApplication,
+        mapsUri,
+        mode: LaunchMode.externalApplication,
       );
 
-      // Jika gagal, buka di browser
       if (!launched) {
-        launched = await launchUrl(
-          MapsWebUri,
-          mode: LaunchMode.externalApplication,
-        );
-      }
-
-      if (!launched) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Tidak dapat membuka Instagram')),
-        );
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Tidak dapat membuka peta')),
+          );
+        }
       }
     } catch (e) {
-      print('Error membuka Instagram: $e');
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Error: $e')));
+      print('Error membuka peta: $e');
+      if (context.mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Error: $e')));
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final name = outletData['name'] as String;
-    final code = outletData['code'] as String;
-    final address = outletData['address'] as String;
-    final logos = outletData['logos'] as List<String>;
+    final name = widget.outletData['name'] as String;
+    final code = widget.outletData['code'] as String;
+    final address = widget.outletData['address'] as String;
+    final logos = widget.outletData['logos'] as List<String>;
 
     final operatingHours = [
       {'day': 'Minggu', 'hours': '07:00 WIB - 22:00 WIB'},
@@ -63,23 +69,56 @@ class OutletDetailPage extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: Colors.white,
-
       appBar: AppbarPrimary(title: 'Outlet Detail'),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Replace the image asset with flutter_map
             Container(
               margin: const EdgeInsets.all(16),
+              height: 250,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(16),
+                // boxShadow: [
+                //   BoxShadow(
+                //     color: Colors.grey.withOpacity(0.3),
+                //     spreadRadius: 1,
+                //     blurRadius: 5,
+                //     offset: const Offset(0, 3),
+                //   ),
+                // ],
               ),
               clipBehavior: Clip.antiAlias,
-              child: Image.asset(
-                'assets/image/googlemaps_barata.png',
-                height: 250,
-                width: double.infinity,
-                fit: BoxFit.cover,
+              child: FlutterMap(
+                options: MapOptions(
+                  // center: _outletLocation,
+                  // zoom: 15.0,
+                  interactionOptions: const InteractionOptions(
+                    flags: InteractiveFlag.all,
+                  ),
+                ),
+                children: [
+                  TileLayer(
+                    urlTemplate:
+                        'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                    userAgentPackageName: 'com.example.jiwaapp_task7',
+                  ),
+                  MarkerLayer(
+                    markers: [
+                      Marker(
+                        width: 80.0,
+                        height: 80.0,
+                        point: _outletLocation,
+                        child: const Icon(
+                          Icons.location_on,
+                          color: Colors.red,
+                          size: 40.0,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
             Padding(
@@ -92,7 +131,7 @@ class OutletDetailPage extends StatelessWidget {
                 children: [
                   Text(
                     name,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                       color: Colors.black,
@@ -152,7 +191,7 @@ class OutletDetailPage extends StatelessWidget {
                   SizedBox(
                     width: 130,
                     child: ElevatedButton(
-                      onPressed: () async {
+                      onPressed: () {
                         _openMaps(context);
                       },
                       style: ElevatedButton.styleFrom(
@@ -162,9 +201,9 @@ class OutletDetailPage extends StatelessWidget {
                         ),
                         padding: const EdgeInsets.symmetric(vertical: 12),
                       ),
-                      child: Row(
+                      child: const Row(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
+                        children: [
                           Text(
                             'Lihat di Peta',
                             style: TextStyle(color: BaseColors.white),
@@ -179,7 +218,7 @@ class OutletDetailPage extends StatelessWidget {
                   const SizedBox(height: 10),
                   Divider(color: BaseColors.border, thickness: 5),
                   const SizedBox(height: 10),
-                  Align(
+                  const Align(
                     alignment: Alignment.center,
                     child: Text(
                       'Jam Operasional',
@@ -193,7 +232,7 @@ class OutletDetailPage extends StatelessWidget {
 
                   const SizedBox(height: 12),
 
-                  Align(
+                  const Align(
                     alignment: Alignment.centerRight,
                     child: Text(
                       'Pickup / Delivery',
@@ -215,7 +254,10 @@ class OutletDetailPage extends StatelessWidget {
                         children: [
                           Text(
                             item['day']!,
-                            style: TextStyle(fontSize: 16, color: Colors.black),
+                            style: const TextStyle(
+                              fontSize: 16,
+                              color: Colors.black,
+                            ),
                           ),
                           Text(
                             item['hours']!,
@@ -232,7 +274,7 @@ class OutletDetailPage extends StatelessWidget {
                       ),
                     ),
 
-                  SizedBox(height: 24),
+                  const SizedBox(height: 24),
                 ],
               ),
             ),
@@ -245,14 +287,12 @@ class OutletDetailPage extends StatelessWidget {
   Widget _buildServiceOption(String imageAsset, String label) {
     return Row(
       children: [
-        Container(
-          child: CircleAvatar(
-            backgroundColor: BaseColors.primary,
-            child: Image.asset(imageAsset, width: 25, height: 25),
-          ),
+        CircleAvatar(
+          backgroundColor: BaseColors.primary,
+          child: Image.asset(imageAsset, width: 25, height: 25),
         ),
         const SizedBox(width: 8),
-        Text(label, style: TextStyle(fontSize: 16, color: Colors.black)),
+        Text(label, style: const TextStyle(fontSize: 16, color: Colors.black)),
       ],
     );
   }
