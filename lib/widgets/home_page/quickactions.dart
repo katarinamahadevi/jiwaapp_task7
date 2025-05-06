@@ -6,7 +6,6 @@ import 'package:jiwaapp_task7/widgets/home_page/action_button.dart';
 
 //TEMAN SEJIWA, JIWA POINT, DAN SUBSCRIPTION
 
-
 class QuickActions extends StatelessWidget {
   const QuickActions({Key? key}) : super(key: key);
 

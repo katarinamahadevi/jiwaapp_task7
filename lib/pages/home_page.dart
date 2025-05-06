@@ -95,7 +95,7 @@ class _HomePageState extends State<HomePage> {
                 children: [
                   SizedBox(height: imageHeight + 10),
                   const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 50),
+                    padding: EdgeInsets.symmetric(horizontal: 30),
                     child: QuickActions(),
                   ),
 

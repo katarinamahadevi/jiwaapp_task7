@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:jiwaapp_task7/pages/add_to_cart_page.dart';
+import 'package:jiwaapp_task7/pages/menu_page.dart'; // Import MenuPage
 import 'package:jiwaapp_task7/theme/color.dart';
 
-//MENU BIASA
-
+// MENU BIASA
 class DetailMenuPage extends StatefulWidget {
   final String title;
   final String description;
@@ -124,9 +124,20 @@ class _DetailMenuPageState extends State<DetailMenuPage> {
               height: 55,
               child: ElevatedButton(
                 onPressed: () {
-                  Navigator.push(
+                  // Calculate the total price
+                  double totalPrice = widget.price * quantity;
+
+                  // Navigate back to MenuPage with StackViewOrder
+                  Navigator.pushReplacement(
                     context,
-                    MaterialPageRoute(builder: (context) => AddToCartPage()),
+                    MaterialPageRoute(
+                      builder:
+                          (context) => MenuPage(
+                            showStackViewOrder: true,
+                            totalPrice: totalPrice,
+                            itemCount: quantity,
+                          ),
+                    ),
                   );
                 },
                 style: ElevatedButton.styleFrom(
@@ -150,6 +161,7 @@ class _DetailMenuPageState extends State<DetailMenuPage> {
           ],
         ),
       ),
+
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
@@ -393,8 +405,6 @@ class _DetailMenuPageState extends State<DetailMenuPage> {
                   ),
                 ),
               ),
-
-            
             ],
           ),
         ),

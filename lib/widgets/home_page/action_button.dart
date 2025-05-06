@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 
 // WIDGET TEMAN SEJIWA, JIWA POINT, DAN SUBSCRIPTION
 
-
 class ActionButton extends StatelessWidget {
-  final String iconAsset; 
+  final String iconAsset;
   final String title;
   final String subtitle;
   final Color backgroundColor;
@@ -12,7 +11,7 @@ class ActionButton extends StatelessWidget {
 
   const ActionButton({
     Key? key,
-    required this.iconAsset, 
+    required this.iconAsset,
     required this.title,
     required this.subtitle,
     this.backgroundColor = const Color(0xFFE05D56),
@@ -26,14 +25,14 @@ class ActionButton extends StatelessWidget {
       child: Column(
         children: [
           Container(
-            width: 60,
-            height: 60,
+            width: 50,
+            height: 50,
             decoration: BoxDecoration(
               color: backgroundColor,
               shape: BoxShape.circle,
             ),
             child: Padding(
-              padding: const EdgeInsets.all(8), 
+              padding: const EdgeInsets.all(8),
               child: Image.asset(iconAsset, fit: BoxFit.contain),
             ),
           ),

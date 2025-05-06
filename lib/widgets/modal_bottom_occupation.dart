@@ -119,15 +119,23 @@ class _ModalbottomOccupationState extends State<ModalBottomOccupation> {
                         }
                         : null,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.grey[300],
-                  disabledBackgroundColor: Colors.grey[200],
+                  backgroundColor:
+                      _selectedOccupation != null
+                          ? BaseColors.primary
+                          : Colors.grey[200],
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(25),
                   ),
                 ),
-                child: const Text(
+                child: Text(
                   'Konfirmasi',
-                  style: TextStyle(color: Colors.black54, fontSize: 16),
+                  style: TextStyle(
+                    color:
+                        _selectedOccupation != null
+                            ? Colors.white
+                            : Colors.black54,
+                    fontSize: 16,
+                  ),
                 ),
               ),
             ),

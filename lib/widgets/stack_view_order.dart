@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jiwaapp_task7/pages/add_to_cart_page.dart';
 import 'package:jiwaapp_task7/theme/color.dart';
 
 class StackViewOrder extends StatelessWidget {
@@ -37,10 +38,7 @@ class StackViewOrder extends StatelessWidget {
             children: [
               const Text(
                 'Total Harga',
-                style: TextStyle(
-                  fontSize: 12,
-                  color: Colors.grey,
-                ),
+                style: TextStyle(fontSize: 12, color: Colors.grey),
               ),
               const SizedBox(height: 4),
               Text(
@@ -53,15 +51,17 @@ class StackViewOrder extends StatelessWidget {
               ),
             ],
           ),
-          
+
           // View Order button with badge
           Stack(
             clipBehavior: Clip.none,
             children: [
               ElevatedButton(
                 onPressed: () {
-                  // Navigate to order detail page
-                  // You can implement this later
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => AddToCartPage()),
+                  );
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: BaseColors.primary,
@@ -72,14 +72,10 @@ class StackViewOrder extends StatelessWidget {
                 ),
                 child: const Text(
                   'Lihat Pesanan',
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.normal,
-                  ),
+                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.normal),
                 ),
               ),
-              
-              // Item count badge
+
               Positioned(
                 top: -8,
                 right: -8,

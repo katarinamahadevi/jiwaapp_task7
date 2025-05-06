@@ -2,6 +2,7 @@ import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
 import 'package:jiwaapp_task7/pages/add_to_cart_page.dart';
 import 'package:jiwaapp_task7/pages/detail_menu_page.dart';
+import 'package:jiwaapp_task7/pages/menu_page.dart';
 import 'package:jiwaapp_task7/theme/color.dart';
 
 //MENU COMBO
@@ -148,9 +149,18 @@ class _DetailMenucomboPageState extends State<DetailMenucomboPage> {
               height: 55,
               child: ElevatedButton(
                 onPressed: () {
-                  Navigator.push(
+                  double totalPrice = widget.price * quantity;
+
+                  Navigator.pushReplacement(
                     context,
-                    MaterialPageRoute(builder: (context) => AddToCartPage()),
+                    MaterialPageRoute(
+                      builder:
+                          (context) => MenuPage(
+                            showStackViewOrder: true,
+                            totalPrice: totalPrice,
+                            itemCount: quantity,
+                          ),
+                    ),
                   );
                 },
                 style: ElevatedButton.styleFrom(

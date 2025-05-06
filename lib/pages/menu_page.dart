@@ -9,9 +9,19 @@ import 'package:jiwaapp_task7/theme/color.dart';
 import 'package:jiwaapp_task7/widgets/modal_bottom_view_cart.dart';
 import 'package:jiwaapp_task7/widgets/navbar.dart';
 import 'package:jiwaapp_task7/widgets/searchbar.dart';
+import 'package:jiwaapp_task7/widgets/stack_view_order.dart'; // Import StackViewOrder widget
 
 class MenuPage extends StatefulWidget {
-  const MenuPage({Key? key}) : super(key: key);
+  final bool showStackViewOrder; // New parameter
+  final double totalPrice; // New parameter
+  final int itemCount; // New parameter
+
+  const MenuPage({
+    Key? key,
+    this.showStackViewOrder = false, // Default to false
+    this.totalPrice = 0.0, // Default to 0.0
+    this.itemCount = 0, // Default to 0
+  }) : super(key: key);
 
   @override
   State<MenuPage> createState() => _MenuPageState();
@@ -53,7 +63,6 @@ class _MenuPageState extends State<MenuPage> {
   int selectedCategoryIndex = 0;
   final ScrollController _categoryScrollController = ScrollController();
   final ScrollController _menuScrollController = ScrollController();
-
   final List<CategoryItem> categories = [
     CategoryItem(
       'Special For Mahadevi Katarina',
@@ -70,7 +79,6 @@ class _MenuPageState extends State<MenuPage> {
     CategoryItem('Jiwa Toast'),
     CategoryItem('Non-Coffee'),
   ];
-
   final List<MenuItem> menuItems = [
     MenuItem(
       title: 'Spesial Combo Jiwa Toast',
@@ -133,9 +141,14 @@ class _MenuPageState extends State<MenuPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: BaseColors.white,
-      bottomNavigationBar: CustomBottomNavBar(
-        selectedIndex: _currentIndex,
-        onItemTapped: _onItemTapped,
+      bottomNavigationBar: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          CustomBottomNavBar(
+            selectedIndex: _currentIndex,
+            onItemTapped: _onItemTapped,
+          ),
+        ],
       ),
       body: Stack(
         children: [
@@ -167,7 +180,7 @@ class _MenuPageState extends State<MenuPage> {
                                     color: Colors.grey.withOpacity(0.3),
                                     spreadRadius: 1,
                                     blurRadius: 3,
-                                    offset: Offset(0, 2),
+                                    offset: const Offset(0, 2),
                                   ),
                                 ]
                                 : null,
@@ -314,7 +327,7 @@ class _MenuPageState extends State<MenuPage> {
                                           color: Colors.grey.withOpacity(0.3),
                                           spreadRadius: 1,
                                           blurRadius: 3,
-                                          offset: Offset(0, 2),
+                                          offset: const Offset(0, 2),
                                         ),
                                       ]
                                       : null,
@@ -397,7 +410,7 @@ class _MenuPageState extends State<MenuPage> {
                                       color: Colors.grey.withOpacity(0.3),
                                       spreadRadius: 1,
                                       blurRadius: 3,
-                                      offset: Offset(0, 2),
+                                      offset: const Offset(0, 2),
                                     ),
                                   ]
                                   : null,
@@ -539,6 +552,17 @@ class _MenuPageState extends State<MenuPage> {
               ),
             ),
           ),
+          if (widget.showStackViewOrder)
+            Positioned(
+              bottom:
+                  20, // Posisikan di atas navbar (nilai sesuaikan dengan tinggi navbar)
+              left: 16,
+              right: 16,
+              child: StackViewOrder(
+                totalPrice: widget.totalPrice,
+                itemCount: widget.itemCount,
+              ),
+            ),
         ],
       ),
     );
@@ -678,7 +702,6 @@ class MenuItemCard extends StatelessWidget {
             .replaceAll('Rp', '')
             .replaceAll('.', '');
         final price = double.parse(priceString) / 1000;
-
         Navigator.push(
           context,
           MaterialPageRoute(
