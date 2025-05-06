@@ -6,6 +6,7 @@ import 'package:jiwaapp_task7/pages/order_page.dart';
 import 'package:jiwaapp_task7/pages/outlet_options_page.dart';
 import 'package:jiwaapp_task7/pages/profile_page.dart';
 import 'package:jiwaapp_task7/theme/color.dart';
+import 'package:jiwaapp_task7/widgets/modal_bottom_view_cart.dart';
 import 'package:jiwaapp_task7/widgets/navbar.dart';
 import 'package:jiwaapp_task7/widgets/searchbar.dart';
 
@@ -454,7 +455,9 @@ class _MenuPageState extends State<MenuPage> {
                           borderColor: Colors.grey.shade200,
                           iconColor: BaseColors.secondary,
                           textColor: BaseColors.greyText,
-                          onTap: () {},
+                          onTap: () {
+                            showModalBottomViewCart(context);
+                          },
                         ),
                       ),
                     ),

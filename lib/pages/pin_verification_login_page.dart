@@ -64,7 +64,6 @@ class _PinVerificationLoginPageState extends State<PinVerificationLoginPage> {
         ),
       ),
       body: GestureDetector(
-        // Menangkap tap dimanapun untuk memunculkan keyboard
         onTap: () {
           FocusScope.of(context).requestFocus(_focusNode);
         },
@@ -139,7 +138,7 @@ class _PinVerificationLoginPageState extends State<PinVerificationLoginPage> {
                       ),
                       TextButton(
                         onPressed: () {
-                          showVerifyOTPBottomSheet(context);
+                          showModalBottomVerifyOTPRegister(context);
                         },
                         child: Text(
                           'Kirim OTP',

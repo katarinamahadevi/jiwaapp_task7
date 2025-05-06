@@ -345,15 +345,17 @@ class _LoyaltyMembershipPageState extends State<LoyaltyMembershipPage> {
                               child: Stack(
                                 alignment: Alignment.center,
                                 children: [
-                                  Image.asset(
-                                    isCurrent
-                                        ? (isComplete
-                                                ? level['icon']
-                                                : level['icon'])
-                                            as String
-                                        : level['iconLocked'] as String,
-                                    width: isCenter ? 110 : 80,
-                                    height: isCenter ? 110 : 80,
+                                  CircleAvatar(
+                                    child: Image.asset(
+                                      isCurrent
+                                          ? (isComplete
+                                                  ? level['icon']
+                                                  : level['icon'])
+                                              as String
+                                          : level['iconLocked'] as String,
+                                      width: isCenter ? 110 : 80,
+                                      height: isCenter ? 110 : 80,
+                                    ),
                                   ),
                                   if (!isCurrent)
                                     Icon(

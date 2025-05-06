@@ -334,7 +334,7 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
                   Text('Ubah PIN', style: TextStyle(fontSize: 16)),
                   GestureDetector(
                     onTap: () {
-                      showVerifyOTPBottomSheet(context);
+                      showModalBottomVerifyOTPRegister(context);
                     },
                     child: Text('Ubah', style: TextStyle(color: Colors.red)),
                   ),

@@ -3,8 +3,12 @@ import 'package:flutter/services.dart';
 import 'package:jiwaapp_task7/pages/register_page.dart';
 import 'dart:async';
 
-class ModalBottomVerifyOTP extends StatefulWidget {
-  const ModalBottomVerifyOTP({super.key});
+void showModalBottomVerifyOTPRegister(BuildContext context) {
+  ModalBottomVerifyOTPRegister.show(context);
+}
+
+class ModalBottomVerifyOTPRegister extends StatefulWidget {
+  const ModalBottomVerifyOTPRegister({super.key});
 
   static void show(BuildContext context) {
     showModalBottomSheet(
@@ -14,17 +18,17 @@ class ModalBottomVerifyOTP extends StatefulWidget {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
-      builder: (context) => const ModalBottomVerifyOTP(),
+      builder: (context) => const ModalBottomVerifyOTPRegister(),
     );
   }
 
   @override
-  State<ModalBottomVerifyOTP> createState() =>
-      _ModalBottomVerifyOTPState();
+  State<ModalBottomVerifyOTPRegister> createState() =>
+      _ModalBottomVerifyOTPRegisterState();
 }
 
-class _ModalBottomVerifyOTPState
-    extends State<ModalBottomVerifyOTP> {
+class _ModalBottomVerifyOTPRegisterState
+    extends State<ModalBottomVerifyOTPRegister> {
   final List<TextEditingController> _otpControllers = List.generate(
     4,
     (_) => TextEditingController(),
@@ -211,6 +215,3 @@ class _ModalBottomVerifyOTPState
   }
 }
 
-void showVerifyOTPBottomSheet(BuildContext context) {
-  ModalBottomVerifyOTP.show(context);
-}

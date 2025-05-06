@@ -51,7 +51,8 @@ class _ModalBottomPinRegisterState extends State<ModalBottomPinRegister> {
     if (_pinController.text.length == widget.pinLength) {
       widget.onPinComplete(_pinController.text);
 
-      // Navigasi ke halaman Home setelah PIN selesai diisi
+      
+//NAVIGASI KE HOMEPAGE SETELAH PIN UDAH DIISI
       Navigator.of(
         context,
       ).pushReplacement(MaterialPageRoute(builder: (context) => HomePage()));

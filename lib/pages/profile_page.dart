@@ -70,7 +70,6 @@ class _ProfilePageState extends State<ProfilePage> {
         mode: LaunchMode.externalNonBrowserApplication,
       );
 
-      // Jika gagal, buka di browser
       if (!launched) {
         launched = await launchUrl(
           JiwaCareWebUri,

@@ -1,7 +1,8 @@
 import 'package:dotted_line/dotted_line.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_map/flutter_map.dart';
-import 'package:latlong2/latlong.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:jiwaapp_task7/theme/color.dart';
 import 'package:jiwaapp_task7/widgets/appbar_primary.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -19,7 +20,10 @@ class OutletDetailPage extends StatefulWidget {
 class _OutletDetailPageState extends State<OutletDetailPage> {
   // Default coordinate for outlet (Surabaya example coordinates)
   // Replace with actual outlet coordinates
-  final LatLng _outletLocation = const LatLng(-7.2575, 112.7521);
+  final LatLng _outletLocation = const LatLng(
+    -7.2575,
+    112.7521,
+  ); // dari google_maps_flutter
 
   void _openMaps(BuildContext context) async {
     // Create map URL with the coordinates
@@ -80,45 +84,40 @@ class _OutletDetailPageState extends State<OutletDetailPage> {
               height: 250,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(16),
-                // boxShadow: [
-                //   BoxShadow(
-                //     color: Colors.grey.withOpacity(0.3),
-                //     spreadRadius: 1,
-                //     blurRadius: 5,
-                //     offset: const Offset(0, 3),
-                //   ),
-                // ],
               ),
               clipBehavior: Clip.antiAlias,
-              child: FlutterMap(
-                options: MapOptions(
-                  // center: _outletLocation,
-                  // zoom: 15.0,
-                  interactionOptions: const InteractionOptions(
-                    flags: InteractiveFlag.all,
+              child: GoogleMap(
+                initialCameraPosition: CameraPosition(
+                  target: LatLng(
+                    _outletLocation.latitude,
+                    _outletLocation.longitude,
                   ),
+                  zoom: 15.0,
                 ),
-                children: [
-                  TileLayer(
-                    urlTemplate:
-                        'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                    userAgentPackageName: 'com.example.jiwaapp_task7',
+                markers: {
+                  Marker(
+                    markerId: MarkerId('outlet_marker'),
+                    position: LatLng(
+                      _outletLocation.latitude,
+                      _outletLocation.longitude,
+                    ),
+                    infoWindow: InfoWindow(title: widget.outletData['name']),
+                    icon: BitmapDescriptor.defaultMarkerWithHue(
+                      BitmapDescriptor.hueRed,
+                    ),
                   ),
-                  MarkerLayer(
-                    markers: [
-                      Marker(
-                        width: 80.0,
-                        height: 80.0,
-                        point: _outletLocation,
-                        child: const Icon(
-                          Icons.location_on,
-                          color: Colors.red,
-                          size: 40.0,
-                        ),
-                      ),
-                    ],
+                },
+                onMapCreated: (GoogleMapController controller) {
+                  // controller bisa disimpan untuk navigasi kamera
+                },
+                zoomControlsEnabled: false,
+                myLocationButtonEnabled: false,
+                mapType: MapType.normal,
+                gestureRecognizers: <Factory<OneSequenceGestureRecognizer>>{
+                  Factory<OneSequenceGestureRecognizer>(
+                    () => EagerGestureRecognizer(),
                   ),
-                ],
+                },
               ),
             ),
             Padding(

@@ -5,12 +5,12 @@ import 'package:jiwaapp_task7/widgets/modal_bottom_privacy_license.dart';
 import 'package:jiwaapp_task7/widgets/modal_bottom_verifyotp.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-
 //HALAMAN ONBOARDING (MASUK KE LOGIN/REGISTER)
 
 class OnboardingPage extends StatelessWidget {
   const OnboardingPage({Key? key}) : super(key: key);
 
+//FUNGSI MEMBUKA WA JIWACARE
   void _openJiwaCare(BuildContext context) async {
     final Uri JiwaCareAppUri = Uri.parse(
       'https://api.whatsapp.com/send/?phone=628118891915&text&type=phone_number&app_absent=0',
@@ -96,7 +96,10 @@ class OnboardingPage extends StatelessWidget {
                   ),
                   SizedBox(
                     height: 35,
-                    child: ElevatedButton(
+                    child: 
+
+  //NAVIGASI KE LOGIN PAGE
+                    ElevatedButton(
                       onPressed: () {
                         Navigator.push(
                           context,
@@ -233,10 +236,10 @@ class OnboardingPage extends StatelessWidget {
                 ),
               ),
             ),
-
+//NAVIGASI KE REGISTER PAGE (MODAL BOTTOM OTP)
             ElevatedButton(
               onPressed: () {
-                showVerifyOTPBottomSheet(context);
+                showModalBottomVerifyOTPRegister(context);
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFFE75C55),

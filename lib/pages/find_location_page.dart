@@ -1,6 +1,9 @@
+import 'dart:async';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_map/flutter_map.dart';
-import 'package:latlong2/latlong.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:jiwaapp_task7/pages/create_address_page.dart';
 import 'package:jiwaapp_task7/pages/search_location_page.dart';
 import 'package:jiwaapp_task7/theme/color.dart';
@@ -13,17 +16,48 @@ class FindLocationPage extends StatefulWidget {
 }
 
 class _FindLocationPageState extends State<FindLocationPage> {
-  final MapController _mapController = MapController();
-
   final LatLng _centerLocation = const LatLng(-7.2575, 112.7521);
-
   LatLng _selectedPosition = const LatLng(-7.2575, 112.7521);
+  GoogleMapController? _googleMapController;
+  String _address = 'Memuat alamat...';
 
   void _recenterMap() {
-    _mapController.move(_centerLocation, 15.0);
+    _googleMapController?.animateCamera(
+      CameraUpdate.newLatLngZoom(_centerLocation, 15.0),
+    );
     setState(() {
       _selectedPosition = _centerLocation;
     });
+  }
+
+  void _onCameraMove(CameraPosition position) {
+    setState(() {
+      _selectedPosition = position.target;
+    });
+  }
+
+  void _onCameraIdle() {
+    _getAddressFromLatLng(_selectedPosition);
+  }
+
+  Future<void> _getAddressFromLatLng(LatLng position) async {
+    try {
+      List<Placemark> placemarks = await placemarkFromCoordinates(
+        position.latitude,
+        position.longitude,
+      );
+      if (placemarks.isNotEmpty) {
+        final place = placemarks.first;
+        setState(() {
+          _address =
+              '${place.name}, ${place.street}, ${place.locality}, ${place.administrativeArea}, ${place.country}';
+        });
+      }
+    } catch (e) {
+      setState(() {
+        _address = 'Gagal memuat alamat';
+      });
+    }
   }
 
   @override
@@ -31,42 +65,32 @@ class _FindLocationPageState extends State<FindLocationPage> {
     return Scaffold(
       body: Stack(
         children: [
-          // Replace blue container with flutter_map
-          FlutterMap(
-            mapController: _mapController,
-            options: MapOptions(
-              // center: _centerLocation,
-              // zoom: 15.0,
-              interactionOptions: const InteractionOptions(
-                flags: InteractiveFlag.all,
-              ),
-              onTap: (tapPosition, point) {
-                setState(() {
-                  _selectedPosition = point;
-                });
-              },
+          GoogleMap(
+            initialCameraPosition: CameraPosition(
+              target: _centerLocation,
+              zoom: 15.0,
             ),
-            children: [
-              TileLayer(
-                urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                userAgentPackageName: 'com.example.jiwaapp_task7',
+            onMapCreated: (controller) {
+              _googleMapController = controller;
+            },
+            onCameraMove: _onCameraMove,
+            onCameraIdle: _onCameraIdle, // Tambahkan ini
+
+            myLocationEnabled: true,
+            myLocationButtonEnabled: false,
+            zoomControlsEnabled: false,
+            mapType: MapType.normal,
+            markers: {
+              Marker(
+                markerId: MarkerId('selected'),
+                position: _selectedPosition,
               ),
-              // Center marker that doesn't move
-              // MarkerLayer(
-              //   markers: [
-              //     Marker(
-              //       width: 40.0,
-              //       height: 40.0,
-              //       point: _selectedPosition,
-              //       child: const Icon(
-              //         Icons.location_pin,
-              //         color: Colors.red,
-              //         size: 40.0,
-              //       ),
-              //     ),
-              //   ],
-              // ),
-            ],
+            },
+            gestureRecognizers: {
+              Factory<OneSequenceGestureRecognizer>(
+                () => EagerGestureRecognizer(),
+              ),
+            },
           ),
 
           // My location button
@@ -89,6 +113,7 @@ class _FindLocationPageState extends State<FindLocationPage> {
             ),
           ),
 
+          // Bottom Sheet
           Align(
             alignment: Alignment.bottomCenter,
             child: Container(
@@ -103,7 +128,6 @@ class _FindLocationPageState extends State<FindLocationPage> {
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 20),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -111,9 +135,7 @@ class _FindLocationPageState extends State<FindLocationPage> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           GestureDetector(
-                            onTap: () {
-                              Navigator.of(context).pop();
-                            },
+                            onTap: () => Navigator.of(context).pop(),
                             child: const Row(
                               children: [
                                 Icon(
@@ -162,12 +184,11 @@ class _FindLocationPageState extends State<FindLocationPage> {
                     ),
                     Divider(color: BaseColors.border),
                     const SizedBox(height: 20),
+                    // (Contoh dummy alamat)
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                       child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          // Ikon lokasi
                           Container(
                             padding: const EdgeInsets.all(5),
                             decoration: BoxDecoration(
@@ -181,15 +202,12 @@ class _FindLocationPageState extends State<FindLocationPage> {
                             ),
                           ),
                           const SizedBox(width: 12),
-                          // Alamat
-                          const Expanded(
+                          Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                  'Taman Jemursari Selatan I No.23, Jemur Wonosari, Kec. Wonocolo, Surabaya, Jawa T...',
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
+                                const Text(
+                                  'Lokasi Terpilih',
                                   style: TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold,
@@ -197,7 +215,7 @@ class _FindLocationPageState extends State<FindLocationPage> {
                                 ),
                                 SizedBox(height: 4),
                                 Text(
-                                  'Taman Jemursari Selatan I No.23, Jemur Wonosari, Kec. Wonocolo, Surabaya, Jawa Timur 60237, Indonesia',
+                                  _address,
                                   style: TextStyle(
                                     fontSize: 14,
                                     color: Colors.black,
@@ -209,10 +227,8 @@ class _FindLocationPageState extends State<FindLocationPage> {
                         ],
                       ),
                     ),
-
                     const Spacer(),
                     Divider(color: BaseColors.border),
-                    // Tombol Konfirmasi
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                       child: SizedBox(
@@ -220,21 +236,25 @@ class _FindLocationPageState extends State<FindLocationPage> {
                         height: 56,
                         child: ElevatedButton(
                           onPressed: () {
-                            // Pass selected coordinates to CreateAddressPage
                             Navigator.push(
                               context,
                               MaterialPageRoute(
                                 builder:
                                     (context) => CreateAddressPage(
                                       addressData: {
-                                        // 'latitude': _selectedPosition.latitude,
-                                        // 'longitude': _selectedPosition.longitude,
-                                        // You can add more data here if needed
+                                        'latitude':
+                                            _selectedPosition.latitude
+                                                .toString(),
+                                        'longitude':
+                                            _selectedPosition.longitude
+                                                .toString(),
+                                        'address': _address,
                                       },
                                     ),
                               ),
                             );
                           },
+
                           style: ElevatedButton.styleFrom(
                             backgroundColor: BaseColors.primary,
                             shape: RoundedRectangleBorder(
@@ -251,18 +271,6 @@ class _FindLocationPageState extends State<FindLocationPage> {
                   ],
                 ),
               ),
-            ),
-          ),
-
-          // Centered pin indicator (optional - for better UX)
-          Positioned(
-            left: 0,
-            right: 0,
-            top:
-                MediaQuery.of(context).size.height *
-                0.25, // Adjust for bottom sheet
-            child: const Center(
-              child: Icon(Icons.location_on, color: Colors.red, size: 40),
             ),
           ),
         ],

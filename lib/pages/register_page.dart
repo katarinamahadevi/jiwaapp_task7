@@ -85,7 +85,6 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   void showCountryPicker() {
-    //negara
     showModalBottomSheet(
       backgroundColor: Colors.white,
       context: context,
@@ -307,6 +306,8 @@ class _RegisterPageState extends State<RegisterPage> {
                 ),
               ),
               SizedBox(height: 16),
+
+ 
               TextField(
                 controller: _dateController,
                 decoration: InputDecoration(
@@ -331,6 +332,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   suffixIcon: const Icon(Icons.event_available),
                 ),
                 readOnly: true,
+//TANGGAL LAHIR               
                 onTap: () {
                   showBirthDatePickerModal(
                     context,
@@ -373,6 +375,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 ),
                 readOnly: true,
                 onTap: () {
+//KEWARGANEGARAAN
                   showCountrySelectionModal(
                     context,
                     countries: _countries,
@@ -413,6 +416,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 ),
                 readOnly: true,
                 onTap: () {
+//PEKERJAAN
                   showOccupationSelectionModal(
                     context,
                     occupation: _occupation,
@@ -455,6 +459,8 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 }
 
+//PICKERDATE TANGGAL LAHIR NAVIGASI KE MODAL BOTTOM PICKER DATE
+
 void showBirthDatePickerModal(
   BuildContext context, {
   required Function(DateTime) onDateSelected,
@@ -471,6 +477,8 @@ void showBirthDatePickerModal(
         ),
   );
 }
+
+//KEWARGANEGARAAN NAVIGASI KE MODAL BOTTOM COUNTRY
 
 void showCountrySelectionModal(
   BuildContext context, {
@@ -498,6 +506,7 @@ void showCountrySelectionModal(
   );
 }
 
+//PEKERJAAN NAVIGASI KE MODAL BOTTOM OCCUPATION
 void showOccupationSelectionModal(
   BuildContext context, {
   required List<String> occupation,
@@ -524,6 +533,8 @@ void showOccupationSelectionModal(
   );
 }
 
+
+//PIN NAVIGASI KE MODAL BOTTOM PIN REGISTER
 void _showModalBottomPin(BuildContext context) {
   showModalBottomSheet(
     context: context,

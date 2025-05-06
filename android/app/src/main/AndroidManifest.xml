@@ -7,6 +7,10 @@
         android:label="jiwaapp_task7"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyB3frrz_BUtSiFaqTpZQN47bE-oLxGZx-I"/>
+
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -37,6 +41,7 @@
             
         
     </application>
+  
     <!-- Required to query activities that can process text, see:
          https://developer.android.com/training/package-visibility and
          https://developer.android.com/reference/android/content/Intent#ACTION_PROCESS_TEXT.
