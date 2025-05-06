@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:jiwaapp_task7/theme/color.dart';
 import 'package:jiwaapp_task7/widgets/appbar_primary.dart';
-import 'package:jiwaapp_task7/widgets/bottom_status_payment.dart';
+import 'package:jiwaapp_task7/widgets/button_status_payment.dart';
 import 'package:jiwaapp_task7/widgets/modal_bottom_tnc_voucher.dart';
 
 class OrderStatusPage extends StatelessWidget {
@@ -122,7 +122,7 @@ class OrderStatusPage extends StatelessWidget {
                             ),
                             GestureDetector(
                               onTap: () {
-                                showTNCVoucherBottomSheet(
+                                showModalBottomTNCVoucher(
                                   context: context,
                                   title: "Syarat dan Ketentuan Delivery",
                                   terms: [
@@ -526,7 +526,7 @@ class OrderStatusPage extends StatelessWidget {
             left: 0,
             right: 0,
             bottom: 0,
-            child: BottomStatusPayment(
+            child: ButtonStatusPayment(
               timeoutSeconds: 270, // 4:30 as shown in the image
               onCancelPayment: () {
                 // Handle cancel payment

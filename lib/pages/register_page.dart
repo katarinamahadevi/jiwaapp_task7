@@ -3,7 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:jiwaapp_task7/theme/color.dart';
 import 'package:jiwaapp_task7/widgets/modal_bottom_country_register.dart';
 import 'package:jiwaapp_task7/widgets/modal_bottom_occupation.dart';
-import 'package:jiwaapp_task7/widgets/modal_bottom_pin.dart';
+import 'package:jiwaapp_task7/widgets/modal_bottom_pin_register.dart';
 import 'package:jiwaapp_task7/widgets/modal_bottom_pickerdate.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -465,7 +465,7 @@ void showBirthDatePickerModal(
     isScrollControlled: true,
     backgroundColor: Colors.transparent,
     builder:
-        (context) => ModalbottomPickerdate(
+        (context) => ModalBottomPickerdate(
           onDateSelected: onDateSelected,
           initialDate: initialDate,
         ),
@@ -534,7 +534,7 @@ void _showModalBottomPin(BuildContext context) {
         padding: EdgeInsets.only(
           bottom: MediaQuery.of(context).viewInsets.bottom,
         ),
-        child: ModalBottomPin(
+        child: ModalBottomPinRegister(
           onPinComplete: (pin) {
             print('PIN yang dimasukkan: $pin');
             Navigator.pop(context);

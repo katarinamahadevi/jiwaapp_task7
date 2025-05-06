@@ -3,7 +3,7 @@ import 'package:jiwaapp_task7/pages/menu_page.dart';
 import 'package:jiwaapp_task7/pages/order_detail_page.dart';
 import 'package:jiwaapp_task7/theme/color.dart';
 
-Future<void> showCancelOrderBottomSheet(BuildContext context) async {
+Future<void> showModalBottomCancelOrder(BuildContext context) async {
   return showModalBottomSheet(
     context: context,
     isScrollControlled: true,

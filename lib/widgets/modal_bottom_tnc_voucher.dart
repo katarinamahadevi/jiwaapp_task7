@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-void showTNCVoucherBottomSheet({
+void showModalBottomTNCVoucher({
   required BuildContext context,
   required String title,
   required List<String> terms,

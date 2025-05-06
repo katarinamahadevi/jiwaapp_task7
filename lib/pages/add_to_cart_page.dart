@@ -5,8 +5,10 @@ import 'package:jiwaapp_task7/pages/my_voucher_page.dart';
 import 'package:jiwaapp_task7/pages/outlet_options_page.dart';
 import 'package:jiwaapp_task7/pages/payment_method_page.dart';
 import 'package:jiwaapp_task7/theme/color.dart';
-import 'package:jiwaapp_task7/widgets/bottom_payment.dart';
+import 'package:jiwaapp_task7/widgets/button_payment.dart';
 import 'package:jiwaapp_task7/widgets/toggle_cupertino.dart';
+
+//TAMBAH KE KERANJANG
 
 class AddToCartPage extends StatefulWidget {
   const AddToCartPage({super.key});
@@ -1538,7 +1540,7 @@ class _AddToCartPageState extends State<AddToCartPage> {
               bottom: 0,
               left: 0,
               right: 0,
-              child: BottomPayment(
+              child: ButtonPayment(
                 onPressed: () {
                   Navigator.push(
                     context,

@@ -2,23 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:jiwaapp_task7/theme/color.dart';
 
-class ModalbottomPickerdate extends StatefulWidget {
+//MODAL BOTTOM TANGGAL
+
+class ModalBottomPickerdate extends StatefulWidget {
   final Function(DateTime) onDateSelected;
   final DateTime? initialDate;
 
-  const ModalbottomPickerdate({
+  const ModalBottomPickerdate({
     Key? key,
     required this.onDateSelected,
     this.initialDate,
   }) : super(key: key);
 
   @override
-  State<ModalbottomPickerdate> createState() =>
+  State<ModalBottomPickerdate> createState() =>
       _ModalbottomPickerdateState();
 }
 
 class _ModalbottomPickerdateState
-    extends State<ModalbottomPickerdate> {
+    extends State<ModalBottomPickerdate> {
   late DateTime _selectedDate;
   late FixedExtentScrollController _dayController;
   late FixedExtentScrollController _monthController;

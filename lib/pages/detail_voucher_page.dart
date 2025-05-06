@@ -6,8 +6,9 @@ import 'package:jiwaapp_task7/widgets/appbar_primary.dart';
 import 'package:jiwaapp_task7/widgets/button_primary.dart';
 import 'package:jiwaapp_task7/widgets/modal_bottom_tnc_voucher.dart';
 
-class DetailVoucherPage extends StatelessWidget {
   //DETAIL VOUCHER DISKON
+
+class DetailVoucherPage extends StatelessWidget {
   const DetailVoucherPage({Key? key}) : super(key: key);
 
   @override
@@ -137,7 +138,7 @@ class DetailVoucherPage extends StatelessWidget {
               ),
               trailing: const Icon(Icons.chevron_right),
               onTap: () {
-                showTNCVoucherBottomSheet(
+                showModalBottomTNCVoucher(
                   context: context,
                   title: "Syarat & Ketentuan",
                   terms: [
@@ -173,7 +174,7 @@ class DetailVoucherPage extends StatelessWidget {
               ),
               trailing: const Icon(Icons.chevron_right),
               onTap: () {
-                showTNCVoucherBottomSheet(
+                showModalBottomTNCVoucher(
                   context: context,
                   title: "Cara Pakai Voucher",
                   terms: [
@@ -210,7 +211,7 @@ class DetailVoucherPage extends StatelessWidget {
               ),
               trailing: const Icon(Icons.chevron_right),
               onTap: () {
-                showTNCVoucherBottomSheet(
+                showModalBottomTNCVoucher(
                   context: context,
                   title: "Partisipasi Outlet",
                   terms: ["Berlaku di semua outlet"],

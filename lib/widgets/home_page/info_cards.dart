@@ -3,8 +3,12 @@ import 'package:jiwaapp_task7/pages/my_voucher_page.dart';
 import 'package:jiwaapp_task7/pages/referral_page.dart';
 import 'package:jiwaapp_task7/widgets/home_page/info_card.dart';
 
+//VOUCHER DAN REFERRAL
+
 class InfoCards extends StatelessWidget {
   const InfoCards({Key? key}) : super(key: key);
+
+
 
   @override
   Widget build(BuildContext context) {

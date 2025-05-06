@@ -13,16 +13,12 @@ class FindLocationPage extends StatefulWidget {
 }
 
 class _FindLocationPageState extends State<FindLocationPage> {
-  // Map controller
   final MapController _mapController = MapController();
 
-  // Default center location (Surabaya coordinates)
   final LatLng _centerLocation = const LatLng(-7.2575, 112.7521);
 
-  // Selected position - will update when marker is moved
   LatLng _selectedPosition = const LatLng(-7.2575, 112.7521);
 
-  // Recenter map to user's location (this is a placeholder - we would need geolocator plugin for actual location)
   void _recenterMap() {
     _mapController.move(_centerLocation, 15.0);
     setState(() {
@@ -56,20 +52,20 @@ class _FindLocationPageState extends State<FindLocationPage> {
                 userAgentPackageName: 'com.example.jiwaapp_task7',
               ),
               // Center marker that doesn't move
-              MarkerLayer(
-                markers: [
-                  Marker(
-                    width: 40.0,
-                    height: 40.0,
-                    point: _selectedPosition,
-                    child: const Icon(
-                      Icons.location_pin,
-                      color: Colors.red,
-                      size: 40.0,
-                    ),
-                  ),
-                ],
-              ),
+              // MarkerLayer(
+              //   markers: [
+              //     Marker(
+              //       width: 40.0,
+              //       height: 40.0,
+              //       point: _selectedPosition,
+              //       child: const Icon(
+              //         Icons.location_pin,
+              //         color: Colors.red,
+              //         size: 40.0,
+              //       ),
+              //     ),
+              //   ],
+              // ),
             ],
           ),
 

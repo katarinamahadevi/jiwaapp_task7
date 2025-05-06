@@ -2,21 +2,21 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:jiwaapp_task7/theme/color.dart';
 
-class BottomPaymentMethod extends StatefulWidget {
+class ButtonPaymentMethod extends StatefulWidget {
   final VoidCallback onPressed;
   final String assetPath;
 
-  const BottomPaymentMethod({
+  const ButtonPaymentMethod({
     Key? key,
     required this.onPressed,
     this.assetPath = 'assets/image/image_announcement.png',
   }) : super(key: key);
 
   @override
-  State<BottomPaymentMethod> createState() => _BottomPaymentMethodState();
+  State<ButtonPaymentMethod> createState() => _ButtonPaymentMethodState();
 }
 
-class _BottomPaymentMethodState extends State<BottomPaymentMethod> {
+class _ButtonPaymentMethodState extends State<ButtonPaymentMethod> {
   late TapGestureRecognizer _tapRecognizer;
 
   @override

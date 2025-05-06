@@ -5,7 +5,7 @@ import 'package:jiwaapp_task7/pages/order_detail_page.dart';
 import 'package:jiwaapp_task7/pages/profile_page.dart';
 import 'package:jiwaapp_task7/theme/color.dart';
 import 'package:jiwaapp_task7/widgets/modal_bottom_filter_order.dart';
-import 'package:jiwaapp_task7/widgets/modal_bottom_order.dart';
+import 'package:jiwaapp_task7/widgets/modal_bottom_order_repeat.dart';
 import 'package:jiwaapp_task7/widgets/navbar.dart';
 
 class OrderPage extends StatefulWidget {
@@ -149,7 +149,7 @@ class _OrderPageState extends State<OrderPage>
           child: Center(
             child: GestureDetector(
               onTap: () {
-                showFilterOrderBottomSheet(context);
+                showModalBottomFilterOrder(context);
               },
               child: Container(
                 width: 100,
@@ -465,7 +465,7 @@ class OrderHistoryCard extends StatelessWidget {
                   height: 35,
                   child: ElevatedButton(
                     onPressed: () {
-                      showRepeatOrderBottomSheet(context);
+                      showModalBottomFilterOrder(context);
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: BaseColors.primary,

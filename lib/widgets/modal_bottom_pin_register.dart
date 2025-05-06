@@ -3,13 +3,13 @@ import 'package:flutter/services.dart';
 import 'package:jiwaapp_task7/pages/home_page.dart';
 import 'package:jiwaapp_task7/theme/color.dart';
 
-class ModalBottomPin extends StatefulWidget {
+class ModalBottomPinRegister extends StatefulWidget {
   final Function(String) onPinComplete;
   final int pinLength;
   final String title;
   final String subtitle;
 
-  const ModalBottomPin({
+  const ModalBottomPinRegister({
     Key? key,
     required this.onPinComplete,
     this.pinLength = 6,
@@ -18,10 +18,10 @@ class ModalBottomPin extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<ModalBottomPin> createState() => _ModalBottomPinState();
+  State<ModalBottomPinRegister> createState() => _ModalBottomPinRegisterState();
 }
 
-class _ModalBottomPinState extends State<ModalBottomPin> {
+class _ModalBottomPinRegisterState extends State<ModalBottomPinRegister> {
   final TextEditingController _pinController = TextEditingController();
   final FocusNode _focusNode = FocusNode();
 
@@ -85,7 +85,6 @@ class _ModalBottomPinState extends State<ModalBottomPin> {
             style: const TextStyle(color: Colors.black, fontSize: 16),
           ),
           const SizedBox(height: 80),
-          // PIN indicators
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: List.generate(
@@ -118,7 +117,6 @@ class _ModalBottomPinState extends State<ModalBottomPin> {
                 FilteringTextInputFormatter.digitsOnly,
                 LengthLimitingTextInputFormatter(widget.pinLength),
               ],
-              // Ini untuk memastikan keyboard tetap terbuka
               enableInteractiveSelection: false,
               autofocus: true,
               decoration: const InputDecoration(

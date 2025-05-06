@@ -78,7 +78,7 @@ class ReferralPage extends StatelessWidget {
                 const SizedBox(width: 6),
                 GestureDetector(
                   onTap: () {
-                    showReferralGuideModal(context);
+                    showModalBottomReferral(context);
                   },
 
                   child: Container(

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:jiwaapp_task7/pages/login_page.dart';
-import 'package:jiwaapp_task7/pages/register_page.dart';
 import 'package:jiwaapp_task7/theme/color.dart';
 import 'package:jiwaapp_task7/widgets/modal_bottom_privacy_license.dart';
 import 'package:jiwaapp_task7/widgets/modal_bottom_verifyotp.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+
+//HALAMAN ONBOARDING (MASUK KE LOGIN/REGISTER)
 
 class OnboardingPage extends StatelessWidget {
   const OnboardingPage({Key? key}) : super(key: key);
@@ -23,7 +25,6 @@ class OnboardingPage extends StatelessWidget {
         mode: LaunchMode.externalNonBrowserApplication,
       );
 
-      // Jika gagal, buka di browser
       if (!launched) {
         launched = await launchUrl(
           JiwaCareWebUri,
@@ -215,7 +216,7 @@ class OnboardingPage extends StatelessWidget {
                         color: Colors.black,
                       ),
                       onTap: () {
-                        showPrivacyLicenseModal(context);
+                        showModalBottomPrivacyLicense(context);
                       },
                     ),
                   ),

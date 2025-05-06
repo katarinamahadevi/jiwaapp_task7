@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:jiwaapp_task7/pages/menu_page.dart';
 import 'package:jiwaapp_task7/theme/color.dart';
 
-Future<void> showDeleteAccountBottomSheet(BuildContext context) async {
+//MODAL BOTTOM HAPUS AKUN
+
+Future<void> showModalBottomDeleteAccount(BuildContext context) async {
   return showModalBottomSheet(
     context: context,
     isScrollControlled: true,

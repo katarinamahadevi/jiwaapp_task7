@@ -2,21 +2,23 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:jiwaapp_task7/theme/color.dart';
 
-class BottomPayment extends StatefulWidget {
+//BUTTON PILIH PEMBAYARAN DI ADD TO CART PAGE
+
+class ButtonPayment extends StatefulWidget {
   final VoidCallback onPressed;
   final String assetPath;
 
-  const BottomPayment({
+  const ButtonPayment({
     Key? key,
     required this.onPressed,
     this.assetPath = 'assets/image/image_announcement.png',
   }) : super(key: key);
 
   @override
-  State<BottomPayment> createState() => _BottomPaymentState();
+  State<ButtonPayment> createState() => _ButtonPaymentState();
 }
 
-class _BottomPaymentState extends State<BottomPayment> {
+class _ButtonPaymentState extends State<ButtonPayment> {
   late TapGestureRecognizer _tapRecognizer;
 
   @override

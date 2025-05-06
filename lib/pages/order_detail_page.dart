@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:jiwaapp_task7/theme/color.dart';
 import 'package:jiwaapp_task7/widgets/appbar_primary.dart';
-import 'package:jiwaapp_task7/widgets/modal_bottom_order.dart';
+import 'package:jiwaapp_task7/widgets/modal_bottom_order_repeat.dart';
 import 'package:jiwaapp_task7/widgets/modal_bottom_tnc_voucher.dart';
 
 class OrderDetailPage extends StatelessWidget {
@@ -122,7 +122,7 @@ class OrderDetailPage extends StatelessWidget {
                             ),
                             GestureDetector(
                               onTap: () {
-                                showTNCVoucherBottomSheet(
+                                showModalBottomTNCVoucher(
                                   context: context,
                                   title: "Syarat dan Ketentuan Delivery",
                                   terms: [
@@ -827,7 +827,7 @@ class OrderDetailPage extends StatelessWidget {
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () {
-                        showRepeatOrderBottomSheet(context);
+                        showModalBottomOrderRepeat(context);
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Color(0xFFE25C4B),

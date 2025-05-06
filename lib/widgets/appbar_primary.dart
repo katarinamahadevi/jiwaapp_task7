@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:jiwaapp_task7/theme/color.dart';
 
+//APPBAR HANYA ICON BACK DAN TITLE PAGE
+
 class AppbarPrimary extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final VoidCallback? onBackPressed;

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:jiwaapp_task7/theme/color.dart';
 
+//MODAL BOTTOM PEKERJAAN
+
 class ModalBottomOccupation extends StatefulWidget {
   final List<String> occupation;
   final String? initialValue;

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:jiwaapp_task7/pages/outlet_options_page.dart';
 
+//OPSI OUTLET
+
 class OutletSection extends StatelessWidget {
   const OutletSection({Key? key}) : super(key: key);
 

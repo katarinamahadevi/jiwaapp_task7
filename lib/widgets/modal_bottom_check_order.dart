@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:jiwaapp_task7/pages/order_status_page.dart';
 import 'package:jiwaapp_task7/theme/color.dart';
 
-void showCheckOrderBottomSheet(BuildContext context) {
+//MODAL BOTTOM KONFIRMASI CEK ULANG PESANAN
+
+void showModalBottomCheckOrder(BuildContext context) {
   showModalBottomSheet(
     backgroundColor: Colors.white,
     context: context,

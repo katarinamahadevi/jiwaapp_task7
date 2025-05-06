@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:jiwaapp_task7/theme/color.dart';
 import 'package:jiwaapp_task7/widgets/appbar_primary.dart';
-import 'package:jiwaapp_task7/widgets/bottom_payment.dart';
-import 'package:jiwaapp_task7/widgets/bottom_payment_method.dart';
+import 'package:jiwaapp_task7/widgets/button_payment.dart';
+import 'package:jiwaapp_task7/widgets/button_payment_method.dart';
 import 'package:jiwaapp_task7/widgets/modal_bottom_check_order.dart';
 
 class PaymentMethodPage extends StatefulWidget {
@@ -240,8 +240,8 @@ class _PaymentMethodPageState extends State<PaymentMethodPage> {
           ),
 
           // BottomPaymentPage ditempel di bawah
-          BottomPaymentMethod(
-            onPressed: () => showCheckOrderBottomSheet(context),
+          ButtonPaymentMethod(
+            onPressed: () => showModalBottomCheckOrder(context),
           ),
         ],
       ),

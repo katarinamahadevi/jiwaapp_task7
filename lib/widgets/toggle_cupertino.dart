@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:jiwaapp_task7/theme/color.dart' show BaseColors;
 
+//TOGGLE JIWA POINT
+
 class ToggleCupertino extends StatefulWidget {
   final bool value;
   final ValueChanged<bool> onChanged;
@@ -28,9 +30,9 @@ class _ToggleCupertinoState extends State<ToggleCupertino> {
     return CupertinoTheme(
       data: CupertinoThemeData(primaryColor: widget.activeColor),
       child: SizedBox(
-        height: 30, // Menyesuaikan tinggi agar lebih mirip dengan gambar
+        height: 30, 
         child: Transform.scale(
-          scale: 0.8, // Mengatur skala untuk menyesuaikan ukuran
+          scale: 0.8, 
           child: CupertinoSwitch(
             value: widget.value,
             onChanged: widget.onChanged,

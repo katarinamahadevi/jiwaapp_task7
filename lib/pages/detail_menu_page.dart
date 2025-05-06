@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:jiwaapp_task7/theme/color.dart';
 
+//MENU BIASA
+
 class DetailMenuPage extends StatefulWidget {
   final String title;
   final String description;

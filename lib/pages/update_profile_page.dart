@@ -7,7 +7,6 @@ import 'package:jiwaapp_task7/widgets/button_primary.dart';
 import 'package:jiwaapp_task7/widgets/modal_bottom_country_register.dart';
 import 'package:jiwaapp_task7/widgets/modal_bottom_delete_account.dart';
 import 'package:jiwaapp_task7/widgets/modal_bottom_occupation.dart';
-import 'package:jiwaapp_task7/widgets/modal_bottom_order.dart';
 import 'package:jiwaapp_task7/widgets/modal_bottom_pickerdate.dart';
 import 'package:jiwaapp_task7/widgets/modal_bottom_verifyotp.dart';
 
@@ -347,7 +346,7 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
             // Hapus akun dengan icon
             GestureDetector(
               onTap: () {
-                showDeleteAccountBottomSheet(context);
+                showModalBottomDeleteAccount(context);
               },
               child: Row(
                 children: [
@@ -402,7 +401,7 @@ void showBirthDatePickerModal(
     isScrollControlled: true,
     backgroundColor: Colors.transparent,
     builder:
-        (context) => ModalbottomPickerdate(
+        (context) => ModalBottomPickerdate(
           onDateSelected: onDateSelected,
           initialDate: initialDate,
         ),

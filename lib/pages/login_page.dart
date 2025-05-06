@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:jiwaapp_task7/pages/pin_verification_page.dart';
+import 'package:jiwaapp_task7/pages/pin_verification_login_page.dart';
 import 'package:jiwaapp_task7/theme/color.dart';
 
 class LoginPage extends StatefulWidget {
@@ -181,7 +181,7 @@ class _LoginPageState extends State<LoginPage> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => PinVerificationPage(),
+                                  builder: (context) => PinVerificationLoginPage(),
                                 ),
                               );
                             }

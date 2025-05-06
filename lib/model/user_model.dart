@@ -1,59 +1,59 @@
 class UserModel {
-    final String status;
-    final String message;
-    final UserData data;
+  final String status;
+  final String message;
+  final UserData data;
 
-    UserModel({
-        required this.status,
-        required this.message,
-        required this.data,
-    });
+  UserModel({
+    required this.status,
+    required this.message,
+    required this.data,
+  });
 
-    factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
+  factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
         status: json["status"],
         message: json["message"],
         data: UserData.fromJson(json["data"]),
-    );
+      );
 
-    Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() => {
         "status": status,
         "message": message,
         "data": data.toJson(),
-    };
+      };
 }
 
 class UserData {
-    final int id;
-    final String name;
-    final String email;
-    final dynamic emailVerifiedAt;
-    final dynamic rememberToken;
-    final DateTime createdAt;
-    final DateTime updatedAt;
-    final String gender;
-    final DateTime dateOfBirth;
-    final String region;
-    final String job;
-    final String referralCode;
-    final dynamic referralBy;
+  final int id;
+  final String name;
+  final String email;
+  final dynamic emailVerifiedAt;
+  final dynamic rememberToken;
+  final DateTime createdAt;
+  final DateTime updatedAt;
+  final String gender;
+  final DateTime dateOfBirth;
+  final String region;
+  final String job;
+  final String referralCode;
+  final dynamic referralBy;
 
-    UserData({
-        required this.id,
-        required this.name,
-        required this.email,
-        required this.emailVerifiedAt,
-        required this.rememberToken,
-        required this.createdAt,
-        required this.updatedAt,
-        required this.gender,
-        required this.dateOfBirth,
-        required this.region,
-        required this.job,
-        required this.referralCode,
-        required this.referralBy,
-    });
+  UserData({
+    required this.id,
+    required this.name,
+    required this.email,
+    required this.emailVerifiedAt,
+    required this.rememberToken,
+    required this.createdAt,
+    required this.updatedAt,
+    required this.gender,
+    required this.dateOfBirth,
+    required this.region,
+    required this.job,
+    required this.referralCode,
+    required this.referralBy,
+  });
 
-    factory UserData.fromJson(Map<String, dynamic> json) => UserData(
+  factory UserData.fromJson(Map<String, dynamic> json) => UserData(
         id: json["id"],
         name: json["name"],
         email: json["email"],
@@ -67,9 +67,9 @@ class UserData {
         job: json["job"],
         referralCode: json["referral_code"],
         referralBy: json["referral_by"],
-    );
+      );
 
-    Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() => {
         "id": id,
         "name": name,
         "email": email,
@@ -83,5 +83,5 @@ class UserData {
         "job": job,
         "referral_code": referralCode,
         "referral_by": referralBy,
-    };
+      };
 }

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:jiwaapp_task7/theme/color.dart';
 
+//DETAIL REFERRAL
+
 class DetailReferralPage extends StatelessWidget {
   const DetailReferralPage({Key? key}) : super(key: key);
 

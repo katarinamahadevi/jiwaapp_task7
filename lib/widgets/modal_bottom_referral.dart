@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:jiwaapp_task7/theme/color.dart';
 
-void showReferralGuideModal(BuildContext context) {
+//MODAL BOTTOM TATA CARA REFERRAL
+
+void showModalBottomReferral(BuildContext context) {
   showModalBottomSheet(
     context: context,
     isScrollControlled: true,

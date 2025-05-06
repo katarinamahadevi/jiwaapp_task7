@@ -3,8 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:jiwaapp_task7/pages/register_page.dart';
 import 'dart:async';
 
-class OtpVerificationBottomSheet extends StatefulWidget {
-  const OtpVerificationBottomSheet({super.key});
+class ModalBottomVerifyOTP extends StatefulWidget {
+  const ModalBottomVerifyOTP({super.key});
 
   static void show(BuildContext context) {
     showModalBottomSheet(
@@ -14,17 +14,17 @@ class OtpVerificationBottomSheet extends StatefulWidget {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
-      builder: (context) => const OtpVerificationBottomSheet(),
+      builder: (context) => const ModalBottomVerifyOTP(),
     );
   }
 
   @override
-  State<OtpVerificationBottomSheet> createState() =>
-      _OtpVerificationBottomSheetState();
+  State<ModalBottomVerifyOTP> createState() =>
+      _ModalBottomVerifyOTPState();
 }
 
-class _OtpVerificationBottomSheetState
-    extends State<OtpVerificationBottomSheet> {
+class _ModalBottomVerifyOTPState
+    extends State<ModalBottomVerifyOTP> {
   final List<TextEditingController> _otpControllers = List.generate(
     4,
     (_) => TextEditingController(),
@@ -32,21 +32,18 @@ class _OtpVerificationBottomSheetState
   final List<FocusNode> _otpFocusNodes = List.generate(4, (_) => FocusNode());
   Timer? _timer;
 
-  // Timer state for countdown
   int _secondsRemaining = 29;
   bool _canResendOtp = false;
 
   @override
   void initState() {
     super.initState();
-    // Ensure first field is focused after widget is built
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (_otpFocusNodes.isNotEmpty) {
         _otpFocusNodes[0].requestFocus();
       }
     });
 
-    // Start countdown timer
     _startCountdownTimer();
   }
 
@@ -65,7 +62,6 @@ class _OtpVerificationBottomSheetState
 
   @override
   void dispose() {
-    // Clean up controllers and focus nodes
     for (var controller in _otpControllers) {
       controller.dispose();
     }
@@ -79,11 +75,7 @@ class _OtpVerificationBottomSheetState
   void _checkOtpAndNavigate() {
     final allFilled = _otpControllers.every((c) => c.text.isNotEmpty);
     if (allFilled) {
-      // Get the complete OTP code
       final otp = _otpControllers.map((c) => c.text).join();
-
-      // Here you would typically validate the OTP with your backend
-      // For this example, we'll just navigate
       Navigator.of(context).pop();
       Navigator.push(
         context,
@@ -104,7 +96,6 @@ class _OtpVerificationBottomSheetState
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // Handle bar
           Container(
             width: 40,
             height: 4,
@@ -114,8 +105,6 @@ class _OtpVerificationBottomSheetState
               borderRadius: BorderRadius.circular(2),
             ),
           ),
-
-          // Header row
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -144,7 +133,6 @@ class _OtpVerificationBottomSheetState
           ),
 
           const SizedBox(height: 24),
-          // OTP Input Fields
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: List.generate(4, (index) {
@@ -166,23 +154,18 @@ class _OtpVerificationBottomSheetState
                       borderSide: BorderSide(color: Colors.green, width: 2),
                     ),
                   ),
-                  // Simpler input handling to avoid focus issues
                   inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                   onChanged: (value) {
-                    // Handle forward navigation (auto-advance to next field)
                     if (value.isNotEmpty) {
                       if (index < 3) {
                         _otpFocusNodes[index + 1].requestFocus();
                       } else {
-                        // Hide keyboard and check OTP
                         FocusScope.of(context).unfocus();
                         _checkOtpAndNavigate();
                       }
                     }
                   },
-                  // Listen for text editing to handle backspace
                   onEditingComplete: () {
-                    // Check if the field is empty and we need to go back
                     if (_otpControllers[index].text.isEmpty && index > 0) {
                       _otpFocusNodes[index - 1].requestFocus();
                     }
@@ -193,12 +176,10 @@ class _OtpVerificationBottomSheetState
           ),
 
           const SizedBox(height: 40),
-          // Resend OTP timer
           GestureDetector(
             onTap:
                 _canResendOtp
                     ? () {
-                      // Handle resend OTP here
                       setState(() {
                         _secondsRemaining = 29;
                         _canResendOtp = false;
@@ -231,5 +212,5 @@ class _OtpVerificationBottomSheetState
 }
 
 void showVerifyOTPBottomSheet(BuildContext context) {
-  OtpVerificationBottomSheet.show(context);
+  ModalBottomVerifyOTP.show(context);
 }

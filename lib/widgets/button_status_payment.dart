@@ -3,23 +3,25 @@ import 'package:flutter/material.dart';
 import 'package:jiwaapp_task7/theme/color.dart';
 import 'package:jiwaapp_task7/widgets/modal_bottom_cancel_order.dart';
 
-class BottomStatusPayment extends StatefulWidget {
+//BUTTON ORDER STATUS DETAIL
+
+class ButtonStatusPayment extends StatefulWidget {
   final Function()? onCancelPayment;
   final Function()? onContinuePayment;
   final int timeoutSeconds;
 
-  const BottomStatusPayment({
+  const ButtonStatusPayment({
     Key? key,
     this.onCancelPayment,
     this.onContinuePayment,
-    this.timeoutSeconds = 300, 
+    this.timeoutSeconds = 300,
   }) : super(key: key);
 
   @override
-  State<BottomStatusPayment> createState() => _BottomStatusPaymentState();
+  State<ButtonStatusPayment> createState() => _ButtonStatusPaymentState();
 }
 
-class _BottomStatusPaymentState extends State<BottomStatusPayment> {
+class _ButtonStatusPaymentState extends State<ButtonStatusPayment> {
   late Timer _timer;
   late int _remainingSeconds;
 
@@ -79,7 +81,7 @@ class _BottomStatusPaymentState extends State<BottomStatusPayment> {
           mainAxisSize: MainAxisSize.min,
           children: [
             ElevatedButton(
-              onPressed: () => showCancelOrderBottomSheet(context),
+              onPressed: () => showModalBottomCancelOrder(context),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.white,
                 foregroundColor: Colors.black,

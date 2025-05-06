@@ -4,6 +4,8 @@ import 'package:jiwaapp_task7/pages/add_to_cart_page.dart';
 import 'package:jiwaapp_task7/pages/detail_menu_page.dart';
 import 'package:jiwaapp_task7/theme/color.dart';
 
+//MENU COMBO
+
 class DetailMenucomboPage extends StatefulWidget {
   final String title;
   final String description;

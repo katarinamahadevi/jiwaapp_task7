@@ -4,6 +4,9 @@ import 'package:jiwaapp_task7/pages/subscription_page.dart';
 import 'package:jiwaapp_task7/pages/jiwa_point_page.dart';
 import 'package:jiwaapp_task7/widgets/home_page/action_button.dart';
 
+//TEMAN SEJIWA, JIWA POINT, DAN SUBSCRIPTION
+
+
 class QuickActions extends StatelessWidget {
   const QuickActions({Key? key}) : super(key: key);
 

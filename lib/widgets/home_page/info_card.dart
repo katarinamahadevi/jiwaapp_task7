@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+//WIDGET VOUCHER DAN REFERRAL
+
 class InfoCard extends StatelessWidget {
   final String title;
   final String subtitle;

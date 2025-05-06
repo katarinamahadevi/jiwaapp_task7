@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-void showPrivacyLicenseModal(BuildContext context) {
+void showModalBottomPrivacyLicense(BuildContext context) {
   showModalBottomSheet(
     context: context,
     isScrollControlled: true,
@@ -15,7 +15,6 @@ void showPrivacyLicenseModal(BuildContext context) {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Drag Handle
             Center(
               child: Container(
                 width: 40,
@@ -27,15 +26,11 @@ void showPrivacyLicenseModal(BuildContext context) {
               ),
             ),
             SizedBox(height: 12),
-
-            // Fixed Header
             Text(
               'Terms of Service',
               style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 8),
-
-            // Scrollable Content
             Expanded(
               child: SingleChildScrollView(
                 child: Column(

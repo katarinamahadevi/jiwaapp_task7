@@ -3,6 +3,8 @@ import 'package:jiwaapp_task7/pages/delivery_page.dart';
 import 'package:jiwaapp_task7/pages/menu_page.dart';
 import 'package:jiwaapp_task7/widgets/home_page/order_option.dart';
 
+//OPSI TAKEAWAY ATAU DELIVERY
+
 class OrderOptions extends StatelessWidget {
   const OrderOptions({Key? key}) : super(key: key);
 

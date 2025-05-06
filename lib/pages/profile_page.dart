@@ -423,7 +423,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           _buildMenuItem(
                             imageAssetPath: 'assets/image/image_privacy.png',
                             onTap: () {
-                              showPrivacyLicenseModal(context);
+                              showModalBottomPrivacyLicense(context);
                             },
 
                             title: 'Kebijakan Privasi',
