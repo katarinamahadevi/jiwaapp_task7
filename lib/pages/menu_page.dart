@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:jiwaapp_task7/pages/delivery_page.dart';
 import 'package:jiwaapp_task7/pages/detail_menucombo_page.dart';
 import 'package:jiwaapp_task7/pages/home_page.dart';
@@ -9,18 +10,18 @@ import 'package:jiwaapp_task7/theme/color.dart';
 import 'package:jiwaapp_task7/widgets/modal_bottom_view_cart.dart';
 import 'package:jiwaapp_task7/widgets/navbar.dart';
 import 'package:jiwaapp_task7/widgets/searchbar.dart';
-import 'package:jiwaapp_task7/widgets/stack_view_order.dart'; // Import StackViewOrder widget
+import 'package:jiwaapp_task7/widgets/stack_view_order.dart';
 
 class MenuPage extends StatefulWidget {
-  final bool showStackViewOrder; // New parameter
-  final double totalPrice; // New parameter
-  final int itemCount; // New parameter
+  final bool showStackViewOrder;
+  final double totalPrice;
+  final int itemCount;
 
   const MenuPage({
     Key? key,
-    this.showStackViewOrder = false, // Default to false
-    this.totalPrice = 0.0, // Default to 0.0
-    this.itemCount = 0, // Default to 0
+    this.showStackViewOrder = false,
+    this.totalPrice = 0.0,
+    this.itemCount = 0,
   }) : super(key: key);
 
   @override
@@ -480,7 +481,6 @@ class _MenuPageState extends State<MenuPage> {
               },
               body: Row(
                 children: [
-                  // Category List with separate scroll
                   SizedBox(
                     width: 100,
                     child: Container(
@@ -506,7 +506,6 @@ class _MenuPageState extends State<MenuPage> {
                       ),
                     ),
                   ),
-                  // Menu items with separate scroll
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -516,7 +515,7 @@ class _MenuPageState extends State<MenuPage> {
                             16.0,
                             16.0,
                             16.0,
-                            8.0, // Added bottom padding
+                            8.0,
                           ),
                           child: Text(
                             categories[selectedCategoryIndex].name,
@@ -534,8 +533,7 @@ class _MenuPageState extends State<MenuPage> {
                             gridDelegate:
                                 const SliverGridDelegateWithFixedCrossAxisCount(
                                   crossAxisCount: 2,
-                                  childAspectRatio:
-                                      0.7, // Adjusted for more height
+                                  childAspectRatio: 0.7,
                                   crossAxisSpacing: 12,
                                   mainAxisSpacing: 15,
                                 ),
@@ -554,8 +552,7 @@ class _MenuPageState extends State<MenuPage> {
           ),
           if (widget.showStackViewOrder)
             Positioned(
-              bottom:
-                  20, // Posisikan di atas navbar (nilai sesuaikan dengan tinggi navbar)
+              bottom: 20,
               left: 16,
               right: 16,
               child: StackViewOrder(
@@ -637,26 +634,34 @@ class CategoryListItem extends StatelessWidget {
           ),
           color: isSelected ? Colors.white : Colors.grey[100],
         ),
-        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 12.0),
+        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 10.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             if (category.isNew)
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                margin: const EdgeInsets.only(bottom: 5),
-                decoration: BoxDecoration(
-                  color: const Color(0xFF3B1D52),
-                  borderRadius: BorderRadius.circular(2),
-                ),
-                child: const Text(
-                  'NEW',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 8,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
+              Align(
+                alignment: Alignment.centerRight,
+                child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 6,
+                        vertical: 2,
+                      ),
+                      margin: const EdgeInsets.only(bottom: 5),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF3B1D52),
+                        borderRadius: BorderRadius.circular(2),
+                      ),
+                      child: const Text(
+                        'NEW',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 8,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    )
+                    .animate(onPlay: (controller) => controller.repeat())
+                    .shake(hz: 3, curve: Curves.easeInOut),
               ),
             Text(
               category.name,
@@ -665,8 +670,8 @@ class CategoryListItem extends StatelessWidget {
                 fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
                 fontSize: 12,
               ),
-              maxLines: 2, // Limit to 2 lines
-              overflow: TextOverflow.ellipsis, // Add ellipsis for overflow
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
             ),
           ],
         ),
@@ -691,34 +696,46 @@ class MenuItem {
 
 class MenuItemCard extends StatelessWidget {
   final MenuItem menuItem;
+  final bool showStackViewOrder; // Add this parameter
 
-  const MenuItemCard({Key? key, required this.menuItem}) : super(key: key);
+  const MenuItemCard({
+    Key? key,
+    required this.menuItem,
+    this.showStackViewOrder = false, // Default to false
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        final priceString = menuItem.price
-            .replaceAll('Rp', '')
-            .replaceAll('.', '');
-        final price = double.parse(priceString) / 1000;
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder:
-                (context) => DetailMenucomboPage(
-                  title: menuItem.title,
-                  description:
-                      'Perpaduan sempurna dari blend biji kopi pilihan, susu, manisnya karamel, dengan krim macchiato lembut di atasnya',
-                  imageUrl: menuItem.imageUrl,
-                  price: price,
-                ),
-          ),
-        );
+        if (showStackViewOrder) {
+          // If stack view is visible, show the modal bottom cart
+          showModalBottomViewCart(context);
+        } else {
+          // Original navigation behavior
+          final priceString = menuItem.price
+              .replaceAll('Rp', '')
+              .replaceAll('.', '');
+          final price = double.parse(priceString) / 1000;
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder:
+                  (context) => DetailMenucomboPage(
+                    title: menuItem.title,
+                    description:
+                        'Perpaduan sempurna dari blend biji kopi pilihan, susu, manisnya karamel, dengan krim macchiato lembut di atasnya',
+                    imageUrl: menuItem.imageUrl,
+                    price: price,
+                  ),
+            ),
+          );
+        }
       },
       child: Stack(
         clipBehavior: Clip.none,
         children: [
+          // Rest of the MenuItemCard UI remains the same
           Padding(
             padding: const EdgeInsets.only(top: 30),
             child: Container(
@@ -746,17 +763,17 @@ class MenuItemCard extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
-                        fontSize: 14, // Slightly reduced font size
+                        fontSize: 14,
                       ),
                     ),
-                    const Spacer(), // Use Spacer instead of SizedBox with fixed height
+                    const Spacer(),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.min, // Use min size
+                          mainAxisSize: MainAxisSize.min,
                           children: [
                             Text(
                               menuItem.price,

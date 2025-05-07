@@ -21,7 +21,6 @@ class PromoBanners extends StatelessWidget {
         mode: LaunchMode.externalNonBrowserApplication,
       );
 
-      // Jika gagal, buka di browser
       if (!launched) {
         launched = await launchUrl(
           instagramWebUri,

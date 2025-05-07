@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get_navigation/get_navigation.dart';
 import 'package:jiwaapp_task7/pages/delivery_page.dart';
 import 'package:jiwaapp_task7/pages/menu_page.dart';
 import 'package:jiwaapp_task7/pages/my_voucher_page.dart';
@@ -21,6 +22,7 @@ class _AddToCartPageState extends State<AddToCartPage> {
   bool isTakeAwaySelected = true;
   String selectedTime = 'Ambil Sekarang';
   bool _jiwaPointActive = false;
+  bool isChecked = false; // Tambahkan di State class
 
   void _showTimeBottomSheet(BuildContext context) {
     String selectedOption = 'Ambil Sekarang';
@@ -1313,18 +1315,36 @@ class _AddToCartPageState extends State<AddToCartPage> {
                                         ),
                                       ),
                                       const SizedBox(width: 8),
-                                      Container(
-                                        width: 30,
-                                        height: 30,
-                                        decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          border: Border.all(
-                                            color: Colors.grey,
-                                            width: 1.5,
+                                      GestureDetector(
+                                        onTap: () {
+                                          setState(() {
+                                            isChecked = !isChecked;
+                                          });
+                                        },
+                                        child: Container(
+                                          width: 30,
+                                          height: 30,
+                                          decoration: BoxDecoration(
+                                            color:
+                                                isChecked
+                                                    ? BaseColors.secondary
+                                                    : Colors.white,
+                                            border: Border.all(
+                                              color: Colors.grey,
+                                              width: 1.5,
+                                            ),
+                                            borderRadius: BorderRadius.circular(
+                                              5,
+                                            ),
                                           ),
-                                          borderRadius: BorderRadius.circular(
-                                            5,
-                                          ),
+                                          child:
+                                              isChecked
+                                                  ? Icon(
+                                                    Icons.check,
+                                                    color: Colors.white,
+                                                    size: 20,
+                                                  )
+                                                  : null,
                                         ),
                                       ),
                                     ],

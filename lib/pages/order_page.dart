@@ -70,70 +70,77 @@ class _OrderPageState extends State<OrderPage>
         // Main app scaffold
         Scaffold(
           backgroundColor: Colors.white,
-          body: SafeArea(
-            child: NestedScrollView(
-              headerSliverBuilder: (context, innerBoxIsScrolled) {
-                return [
-                  SliverToBoxAdapter(
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const SizedBox(height: 8),
-                          const Text(
-                            'Order',
-                            style: TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black,
-                            ),
+          appBar: PreferredSize(
+            preferredSize: Size.fromHeight(
+              110,
+            ), // Control the height of the fixed area
+            child: Container(
+              color: Colors.white,
+              child: SafeArea(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 8.0),
+                      child: const Text(
+                        'Order',
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      decoration: BoxDecoration(color: Colors.white),
+                      child: TabBar(
+                        controller: _tabController,
+                        indicator: UnderlineTabIndicator(
+                          borderSide: BorderSide(
+                            color: BaseColors.primary,
+                            width: 3.0,
                           ),
-                          const SizedBox(height: 24),
-                          Container(
-                            decoration: BoxDecoration(color: Colors.white),
-                            child: TabBar(
-                              controller: _tabController,
-                              indicator: UnderlineTabIndicator(
-                                borderSide: BorderSide(
-                                  color: BaseColors.primary,
-                                  width: 3.0,
-                                ),
-                                insets: EdgeInsets.symmetric(horizontal: 0),
-                              ),
-                              labelColor: BaseColors.primary,
-                              unselectedLabelColor: Colors.black,
-                              labelStyle: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
-                              unselectedLabelStyle: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
-                              tabs: const [
-                                Tab(text: 'Ongoing'),
-                                Tab(text: 'History'),
-                              ],
-                            ),
-                          ),
+                          insets: EdgeInsets.symmetric(horizontal: 0),
+                        ),
+                        labelColor: BaseColors.primary,
+                        unselectedLabelColor: Colors.black,
+                        labelStyle: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        unselectedLabelStyle: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        tabs: const [
+                          Tab(text: 'Ongoing'),
+                          Tab(text: 'History'),
                         ],
                       ),
                     ),
-                  ),
-                ];
-              },
-              body: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: TabBarView(
-                  controller: _tabController,
-                  children: [
-                    SingleChildScrollView(child: EmptyOrderState()),
-                    HistoryOrderContent(),
+                    Divider(
+                      height: 1,
+                      thickness: 1,
+                      color: Colors.grey.shade200,
+                    ),
                   ],
                 ),
               ),
             ),
+          ),
+          body: TabBarView(
+            controller: _tabController,
+            children: [
+              SingleChildScrollView(
+                padding: EdgeInsets.symmetric(horizontal: 16.0),
+                child: EmptyOrderState(),
+              ),
+              SingleChildScrollView(
+                padding: EdgeInsets.symmetric(horizontal: 16.0),
+                child: HistoryOrderContent(),
+              ),
+            ],
           ),
           bottomNavigationBar: CustomBottomNavBar(
             selectedIndex: _currentIndex,
@@ -202,39 +209,89 @@ class _OrderPageState extends State<OrderPage>
 class HistoryOrderContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          SizedBox(height: 16),
-          OrderHistoryCard(
-            orderStatus: 'Order Completed',
-            deliveryMethod: 'Delivery',
-            deliveryIconAsset: 'assets/image/image_take_away.png',
-            price: 'Rp41.500',
-            orderId: 'J+202512617405493000001',
-            dateTime: '26 Feb 2025 | 12:55',
-            restaurant: 'BARATA',
-            promo: 'Buy 1 Get 1 Free Minuman',
-            address:
-                'Ordo apps - Taman Jemursari Selatan 1, Jemur Wonosari, Surabaya, Ja...',
-            itemCount: '1 Item',
-          ),
-          SizedBox(height: 16),
-          OrderHistoryCard(
-            orderStatus: 'Order Completed',
-            deliveryMethod: 'Take Away',
-            deliveryIconAsset: 'assets/image/image_delivery.png',
-            price: 'Rp65.000',
-            orderId: 'J+202511417395185983261',
-            dateTime: '14 Feb 2025 | 14:36',
-            restaurant: 'BARATA',
-            promo: 'Buy 1 Get 1 Free Minuman, Geber Beef Santuy',
-            address: '',
-            itemCount: '3 Item',
-          ),
-          SizedBox(height: 16),
-        ],
-      ),
+    return Column(
+      children: [
+        SizedBox(height: 16),
+        OrderHistoryCard(
+          orderStatus: 'Order Completed',
+          deliveryMethod: 'Delivery',
+          deliveryIconAsset: 'assets/image/image_take_away.png',
+          price: 'Rp41.500',
+          orderId: 'J+202512617405493000001',
+          dateTime: '26 Feb 2025 | 12:55',
+          restaurant: 'BARATA',
+          promo: 'Buy 1 Get 1 Free Minuman',
+          address:
+              'Ordo apps - Taman Jemursari Selatan 1, Jemur Wonosari, Surabaya, Ja...',
+          itemCount: '1 Item',
+        ),
+        SizedBox(height: 16),
+        OrderHistoryCard(
+          orderStatus: 'Order Completed',
+          deliveryMethod: 'Take Away',
+          deliveryIconAsset: 'assets/image/image_delivery.png',
+          price: 'Rp65.000',
+          orderId: 'J+202511417395185983261',
+          dateTime: '14 Feb 2025 | 14:36',
+          restaurant: 'BARATA',
+          promo: 'Buy 1 Get 1 Free Minuman, Geber Beef Santuy',
+          address: '',
+          itemCount: '3 Item',
+        ),
+        SizedBox(height: 16),
+        OrderHistoryCard(
+          orderStatus: 'Order Completed',
+          deliveryMethod: 'Take Away',
+          deliveryIconAsset: 'assets/image/image_delivery.png',
+          price: 'Rp65.000',
+          orderId: 'J+202511417395185983261',
+          dateTime: '14 Feb 2025 | 14:36',
+          restaurant: 'BARATA',
+          promo: 'Buy 1 Get 1 Free Minuman, Geber Beef Santuy',
+          address: '',
+          itemCount: '3 Item',
+        ),
+        SizedBox(height: 16),
+        OrderHistoryCard(
+          orderStatus: 'Order Completed',
+          deliveryMethod: 'Take Away',
+          deliveryIconAsset: 'assets/image/image_delivery.png',
+          price: 'Rp65.000',
+          orderId: 'J+202511417395185983261',
+          dateTime: '14 Feb 2025 | 14:36',
+          restaurant: 'BARATA',
+          promo: 'Buy 1 Get 1 Free Minuman, Geber Beef Santuy',
+          address: '',
+          itemCount: '3 Item',
+        ),
+        SizedBox(height: 16),
+        OrderHistoryCard(
+          orderStatus: 'Order Completed',
+          deliveryMethod: 'Take Away',
+          deliveryIconAsset: 'assets/image/image_delivery.png',
+          price: 'Rp65.000',
+          orderId: 'J+202511417395185983261',
+          dateTime: '14 Feb 2025 | 14:36',
+          restaurant: 'BARATA',
+          promo: 'Buy 1 Get 1 Free Minuman, Geber Beef Santuy',
+          address: '',
+          itemCount: '3 Item',
+        ),
+        SizedBox(height: 16),
+        OrderHistoryCard(
+          orderStatus: 'Order Completed',
+          deliveryMethod: 'Take Away',
+          deliveryIconAsset: 'assets/image/image_delivery.png',
+          price: 'Rp65.000',
+          orderId: 'J+202511417395185983261',
+          dateTime: '14 Feb 2025 | 14:36',
+          restaurant: 'BARATA',
+          promo: 'Buy 1 Get 1 Free Minuman, Geber Beef Santuy',
+          address: '',
+          itemCount: '3 Item',
+        ),
+        SizedBox(height: 80),
+      ],
     );
   }
 }
@@ -465,7 +522,7 @@ class OrderHistoryCard extends StatelessWidget {
                   height: 35,
                   child: ElevatedButton(
                     onPressed: () {
-                      showModalBottomFilterOrder(context);
+                      showModalBottomOrderRepeat(context);
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: BaseColors.primary,

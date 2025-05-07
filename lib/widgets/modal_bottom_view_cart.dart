@@ -2,23 +2,31 @@ import 'package:flutter/material.dart';
 import 'package:jiwaapp_task7/theme/color.dart';
 
 void showModalBottomViewCart(BuildContext context) {
+  final double navbarHeight = 80.0;
+
   showModalBottomSheet(
     backgroundColor: Colors.white,
     context: context,
-    isScrollControlled: true,
-    shape: RoundedRectangleBorder(
+    isScrollControlled: true, 
+    shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
     ),
     builder: (context) {
       return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        // Apply bottom padding to account for the navbar height
+        padding: EdgeInsets.only(
+          left: 16,
+          right: 16,
+          top: 12,
+          bottom: navbarHeight, // This ensures content doesn't go behind navbar
+        ),
         child: Column(
-          mainAxisSize: MainAxisSize.min,
+          mainAxisSize: MainAxisSize.min, // Keep the sheet as small as possible
           children: [
             Container(
               width: 40,
               height: 5,
-              margin: EdgeInsets.only(bottom: 12),
+              margin: const EdgeInsets.only(bottom: 12),
               decoration: BoxDecoration(
                 color: Colors.grey[400],
                 borderRadius: BorderRadius.circular(12),
@@ -32,8 +40,7 @@ void showModalBottomViewCart(BuildContext context) {
               ),
             ),
             Divider(color: BaseColors.border),
-            SizedBox(height: 12),
-
+            const SizedBox(height: 12),
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
@@ -47,7 +54,7 @@ void showModalBottomViewCart(BuildContext context) {
                     fit: BoxFit.cover,
                   ),
                 ),
-                SizedBox(width: 12),
+                const SizedBox(width: 12),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -82,23 +89,20 @@ void showModalBottomViewCart(BuildContext context) {
                           ),
                         ],
                       ),
-                      SizedBox(height: 4),
-                      // Subjudul
+                      const SizedBox(height: 4),
                       Text(
                         "Item 1: 1 Americano",
                         style: TextStyle(color: Colors.grey),
                       ),
-                      SizedBox(height: 12),
-                      // Row icon edit + hapus dan jumlah
+                      const SizedBox(height: 12),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          // Edit dan delete berdampingan
                           Row(
                             children: [
                               GestureDetector(
                                 onTap: () {
-                                  // Aksi edit
+                                  // Edit action
                                 },
                                 child: Image.asset(
                                   'assets/image/image_update.png',
@@ -106,10 +110,10 @@ void showModalBottomViewCart(BuildContext context) {
                                   height: 24,
                                 ),
                               ),
-                              SizedBox(width: 120),
+                              const SizedBox(width: 120),
                               GestureDetector(
                                 onTap: () {
-                                  // Aksi delete
+                                  // Delete action
                                 },
                                 child: Image.asset(
                                   'assets/image/image_delete.png',
@@ -119,8 +123,6 @@ void showModalBottomViewCart(BuildContext context) {
                               ),
                             ],
                           ),
-
-                          // Button + -
                           Row(
                             children: [
                               IconButton(
@@ -141,9 +143,7 @@ void showModalBottomViewCart(BuildContext context) {
                 ),
               ],
             ),
-            SizedBox(height: 24),
-
-            // Tombol tambah
+            const SizedBox(height: 24),
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
@@ -161,7 +161,7 @@ void showModalBottomViewCart(BuildContext context) {
                 ),
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
           ],
         ),
       );

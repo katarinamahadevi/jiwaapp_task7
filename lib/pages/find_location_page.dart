@@ -74,26 +74,30 @@ class _FindLocationPageState extends State<FindLocationPage> {
               _googleMapController = controller;
             },
             onCameraMove: _onCameraMove,
-            onCameraIdle: _onCameraIdle, // Tambahkan ini
-
+            onCameraIdle: _onCameraIdle,
             myLocationEnabled: true,
             myLocationButtonEnabled: false,
             zoomControlsEnabled: false,
             mapType: MapType.normal,
-            markers: {
-              Marker(
-                markerId: MarkerId('selected'),
-                position: _selectedPosition,
-              ),
-            },
+            markers: {},
             gestureRecognizers: {
               Factory<OneSequenceGestureRecognizer>(
                 () => EagerGestureRecognizer(),
               ),
             },
           ),
-
-          // My location button
+          Center(
+            child: Container(
+              padding: const EdgeInsets.only(
+                bottom: 200,
+              ), 
+              child: Icon(
+                Icons.location_on,
+                size: 65,
+                color: BaseColors.primary,
+              ),
+            ),
+          ),
           Positioned(
             top: MediaQuery.of(context).size.height * 0.52,
             right: 5,
@@ -112,8 +116,6 @@ class _FindLocationPageState extends State<FindLocationPage> {
               ),
             ),
           ),
-
-          // Bottom Sheet
           Align(
             alignment: Alignment.bottomCenter,
             child: Container(
