@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get_navigation/get_navigation.dart';
 import 'package:jiwaapp_task7/pages/delivery_page.dart';
 import 'package:jiwaapp_task7/pages/menu_page.dart';
 import 'package:jiwaapp_task7/pages/my_voucher_page.dart';
@@ -7,6 +6,8 @@ import 'package:jiwaapp_task7/pages/outlet_options_page.dart';
 import 'package:jiwaapp_task7/pages/payment_method_page.dart';
 import 'package:jiwaapp_task7/theme/color.dart';
 import 'package:jiwaapp_task7/widgets/button_payment.dart';
+import 'package:jiwaapp_task7/widgets/button_payment_confirmation.dart';
+import 'package:jiwaapp_task7/widgets/modal_bottom_check_order.dart';
 import 'package:jiwaapp_task7/widgets/toggle_cupertino.dart';
 
 //TAMBAH KE KERANJANG
@@ -23,6 +24,11 @@ class _AddToCartPageState extends State<AddToCartPage> {
   String selectedTime = 'Ambil Sekarang';
   bool _jiwaPointActive = false;
   bool isChecked = false; // Tambahkan di State class
+
+  bool hasSelectedPayment = false;
+  String selectedPaymentMethod = '';
+  String selectedPaymentAmount = 'Rp42.500';
+  String selectedPaymentLogoPath = '';
 
   void _showTimeBottomSheet(BuildContext context) {
     String selectedOption = 'Ambil Sekarang';
@@ -562,6 +568,22 @@ class _AddToCartPageState extends State<AddToCartPage> {
         );
       },
     );
+  }
+
+  int quantity = 1;
+
+  void incrementQuantity() {
+    setState(() {
+      quantity++;
+    });
+  }
+
+  void decrementQuantity() {
+    if (quantity > 1) {
+      setState(() {
+        quantity--;
+      });
+    }
   }
 
   @override
@@ -1218,7 +1240,7 @@ class _AddToCartPageState extends State<AddToCartPage> {
                               Row(
                                 children: [
                                   GestureDetector(
-                                    // onTap: decrementQuantity,
+                                    onTap: decrementQuantity,
                                     child: Container(
                                       width: 30,
                                       height: 30,
@@ -1232,7 +1254,7 @@ class _AddToCartPageState extends State<AddToCartPage> {
                                   SizedBox(
                                     width: 40,
                                     child: Text(
-                                      '1',
+                                      quantity.toString(),
                                       textAlign: TextAlign.center,
                                       style: const TextStyle(
                                         fontSize: 20,
@@ -1241,7 +1263,7 @@ class _AddToCartPageState extends State<AddToCartPage> {
                                     ),
                                   ),
                                   GestureDetector(
-                                    // onTap: incrementQuantity,
+                                    onTap: incrementQuantity,
                                     child: Container(
                                       width: 30,
                                       height: 30,
@@ -1554,22 +1576,45 @@ class _AddToCartPageState extends State<AddToCartPage> {
                     ],
                   ),
                 ),
+                SizedBox(height: 100),
               ],
             ),
             Positioned(
               bottom: 0,
               left: 0,
               right: 0,
-              child: ButtonPayment(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => PaymentMethodPage(),
-                    ),
-                  );
-                },
-              ),
+              child:
+                  hasSelectedPayment
+                      ? ButtonPaymentConfirmation(
+                        onPressed: () {
+                          // When "Bayar" is clicked, show the confirmation modal
+                          showModalBottomCheckOrder(context);
+                        },
+                        paymentMethod: selectedPaymentMethod,
+                        amount: selectedPaymentAmount,
+                        paymentLogoPath: selectedPaymentLogoPath,
+                      )
+                      : ButtonPayment(
+                        onPressed: () async {
+                          // Navigate to payment method page and wait for result
+                          final result = await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => PaymentMethodPage(),
+                            ),
+                          );
+
+                          // Check if we got a result with payment method info
+                          if (result != null &&
+                              result is Map<String, dynamic>) {
+                            setState(() {
+                              hasSelectedPayment = true;
+                              selectedPaymentMethod = result['method'];
+                              selectedPaymentLogoPath = result['logoPath'];
+                            });
+                          }
+                        },
+                      ),
             ),
           ],
         ),

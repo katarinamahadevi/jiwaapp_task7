@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:jiwaapp_task7/pages/add_to_cart_page.dart';
-import 'package:jiwaapp_task7/pages/menu_page.dart'; // Import MenuPage
+import 'package:jiwaapp_task7/pages/menu_page.dart'; 
 import 'package:jiwaapp_task7/theme/color.dart';
 
 // MENU BIASA

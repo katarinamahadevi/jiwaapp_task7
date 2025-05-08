@@ -79,7 +79,7 @@ class _ModalBottomVerifyOTPRegisterState
   void _checkOtpAndNavigate() {
     final allFilled = _otpControllers.every((c) => c.text.isNotEmpty);
     if (allFilled) {
-      final otp = _otpControllers.map((c) => c.text).join();
+      // final otp = _otpControllers.map((c) => c.text).join();
       Navigator.of(context).pop();
       Navigator.push(
         context,
@@ -214,4 +214,3 @@ class _ModalBottomVerifyOTPRegisterState
     );
   }
 }
-

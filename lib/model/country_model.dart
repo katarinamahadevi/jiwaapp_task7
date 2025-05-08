@@ -1,4 +1,3 @@
-// lib/models/country_model.dart
 class CountryModel {
   final String name;
   final String code;

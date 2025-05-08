@@ -15,6 +15,7 @@ class _OutletOptionsPageState extends State<OutletOptionsPage> {
   bool isOperatingSelected = true;
   String selectedFilter = "Semua";
   String selectedBrand = "Semua Brand";
+  String? selectedOutletId;
 
   final allBrandLogos = [
     'assets/logo/logo_jiwaplus.png',
@@ -50,12 +51,14 @@ class _OutletOptionsPageState extends State<OutletOptionsPage> {
             CustomSearchBar(
               hintText: 'Cari outlet yang kamu mau di sini',
               icon: Icons.store_mall_directory_outlined,
-              backgroundColor: Colors.white,
-              borderColor: Colors.grey.shade200,
               iconColor: BaseColors.primary,
+              backgroundColor: Colors.white,
               textColor: Colors.grey,
-              onTap: () {},
+              onChanged: (value) {
+                print('Search input: $value');
+              },
             ),
+
             const SizedBox(height: 16),
             Row(
               children: [
@@ -303,10 +306,10 @@ class _OutletOptionsPageState extends State<OutletOptionsPage> {
         height: 36,
         padding: const EdgeInsets.symmetric(horizontal: 16),
         decoration: BoxDecoration(
-          color: isSelected ? Color(0xFFE25C4B) : Colors.white,
+          color: isSelected ? BaseColors.primary : Colors.white,
           borderRadius: BorderRadius.circular(18),
           border: Border.all(
-            color: isSelected ? Color(0xFFE25C4B) : Colors.grey.shade300,
+            color: isSelected ? BaseColors.primary : Colors.grey.shade300,
           ),
         ),
         alignment: Alignment.center,
@@ -356,158 +359,177 @@ class _OutletOptionsPageState extends State<OutletOptionsPage> {
     required Color kmColor,
     required Map<String, dynamic> outletData,
   }) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: bgColor,
-        border: Border.all(color: Colors.grey.shade300),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            name,
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 16,
-              color: Colors.black,
-            ),
-          ),
-          const SizedBox(height: 4),
-          Row(
-            children: [
-              Text(
-                code,
-                style: TextStyle(color: BaseColors.black, fontSize: 14),
-              ),
-              const SizedBox(width: 8),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                decoration: BoxDecoration(color: BaseColors.greenContainer),
-                child: const Text(
-                  "Buka",
-                  style: TextStyle(color: Colors.green, fontSize: 12),
-                ),
-              ),
-              const SizedBox(width: 8),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                decoration: BoxDecoration(color: BaseColors.greenContainer),
-                child: Text(
-                  time,
-                  style: TextStyle(color: Colors.green, fontSize: 12),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 6),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "$distance km",
-                style: TextStyle(color: BaseColors.black, fontSize: 14),
-              ),
-              Text(
-                " - ",
-                style: TextStyle(color: BaseColors.greyText, fontSize: 14),
-              ),
-              Expanded(
-                child: Text(
-                  address,
-                  style: TextStyle(
-                    color: BaseColors.greyText,
-                    fontSize: 14,
-                    height: 1.3,
-                  ),
-                  maxLines: 3,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 12),
-          Row(
-            children: [
-              for (var logo in logos)
-                Padding(
-                  padding: const EdgeInsets.only(right: 8),
-                  child: Image.asset(logo, height: 24),
-                ),
-            ],
-          ),
-          const SizedBox(height: 12),
-          Row(
-            children: [
-              Container(
-                child: CircleAvatar(
-                  backgroundColor: BaseColors.primary,
-                  child: Image.asset(
-                    'assets/image/image_take_away.png',
-                    width: 20,
-                    height: 20,
-                  ),
-                ),
-              ),
-              const SizedBox(width: 8),
-              Container(
-                child: CircleAvatar(
-                  backgroundColor: BaseColors.primary,
-                  child: Image.asset(
-                    'assets/image/image_delivery.png',
-                    width: 20,
-                    height: 20,
-                  ),
-                ),
-              ),
-              const SizedBox(width: 12),
+    final String outletId = "$name-$code";
+    final bool isSelected = selectedOutletId == outletId;
 
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 10,
-                  vertical: 6,
-                ),
-                decoration: BoxDecoration(
-                  color: kmColor,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Text(
-                  '${distance.toStringAsFixed(2)} KM',
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: distance < 1.0 ? Colors.green : Colors.blue,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ),
-              const SizedBox(width: 12),
-              const Spacer(),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xFFE25C4B),
-                  elevation: 0,
-                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder:
-                          (context) => OutletDetailPage(outletData: outletData),
-                    ),
-                  );
-                },
-                child: const Text(
-                  'Detail Outlet',
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-            ],
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          selectedOutletId = isSelected ? null : outletId;
+        });
+      },
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: bgColor,
+          border: Border.all(
+            color: isSelected ? BaseColors.primary : Colors.grey.shade300,
           ),
-        ],
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              name,
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+                color: Colors.black,
+              ),
+            ),
+            const SizedBox(height: 4),
+            Row(
+              children: [
+                Text(
+                  code,
+                  style: TextStyle(color: BaseColors.black, fontSize: 14),
+                ),
+                const SizedBox(width: 8),
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 2,
+                  ),
+                  decoration: BoxDecoration(color: BaseColors.greenContainer),
+                  child: const Text(
+                    "Buka",
+                    style: TextStyle(color: Colors.green, fontSize: 12),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 2,
+                  ),
+                  decoration: BoxDecoration(color: BaseColors.greenContainer),
+                  child: Text(
+                    time,
+                    style: TextStyle(color: Colors.green, fontSize: 12),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 6),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "$distance km",
+                  style: TextStyle(color: BaseColors.black, fontSize: 14),
+                ),
+                Text(
+                  " - ",
+                  style: TextStyle(color: BaseColors.greyText, fontSize: 14),
+                ),
+                Expanded(
+                  child: Text(
+                    address,
+                    style: TextStyle(
+                      color: BaseColors.greyText,
+                      fontSize: 14,
+                      height: 1.3,
+                    ),
+                    maxLines: 3,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 12),
+            Row(
+              children: [
+                for (var logo in logos)
+                  Padding(
+                    padding: const EdgeInsets.only(right: 8),
+                    child: Image.asset(logo, height: 24),
+                  ),
+              ],
+            ),
+            const SizedBox(height: 12),
+            Row(
+              children: [
+                Container(
+                  child: CircleAvatar(
+                    backgroundColor: BaseColors.primary,
+                    child: Image.asset(
+                      'assets/image/image_take_away.png',
+                      width: 20,
+                      height: 20,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Container(
+                  child: CircleAvatar(
+                    backgroundColor: BaseColors.primary,
+                    child: Image.asset(
+                      'assets/image/image_delivery.png',
+                      width: 20,
+                      height: 20,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 12),
+
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 6,
+                  ),
+                  decoration: BoxDecoration(
+                    color: kmColor,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Text(
+                    '${distance.toStringAsFixed(2)} KM',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: distance < 1.0 ? Colors.green : Colors.blue,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                const Spacer(),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Color(0xFFE25C4B),
+                    elevation: 0,
+                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder:
+                            (context) =>
+                                OutletDetailPage(outletData: outletData),
+                      ),
+                    );
+                  },
+                  child: const Text(
+                    'Detail Outlet',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

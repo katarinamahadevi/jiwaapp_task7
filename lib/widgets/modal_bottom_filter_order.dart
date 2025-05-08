@@ -3,7 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:jiwaapp_task7/theme/color.dart';
 import 'package:jiwaapp_task7/widgets/modal_bottom_pickerdate.dart';
 
-void showModalBottomFilterOrder (BuildContext context) {
+void showModalBottomFilterOrder(BuildContext context) {
   final Map<String, bool> checkboxStates = {
     "Take Away": false,
     "Dine In": false,

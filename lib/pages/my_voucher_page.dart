@@ -3,8 +3,35 @@ import 'package:jiwaapp_task7/pages/detail_voucher_page.dart';
 import 'package:jiwaapp_task7/theme/color.dart';
 import 'package:jiwaapp_task7/widgets/appbar_primary.dart';
 
-class MyVoucherPage extends StatelessWidget {
+class MyVoucherPage extends StatefulWidget {
   const MyVoucherPage({Key? key}) : super(key: key);
+
+  @override
+  State<MyVoucherPage> createState() => _MyVoucherPageState();
+}
+
+class _MyVoucherPageState extends State<MyVoucherPage> {
+  final TextEditingController _controller = TextEditingController();
+  final ValueNotifier<Color> _borderColor = ValueNotifier<Color>(
+    Colors.grey.shade300,
+  );
+
+  @override
+  void initState() {
+    super.initState();
+    _controller.addListener(() {
+      // Mengubah warna border menjadi merah saat mengetik
+      _borderColor.value =
+          _controller.text.isNotEmpty ? Colors.red : Colors.grey.shade300;
+    });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    _borderColor.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -15,45 +42,50 @@ class MyVoucherPage extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.all(16.0),
-            child: Container(
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.grey.shade300),
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                      child: TextField(
-                        decoration: InputDecoration(
-                          hintText: 'Masukan Kode Promo',
-                          hintStyle: TextStyle(color: Colors.grey.shade400),
-                          border: InputBorder.none,
+            child: ValueListenableBuilder<Color>(
+              valueListenable: _borderColor,
+              builder: (context, borderColor, child) {
+                return Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(color: borderColor),
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                          child: TextField(
+                            controller: _controller,
+                            decoration: InputDecoration(
+                              hintText: 'Masukan Kode Promo',
+                              hintStyle: TextStyle(color: Colors.grey.shade400),
+                              border: InputBorder.none,
+                            ),
+                          ),
                         ),
                       ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 10.0),
-                    child: TextButton(
-                      onPressed: () {},
-                      child: const Text(
-                        'Gunakan',
-                        style: TextStyle(
-                          color: BaseColors.primary,
-                          fontWeight: FontWeight.normal,
+                      Padding(
+                        padding: const EdgeInsets.only(right: 10.0),
+                        child: TextButton(
+                          onPressed: () {},
+                          child: const Text(
+                            'Gunakan',
+                            style: TextStyle(
+                              color: BaseColors.primary,
+                              fontWeight: FontWeight.normal,
+                            ),
+                          ),
                         ),
                       ),
-                    ),
+                    ],
                   ),
-                ],
-              ),
+                );
+              },
             ),
           ),
 
-          Divider(height: 1, thickness: 1, color: Colors.grey.shade200),
-
+          // Divider(height: 1, thickness: 1, color: Colors.grey.shade200),
           Expanded(
             child: SingleChildScrollView(
               child: Padding(

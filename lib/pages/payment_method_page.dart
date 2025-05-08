@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:jiwaapp_task7/theme/color.dart';
 import 'package:jiwaapp_task7/widgets/appbar_primary.dart';
-import 'package:jiwaapp_task7/widgets/button_payment.dart';
 import 'package:jiwaapp_task7/widgets/button_payment_method.dart';
-import 'package:jiwaapp_task7/widgets/modal_bottom_check_order.dart';
 
 class PaymentMethodPage extends StatefulWidget {
   @override
@@ -17,7 +15,7 @@ class _PaymentMethodPageState extends State<PaymentMethodPage> {
     text: '8785359166',
   );
   final TextEditingController _cashtagController = TextEditingController();
-
+  
   final List<Map<String, String>> paymentMethods = [
     {'label': 'GOPAY', 'value': 'gopay', 'asset': 'assets/logo/logo_gopay.png'},
     {
@@ -65,8 +63,7 @@ class _PaymentMethodPageState extends State<PaymentMethodPage> {
                   children: [
                     Padding(
                       padding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 8,
+                        horizontal: 12,vertical: 8,
                       ),
                       child: Container(
                         width: 32,
@@ -238,10 +235,22 @@ class _PaymentMethodPageState extends State<PaymentMethodPage> {
               }).toList(),
             ],
           ),
-
-          // BottomPaymentPage ditempel di bawah
-          ButtonPaymentMethod(
-            onPressed: () => showModalBottomCheckOrder(context),
+          // Bottom payment button modified to return the selected method
+          Positioned(
+            bottom: 0,
+            left: 0,
+            right: 0,
+            child: ButtonPaymentMethod(
+              onPressed: () {
+                // Return the selected payment method info back to AddToCartPage
+                Navigator.pop(context, {
+                  'method': paymentMethods.firstWhere(
+                      (method) => method['value'] == selectedMethod)['label'],
+                  'logoPath': paymentMethods.firstWhere(
+                      (method) => method['value'] == selectedMethod)['asset'],
+                });
+              },
+            ),
           ),
         ],
       ),

@@ -463,14 +463,14 @@ class _MenuPageState extends State<MenuPage> {
                           vertical: 8.0,
                         ),
                         child: CustomSearchBar(
-                          hintText: 'Search menu',
-                          icon: Icons.search,
-                          backgroundColor: Colors.white,
-                          borderColor: Colors.grey.shade200,
+                          hintText: 'Search menu...',
+                          icon: Icons.search_sharp,
                           iconColor: BaseColors.secondary,
-                          textColor: BaseColors.greyText,
-                          onTap: () {
-                            showModalBottomViewCart(context);
+                          backgroundColor: Colors.white,
+                          textColor: Colors.grey,
+                          onChanged: (value) {
+                            // Contoh: filter daftar outlet berdasarkan `value`
+                            print('Search input: $value');
                           },
                         ),
                       ),
@@ -696,12 +696,12 @@ class MenuItem {
 
 class MenuItemCard extends StatelessWidget {
   final MenuItem menuItem;
-  final bool showStackViewOrder; // Add this parameter
+  final bool showStackViewOrder;
 
   const MenuItemCard({
     Key? key,
     required this.menuItem,
-    this.showStackViewOrder = false, // Default to false
+    this.showStackViewOrder = false,
   }) : super(key: key);
 
   @override
@@ -709,10 +709,8 @@ class MenuItemCard extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         if (showStackViewOrder) {
-          // If stack view is visible, show the modal bottom cart
           showModalBottomViewCart(context);
         } else {
-          // Original navigation behavior
           final priceString = menuItem.price
               .replaceAll('Rp', '')
               .replaceAll('.', '');
@@ -735,7 +733,6 @@ class MenuItemCard extends StatelessWidget {
       child: Stack(
         clipBehavior: Clip.none,
         children: [
-          // Rest of the MenuItemCard UI remains the same
           Padding(
             padding: const EdgeInsets.only(top: 30),
             child: Container(

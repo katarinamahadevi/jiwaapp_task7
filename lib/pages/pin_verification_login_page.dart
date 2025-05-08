@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:jiwaapp_task7/pages/home_page.dart';
 import 'package:jiwaapp_task7/pages/profile_page.dart';
 import 'package:jiwaapp_task7/theme/color.dart';
 import 'package:jiwaapp_task7/widgets/modal_bottom_verifyotp.dart';
