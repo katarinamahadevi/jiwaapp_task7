@@ -174,7 +174,7 @@ class _PaymentMethodPageState extends State<PaymentMethodPage> {
           ListView(
             padding: const EdgeInsets.only(
               bottom: 300,
-            ), // Beri space agar tidak ketutup tombol
+            ), 
             children: [
               const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 20),
@@ -228,21 +228,18 @@ class _PaymentMethodPageState extends State<PaymentMethodPage> {
                         });
                       },
                     ),
-                    // Conditional input field directly under the selected method
                     if (selectedMethod == method['value']) _buildInputField(),
                   ],
                 );
               }).toList(),
             ],
           ),
-          // Bottom payment button modified to return the selected method
           Positioned(
             bottom: 0,
             left: 0,
             right: 0,
             child: ButtonPaymentMethod(
               onPressed: () {
-                // Return the selected payment method info back to AddToCartPage
                 Navigator.pop(context, {
                   'method': paymentMethods.firstWhere(
                       (method) => method['value'] == selectedMethod)['label'],

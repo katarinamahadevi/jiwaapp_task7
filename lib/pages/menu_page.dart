@@ -469,7 +469,6 @@ class _MenuPageState extends State<MenuPage> {
                           backgroundColor: Colors.white,
                           textColor: Colors.grey,
                           onChanged: (value) {
-                            // Contoh: filter daftar outlet berdasarkan `value`
                             print('Search input: $value');
                           },
                         ),

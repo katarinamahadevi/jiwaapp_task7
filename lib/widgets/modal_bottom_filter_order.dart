@@ -11,8 +11,6 @@ void showModalBottomFilterOrder(BuildContext context) {
     "Selesai": false,
     "Dibatalkan": false,
   };
-
-  // Add date controllers and selected date variables
   final TextEditingController _startDateController = TextEditingController(
     text: "30/04/2024",
   );
@@ -116,7 +114,6 @@ void showModalBottomFilterOrder(BuildContext context) {
                   ),
                 ),
 
-                // Tombol bawah
                 Positioned(
                   left: 0,
                   right: 0,
@@ -136,7 +133,6 @@ void showModalBottomFilterOrder(BuildContext context) {
                                 for (var key in checkboxStates.keys) {
                                   checkboxStates[key] = false;
                                 }
-                                // Reset dates to default values
                                 _startDateController.text = "30/04/2024";
                                 _endDateController.text = "30/04/2025";
                                 _selectedStartDate = DateTime(2024, 4, 30);
@@ -184,8 +180,6 @@ void showModalBottomFilterOrder(BuildContext context) {
     },
   );
 }
-
-// Helper widgets
 
 Widget _buildDragIndicator() {
   return Center(
@@ -266,7 +260,6 @@ Widget _buildDateField(String label, String date) {
   );
 }
 
-// Using the exact same showBirthDatePickerModal from RegisterPage
 void showBirthDatePickerModal(
   BuildContext context, {
   required Function(DateTime) onDateSelected,

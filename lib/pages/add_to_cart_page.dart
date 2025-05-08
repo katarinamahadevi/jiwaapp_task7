@@ -23,7 +23,7 @@ class _AddToCartPageState extends State<AddToCartPage> {
   bool isTakeAwaySelected = true;
   String selectedTime = 'Ambil Sekarang';
   bool _jiwaPointActive = false;
-  bool isChecked = false; // Tambahkan di State class
+  bool isChecked = false; 
 
   bool hasSelectedPayment = false;
   String selectedPaymentMethod = '';
@@ -1587,7 +1587,6 @@ class _AddToCartPageState extends State<AddToCartPage> {
                   hasSelectedPayment
                       ? ButtonPaymentConfirmation(
                         onPressed: () {
-                          // When "Bayar" is clicked, show the confirmation modal
                           showModalBottomCheckOrder(context);
                         },
                         paymentMethod: selectedPaymentMethod,
@@ -1596,7 +1595,6 @@ class _AddToCartPageState extends State<AddToCartPage> {
                       )
                       : ButtonPayment(
                         onPressed: () async {
-                          // Navigate to payment method page and wait for result
                           final result = await Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -1604,7 +1602,6 @@ class _AddToCartPageState extends State<AddToCartPage> {
                             ),
                           );
 
-                          // Check if we got a result with payment method info
                           if (result != null &&
                               result is Map<String, dynamic>) {
                             setState(() {

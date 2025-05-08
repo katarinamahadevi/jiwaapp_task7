@@ -97,7 +97,6 @@ class _ButtonPaymentState extends State<ButtonPayment> {
         alignment: Alignment.bottomCenter,
         clipBehavior: Clip.none,
         children: [
-          // Container ungu
           Container(
             padding: const EdgeInsets.fromLTRB(16, 16, 16, 110),
             decoration: const BoxDecoration(
@@ -158,7 +157,6 @@ class _ButtonPaymentState extends State<ButtonPayment> {
             ),
           ),
 
-          // Container putih dengan tombol
           Positioned(
             bottom: 0,
             left: 0,

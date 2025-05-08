@@ -170,8 +170,6 @@ class _OutletOptionsPageState extends State<OutletOptionsPage> {
             const SizedBox(height: 10),
             Divider(color: BaseColors.border),
             const SizedBox(height: 10),
-
-            // Scrollable list of outlet cards
             Expanded(
               child: ListView(
                 children: [

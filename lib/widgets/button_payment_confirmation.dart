@@ -6,7 +6,7 @@ import 'package:jiwaapp_task7/theme/color.dart';
 class ButtonPaymentConfirmation extends StatefulWidget {
   final VoidCallback onPressed;
   final String assetPath;
-  final String? paymentMethod; // Menambahkan parameter untuk metode pembayaran
+  final String? paymentMethod; 
   final String? amount; 
   final String? paymentLogoPath; 
 
@@ -183,7 +183,6 @@ class _ButtonPaymentConfirmationState extends State<ButtonPaymentConfirmation> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  // Payment method container
                   if (widget.paymentMethod != null)
                     GestureDetector(
                       // onTap: () => PaymentMethodPage(),
@@ -200,7 +199,6 @@ class _ButtonPaymentConfirmationState extends State<ButtonPaymentConfirmation> {
                         ),
                         child: Row(
                           children: [
-                            // Payment logo
                             if (widget.paymentLogoPath != null)
                               CircleAvatar(
                                 backgroundColor: Colors.white,
@@ -212,7 +210,6 @@ class _ButtonPaymentConfirmationState extends State<ButtonPaymentConfirmation> {
                                 ),
                               ),
                             const SizedBox(width: 12),
-                            // Payment method name
                             Expanded(
                               child: Text(
                                 widget.paymentMethod!,
@@ -222,7 +219,6 @@ class _ButtonPaymentConfirmationState extends State<ButtonPaymentConfirmation> {
                                 ),
                               ),
                             ),
-                            // Amount
                             if (widget.amount != null)
                               Row(
                                 children: [
@@ -243,7 +239,6 @@ class _ButtonPaymentConfirmationState extends State<ButtonPaymentConfirmation> {
                         ),
                       ),
                     ),
-                  // Button Pilih Pembayaran
                   SizedBox(
                     width: double.infinity,
                     height: 55,

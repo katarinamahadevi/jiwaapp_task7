@@ -22,12 +22,10 @@ void showModalBottomCheckOrder(BuildContext context) {
           height: MediaQuery.of(context).size.height * 0.85,
           child: Stack(
             children: [
-              // Scrollable content
               Positioned.fill(
-                bottom: 80, // Reserve space for the fixed buttons
+                bottom: 80, 
                 child: Column(
                   children: [
-                    // Header with indicator
                     Container(
                       width: 40,
                       height: 4,
@@ -38,7 +36,6 @@ void showModalBottomCheckOrder(BuildContext context) {
                       ),
                     ),
 
-                    // Content with padding
                     Expanded(
                       child: SingleChildScrollView(
                         child: Padding(
@@ -180,7 +177,6 @@ void showModalBottomCheckOrder(BuildContext context) {
                                   ),
                                 );
                               }).toList(),
-                              // Add extra padding at the bottom to ensure content isn't covered by buttons
                               const SizedBox(height: 20),
                             ],
                           ),
@@ -191,7 +187,6 @@ void showModalBottomCheckOrder(BuildContext context) {
                 ),
               ),
 
-              // Fixed buttons at the bottom
               Positioned(
                 left: 0,
                 right: 0,

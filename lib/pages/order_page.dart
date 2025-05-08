@@ -67,13 +67,12 @@ class _OrderPageState extends State<OrderPage>
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        // Main app scaffold
         Scaffold(
           backgroundColor: Colors.white,
           appBar: PreferredSize(
             preferredSize: Size.fromHeight(
               110,
-            ), // Control the height of the fixed area
+            ), 
             child: Container(
               color: Colors.white,
               child: SafeArea(
@@ -148,9 +147,8 @@ class _OrderPageState extends State<OrderPage>
           ),
         ),
 
-        // Filter button overlay
         Positioned(
-          bottom: 80, // Adjust as needed to position above navbar
+          bottom: 80, 
           left: 0,
           right: 0,
           child: Center(
