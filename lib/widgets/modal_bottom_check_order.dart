@@ -23,7 +23,7 @@ void showModalBottomCheckOrder(BuildContext context) {
           child: Stack(
             children: [
               Positioned.fill(
-                bottom: 80, 
+                bottom: 80,
                 child: Column(
                   children: [
                     Container(
@@ -194,13 +194,13 @@ void showModalBottomCheckOrder(BuildContext context) {
                 child: Container(
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.1),
-                        blurRadius: 4,
-                        offset: const Offset(0, -2),
-                      ),
-                    ],
+                    // boxShadow: [
+                    //   BoxShadow(
+                    //     color: Colors.black.withOpacity(0.1),
+                    //     blurRadius: 4,
+                    //     offset: const Offset(0, -2),
+                    //   ),
+                    // ],
                   ),
                   padding: const EdgeInsets.all(16),
                   child: Row(

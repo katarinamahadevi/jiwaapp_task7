@@ -70,9 +70,7 @@ class _OrderPageState extends State<OrderPage>
         Scaffold(
           backgroundColor: Colors.white,
           appBar: PreferredSize(
-            preferredSize: Size.fromHeight(
-              110,
-            ), 
+            preferredSize: Size.fromHeight(110),
             child: Container(
               color: Colors.white,
               child: SafeArea(
@@ -148,7 +146,7 @@ class _OrderPageState extends State<OrderPage>
         ),
 
         Positioned(
-          bottom: 80, 
+          bottom: 80,
           left: 0,
           right: 0,
           child: Center(
@@ -186,11 +184,9 @@ class _OrderPageState extends State<OrderPage>
                     SizedBox(width: 8),
                     Text(
                       'Filter',
-                      style: TextStyle(
-                        decoration: TextDecoration.none,
+                      style: Theme.of(context).textTheme.labelLarge?.copyWith(
                         color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 12,
+                        fontWeight: FontWeight.normal,
                       ),
                     ),
                   ],
@@ -515,59 +511,53 @@ class OrderHistoryCard extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                SizedBox(
-                  width: 110,
-                  height: 35,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      showModalBottomOrderRepeat(context);
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: BaseColors.primary,
-                      foregroundColor: Colors.white,
-                      elevation: 0,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
+                ElevatedButton(
+                  onPressed: () {
+                    showModalBottomOrderRepeat(context);
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: BaseColors.primary,
+                    foregroundColor: Colors.white,
+                    elevation: 0,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15),
                     ),
-                    child: Text(
-                      'Pesan Ulang',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 10,
-                      ),
-                    ),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 6,
+                    ), // padding internal
+                  ),
+                  child: Text(
+                    'Pesan Ulang',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 10),
                   ),
                 ),
-                SizedBox(
-                  width: 124,
-                  height: 35,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const OrderDetailPage(),
-                        ),
-                      );
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: BaseColors.primary,
-                      foregroundColor: Colors.white,
-                      elevation: 0,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const OrderDetailPage(),
                       ),
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: BaseColors.primary,
+                    foregroundColor: Colors.white,
+                    elevation: 0,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15),
                     ),
-                    child: Text(
-                      'Detail Pesanan',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 10,
-                      ),
-                    ),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 6,
+                    ), // padding internal
+                  ),
+                  child: Text(
+                    'Detail Pesanan',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 10),
                   ),
                 ),
               ],

@@ -49,7 +49,7 @@ class _OutletOptionsPageState extends State<OutletOptionsPage> {
           children: [
             const SizedBox(height: 16),
             CustomSearchBar(
-              hintText: 'Cari outlet yang kamu mau di sini',
+              hintText: 'Cari outlet yang kamu mau disini',
               icon: Icons.store_mall_directory_outlined,
               iconColor: BaseColors.primary,
               backgroundColor: Colors.white,
@@ -59,6 +59,16 @@ class _OutletOptionsPageState extends State<OutletOptionsPage> {
               },
             ),
 
+            // CustomSearchBar(
+            //   hintText: 'Cari outlet yang kamu mau di sini',
+            //   icon: Icons.store_mall_directory_outlined,
+            //   iconColor: BaseColors.primary,
+            //   backgroundColor: Colors.white,
+            //   textColor: Colors.grey,
+            //   onChanged: (value) {
+            //     print('Search input: $value');
+            //   },
+            // ),
             const SizedBox(height: 16),
             Row(
               children: [

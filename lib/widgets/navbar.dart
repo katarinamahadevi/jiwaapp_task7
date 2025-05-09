@@ -36,7 +36,7 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
           children: [
             _buildNavItem(0, Icons.home_outlined, 'Home'),
             _buildNavItem(1, Icons.fastfood, 'Menu'),
-            _buildNavItem(2, Icons.receipt_outlined, 'Pesanan'),
+            _buildNavItem(2, Icons.sticky_note_2, 'Pesanan'),
             _buildNavItem(3, Icons.person_outline, 'Profile'),
           ],
         ),
