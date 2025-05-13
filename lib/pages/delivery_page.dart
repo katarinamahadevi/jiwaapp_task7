@@ -5,7 +5,6 @@ import 'package:jiwaapp_task7/theme/color.dart';
 import 'package:jiwaapp_task7/widgets/appbar_primary.dart';
 import 'package:jiwaapp_task7/widgets/modal_bottom_delete_address.dart';
 
-
 //ALAMAT
 
 class DeliveryPage extends StatelessWidget {
@@ -15,7 +14,7 @@ class DeliveryPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: BaseColors.greyBG,
-      appBar: const AppbarPrimary(title: 'Alamat Tersimpan'),
+      appBar:  AppbarPrimary(title: 'Alamat Tersimpan'),
       body: Column(
         children: [
           _buildAddAddressButton(context),

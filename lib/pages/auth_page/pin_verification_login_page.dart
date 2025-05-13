@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:jiwaapp_task7/pages/profile_page.dart';
+import 'package:get/get.dart';
+import 'package:jiwaapp_task7/controller/login_controller.dart';
 import 'package:jiwaapp_task7/theme/color.dart';
-import 'package:jiwaapp_task7/widgets/modal_bottom_verifyotp.dart';
+import 'package:jiwaapp_task7/widgets/auth_page/modal_bottom_verifyotp.dart';
 
 class PinVerificationLoginPage extends StatefulWidget {
   @override
@@ -13,28 +14,43 @@ class PinVerificationLoginPage extends StatefulWidget {
 class _PinVerificationLoginPageState extends State<PinVerificationLoginPage> {
   final int pinLength = 6;
   String currentPin = '';
-
-  // Controller untuk TextField tersembunyi
+  String email = '';
+  bool isLoading = false;
+  
+    
   final TextEditingController _pinController = TextEditingController();
-  // Focus node untuk mengelola focus keyboard
+  
   final FocusNode _focusNode = FocusNode();
+
+  final LoginController _loginController = Get.find<LoginController>();
+
 
   @override
   void initState() {
     super.initState();
-    // Listener untuk update UI saat input berubah
+    
+    if (Get.arguments != null && Get.arguments['email'] != null) {
+      email = Get.arguments['email'];
+    } else {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Get.back();
+        Get.snackbar(
+          'Error',
+          'Email tidak ditemukan, silakan login ulang',
+          snackPosition: SnackPosition.BOTTOM,
+        );
+      });
+    }
+    
     _pinController.addListener(() {
       setState(() {
         currentPin = _pinController.text;
-        // Jika PIN sudah lengkap, verifikasi
         if (currentPin.length == pinLength) {
           _verifyPin();
         }
       });
     });
-
-    // Set focus ke field saat halaman dibuka
-    Future.delayed(Duration(milliseconds: 100), () {
+        Future.delayed(Duration(milliseconds: 100), () {
       FocusScope.of(context).requestFocus(_focusNode);
     });
   }
@@ -45,6 +61,20 @@ class _PinVerificationLoginPageState extends State<PinVerificationLoginPage> {
     _focusNode.dispose();
     super.dispose();
   }
+
+
+ void _verifyPin() {
+  _focusNode.unfocus();
+  final enteredPin = _pinController.text.trim();
+
+  if (enteredPin.isEmpty || enteredPin.length < pinLength) {
+    Get.snackbar('Error', 'PIN harus terdiri dari 6 angka', snackPosition: SnackPosition.BOTTOM);
+    return;
+  }
+
+  _loginController.verifyPinLogin(email, enteredPin, _pinController);
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -103,6 +133,11 @@ class _PinVerificationLoginPageState extends State<PinVerificationLoginPage> {
                       ),
                     ),
                   ),
+                  SizedBox(height: 20),
+                  if (isLoading)
+                    CircularProgressIndicator(
+                      color: BaseColors.primary,
+                    ),
                   Opacity(
                     opacity: 0,
                     child: Container(
@@ -123,7 +158,6 @@ class _PinVerificationLoginPageState extends State<PinVerificationLoginPage> {
                       ),
                     ),
                   ),
-
                   SizedBox(height: 60),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -137,7 +171,16 @@ class _PinVerificationLoginPageState extends State<PinVerificationLoginPage> {
                       ),
                       TextButton(
                         onPressed: () {
-                          showModalBottomVerifyOTPRegister(context);
+                          // Pastikan kita memiliki email valid sebelum menampilkan modal OTP
+                          if (email.isNotEmpty) {
+                            showModalBottomVerifyOTPRegister(context, email: email);
+                          } else {
+                            Get.snackbar(
+                              'Error',
+                              'Email tidak ditemukan, silakan kembali ke halaman login',
+                              snackPosition: SnackPosition.BOTTOM,
+                            );
+                          }
                         },
                         child: Text(
                           'Kirim OTP',
@@ -157,22 +200,5 @@ class _PinVerificationLoginPageState extends State<PinVerificationLoginPage> {
         ),
       ),
     );
-  }
-
-  void _verifyPin() {
-    _focusNode.unfocus();
-
-    Future.delayed(Duration(milliseconds: 300), () {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Login Berhasil: $currentPin')));
-
-      _pinController.clear();
-
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => ProfilePage()),
-      );
-    });
   }
 }

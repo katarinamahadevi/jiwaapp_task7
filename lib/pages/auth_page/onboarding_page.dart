@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:jiwaapp_task7/pages/login_page.dart';
+import 'package:jiwaapp_task7/pages/auth_page/login_page.dart';
 import 'package:jiwaapp_task7/theme/color.dart';
 import 'package:jiwaapp_task7/widgets/modal_bottom_privacy_license.dart';
-import 'package:jiwaapp_task7/widgets/modal_bottom_verifyotp.dart';
+import 'package:jiwaapp_task7/widgets/auth_page/modal_bottom_verifyotp.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 //HALAMAN ONBOARDING (MASUK KE LOGIN/REGISTER)
@@ -10,7 +10,7 @@ import 'package:url_launcher/url_launcher.dart';
 class OnboardingPage extends StatelessWidget {
   const OnboardingPage({Key? key}) : super(key: key);
 
-//FUNGSI MEMBUKA WA JIWACARE
+  //FUNGSI MEMBUKA WA JIWACARE
   void _openJiwaCare(BuildContext context) async {
     final Uri JiwaCareAppUri = Uri.parse(
       'https://api.whatsapp.com/send/?phone=628118891915&text&type=phone_number&app_absent=0',
@@ -96,9 +96,8 @@ class OnboardingPage extends StatelessWidget {
                   ),
                   SizedBox(
                     height: 35,
-                    child: 
-
-  //NAVIGASI KE LOGIN PAGE
+                    child:
+                    //NAVIGASI KE LOGIN PAGE
                     ElevatedButton(
                       onPressed: () {
                         Navigator.push(
@@ -236,21 +235,6 @@ class OnboardingPage extends StatelessWidget {
                 ),
               ),
             ),
-//NAVIGASI KE REGISTER PAGE (MODAL BOTTOM OTP)
-            ElevatedButton(
-              onPressed: () {
-                showModalBottomVerifyOTPRegister(context);
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFFE75C55),
-                foregroundColor: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-              child: const Text('Daftar disini'),
-            ),
-
             const Spacer(),
             Divider(color: BaseColors.border, thickness: 2),
             Container(

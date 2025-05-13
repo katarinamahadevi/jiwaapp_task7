@@ -13,15 +13,14 @@ void showModalBottomViewCart(BuildContext context) {
     ),
     builder: (context) {
       return Padding(
-        // Apply bottom padding to account for the navbar height
         padding: EdgeInsets.only(
           left: 16,
           right: 16,
           top: 12,
-          bottom: navbarHeight, // This ensures content doesn't go behind navbar
+          bottom: navbarHeight, 
         ),
         child: Column(
-          mainAxisSize: MainAxisSize.min, // Keep the sheet as small as possible
+          mainAxisSize: MainAxisSize.min, 
           children: [
             Container(
               width: 40,
@@ -102,7 +101,6 @@ void showModalBottomViewCart(BuildContext context) {
                             children: [
                               GestureDetector(
                                 onTap: () {
-                                  // Edit action
                                 },
                                 child: Image.asset(
                                   'assets/image/image_update.png',
@@ -113,7 +111,6 @@ void showModalBottomViewCart(BuildContext context) {
                               const SizedBox(width: 120),
                               GestureDetector(
                                 onTap: () {
-                                  // Delete action
                                 },
                                 child: Image.asset(
                                   'assets/image/image_delete.png',
