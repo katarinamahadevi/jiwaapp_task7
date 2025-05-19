@@ -1,13 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:jiwaapp_task7/controller/address_controller.dart';
 import 'package:jiwaapp_task7/theme/color.dart';
 import 'package:jiwaapp_task7/widgets/appbar_primary.dart';
 import 'package:jiwaapp_task7/widgets/button_primary.dart';
+import 'package:get/get.dart';
 
 class UpdateAddressPage extends StatefulWidget {
   final Map<String, String> addressData;
+  final int addressId;
 
-  const UpdateAddressPage({super.key, required this.addressData});
+  const UpdateAddressPage({
+    super.key,
+    required this.addressData,
+    required this.addressId,
+  });
 
   @override
   _UpdateAddressPageState createState() => _UpdateAddressPageState();
@@ -15,19 +22,25 @@ class UpdateAddressPage extends StatefulWidget {
 
 class _UpdateAddressPageState extends State<UpdateAddressPage> {
   late TextEditingController _labelController;
-  late TextEditingController _addressController;
+  late TextEditingController _addressTextController;
   late TextEditingController _noteController;
   late TextEditingController _nameController;
   late TextEditingController _phoneController;
+
+  final AddressController _addressController = Get.find<AddressController>();
+
+  bool _isLoading = false;
 
   @override
   void initState() {
     super.initState();
     _labelController = TextEditingController(text: widget.addressData['title']);
-    _addressController = TextEditingController(
+    _addressTextController = TextEditingController(
       text: widget.addressData['address'],
     );
-    _noteController = TextEditingController(text: '-');
+    _noteController = TextEditingController(
+      text: widget.addressData['note'] ?? '-',
+    );
     _nameController = TextEditingController(text: widget.addressData['name']);
     _phoneController = TextEditingController(text: widget.addressData['phone']);
   }
@@ -35,7 +48,7 @@ class _UpdateAddressPageState extends State<UpdateAddressPage> {
   @override
   void dispose() {
     _labelController.dispose();
-    _addressController.dispose();
+    _addressTextController.dispose();
     _noteController.dispose();
     _nameController.dispose();
     _phoneController.dispose();
@@ -48,73 +61,106 @@ class _UpdateAddressPageState extends State<UpdateAddressPage> {
       backgroundColor: Colors.white,
       appBar: AppbarPrimary(title: 'Ubah Alamat'),
       bottomNavigationBar: ButtonPrimary(
-        label: 'Simpan',
-        onPressed: _saveAddress,
+        label: _isLoading ? 'Menyimpan...' : 'Simpan',
+        onPressed: _isLoading ? null : () => _saveAddress(),
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _buildContainerTextField(
-                    controller: _labelController,
-                    label: 'Label Alamat *',
-                    hint: 'Masukkan label alamat',
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    'Contoh: rumah, kantor, dan lainnya',
-                    style: TextStyle(color: Colors.grey.shade600, fontSize: 12),
-                  ),
-                ],
-              ),
+      body: Obx(() {
+        if (_addressController.isLoading.value) {
+          return const Center(child: CircularProgressIndicator());
+        }
+        if (_addressController.hasError.value) {
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'Terjadi kesalahan',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                SizedBox(height: 8),
+                Text(_addressController.errorMessage.value),
+                SizedBox(height: 16),
+                ElevatedButton(
+                  onPressed: () {
+                    setState(() {});
+                  },
+                  child: Text('Coba Lagi'),
+                ),
+              ],
+            ),
+          );
+        }
 
-              const SizedBox(height: 16),
+        return SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildContainerTextField(
+                      controller: _labelController,
+                      label: 'Label Alamat *',
+                      hint: 'Masukkan label alamat',
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      'Contoh: rumah, kantor, dan lainnya',
+                      style: TextStyle(
+                        color: Colors.grey.shade600,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ],
+                ),
 
-              _buildAddressField(
-                controller: _addressController,
-                address: widget.addressData['address'] ?? '',
-              ),
+                const SizedBox(height: 16),
 
-              const SizedBox(height: 16),
+                _buildAddressField(
+                  address: widget.addressData['address'] ?? '',
+                ),
 
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _buildContainerTextField(
-                    controller: _noteController,
-                    label: 'Catatan',
-                    hint: 'Masukkan catatan tambahan',
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    'Contoh: lantai, blok, nomor rumah',
-                    style: TextStyle(color: Colors.grey.shade600, fontSize: 12),
-                  ),
-                ],
-              ),
+                const SizedBox(height: 16),
 
-              const SizedBox(height: 16),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildContainerTextField(
+                      controller: _noteController,
+                      label: 'Catatan',
+                      hint: 'Masukkan catatan tambahan',
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      'Contoh: lantai, blok, nomor rumah',
+                      style: TextStyle(
+                        color: Colors.grey.shade600,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ],
+                ),
 
-              _buildContainerTextField(
-                controller: _nameController,
-                label: 'Nama Penerima *',
-                hint: 'Masukkan nama penerima',
-              ),
+                const SizedBox(height: 16),
 
-              const SizedBox(height: 16),
+                _buildContainerTextField(
+                  controller: _nameController,
+                  label: 'Nama Penerima *',
+                  hint: 'Masukkan nama penerima',
+                ),
 
-              _buildPhoneField(),
+                const SizedBox(height: 16),
 
-              const SizedBox(height: 24),
-            ],
+                _buildPhoneField(),
+
+                const SizedBox(height: 24),
+              ],
+            ),
           ),
-        ),
-      ),
+        );
+      }),
     );
   }
 
@@ -161,10 +207,7 @@ class _UpdateAddressPageState extends State<UpdateAddressPage> {
     );
   }
 
-  Widget _buildAddressField({
-    required TextEditingController controller,
-    required String address,
-  }) {
+  Widget _buildAddressField({required String address}) {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
@@ -178,7 +221,6 @@ class _UpdateAddressPageState extends State<UpdateAddressPage> {
           Container(
             width: 30,
             height: 30,
-
             child: CircleAvatar(
               backgroundColor: BaseColors.primary,
               child: Image.asset(
@@ -286,10 +328,62 @@ class _UpdateAddressPageState extends State<UpdateAddressPage> {
     );
   }
 
-  void _saveAddress() {
-    Navigator.pop(context);
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(const SnackBar(content: Text('Alamat berhasil disimpan')));
+  Future<void> _saveAddress() async {
+    if (_labelController.text.isEmpty ||
+        _addressTextController.text.isEmpty ||
+        _nameController.text.isEmpty ||
+        _phoneController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Harap isi semua field yang wajib diisi')),
+      );
+      return;
+    }
+
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      final double latitude =
+          double.tryParse(widget.addressData['latitude'] ?? '0.0') ?? 0.0;
+      final double longitude =
+          double.tryParse(widget.addressData['longitude'] ?? '0.0') ?? 0.0;
+      final Map<String, dynamic> addressData = {
+        'label': _labelController.text,
+        'address': _addressTextController.text,
+        'latitude': latitude,
+        'longitude': longitude,
+        'note': _noteController.text,
+        'recipient_name': _nameController.text,
+        'phone_number':
+            _phoneController.text.startsWith('0')
+                ? _phoneController.text
+                : '0${_phoneController.text}',
+      };
+
+      final success = await _addressController.updateAddress(
+        widget.addressId,
+        addressData,
+      );
+
+      if (success) {
+        Navigator.pop(context, true); 
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Alamat berhasil diperbarui')),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(_addressController.errorMessage.value)),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Terjadi kesalahan: ${e.toString()}')),
+      );
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
   }
 }

@@ -3,10 +3,13 @@ import 'package:jiwaapp_task7/theme/color.dart';
 
 class ButtonPrimary extends StatelessWidget {
   final String label;
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed; // ✅ Jadikan nullable
 
-  const ButtonPrimary({Key? key, required this.label, required this.onPressed})
-    : super(key: key);
+  const ButtonPrimary({
+    Key? key,
+    required this.label,
+    required this.onPressed,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +18,7 @@ class ButtonPrimary extends StatelessWidget {
         margin: const EdgeInsets.all(16),
         width: double.infinity,
         child: ElevatedButton(
-          onPressed: onPressed,
+          onPressed: onPressed, // bisa null sekarang
           style: ElevatedButton.styleFrom(
             backgroundColor: BaseColors.primary,
             foregroundColor: Colors.white,

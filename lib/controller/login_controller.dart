@@ -46,29 +46,40 @@ class LoginController extends GetxController {
     if (!isButtonEnabled.value) return;
 
     isLoading.value = true;
-    String email = emailController.text.trim();
+    final email = emailController.text.trim();
 
     try {
-      await _authService.login(email);
-
+      await _authService.login(email); 
       isLoading.value = false;
       Get.to(() => PinVerificationLoginPage(), arguments: {'email': email});
     } catch (e) {
       isLoading.value = false;
-      String errorMessage = e.toString();
+      final errorMessage = e.toString();
+
       if (_isEmailNotRegistered(errorMessage)) {
         try {
           await _authService.sendOtp(email);
           if (Get.context != null) {
             showModalBottomVerifyOTPRegister(Get.context!, email: email);
           }
-
-          Get.snackbar('OTP Terkirim', 'Kode OTP telah dikirim ke email Anda.');
-        } catch (e) {
-          Get.snackbar('Gagal Mengirim OTP', e.toString());
+          Get.snackbar(
+            'OTP Dikirim',
+            'Silakan cek email Anda.',
+            snackPosition: SnackPosition.BOTTOM,
+          );
+        } catch (otpError) {
+          Get.snackbar(
+            'Gagal Mengirim OTP',
+            otpError.toString(),
+            snackPosition: SnackPosition.BOTTOM,
+          );
         }
       } else {
-        Get.snackbar('Error', errorMessage);
+        Get.snackbar(
+          'Login Gagal',
+          errorMessage,
+          snackPosition: SnackPosition.BOTTOM,
+        );
       }
     }
   }

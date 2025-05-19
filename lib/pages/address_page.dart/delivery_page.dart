@@ -1,59 +1,105 @@
 import 'package:flutter/material.dart';
-import 'package:jiwaapp_task7/pages/search_location_page.dart';
-import 'package:jiwaapp_task7/pages/update_address_page.dart';
+import 'package:get/get.dart';
+import 'package:jiwaapp_task7/controller/address_controller.dart';
+import 'package:jiwaapp_task7/model/address_model.dart';
+import 'package:jiwaapp_task7/pages/address_page.dart/search_location_page.dart';
+import 'package:jiwaapp_task7/pages/address_page.dart/update_address_page.dart';
 import 'package:jiwaapp_task7/theme/color.dart';
 import 'package:jiwaapp_task7/widgets/appbar_primary.dart';
 import 'package:jiwaapp_task7/widgets/modal_bottom_delete_address.dart';
 
-//ALAMAT
-
-class DeliveryPage extends StatelessWidget {
-  const DeliveryPage({super.key});
+class DeliveryPage extends GetView<AddressController> {
+  const DeliveryPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: BaseColors.greyBG,
-      appBar:  AppbarPrimary(title: 'Alamat Tersimpan'),
+      appBar: AppbarPrimary(title: 'Alamat Tersimpan'),
       body: Column(
         children: [
           _buildAddAddressButton(context),
           SizedBox(height: 20),
           Expanded(
-            child: ListView(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              children: [
-                _buildAddressItem(
-                  context: context,
-                  title: 'Jalan semolowaru selatan V no.7',
-                  name: 'Mahadevi Katarina',
-                  phone: '087853591966',
-                  address:
-                      'Jl. Semolowaru Selatan V No.7, RT.004/RW.03, Semolowaru, Kec. Sukolilo, Surabaya, Jawa Timur 60119, Indonesia',
-                  isHighlighted: false,
+            child: Obx(() {
+              if (controller.isLoading.value) {
+                return Center(child: CircularProgressIndicator());
+              }
+
+              if (controller.hasError.value) {
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Terjadi kesalahan',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(height: 8),
+                      Text(controller.errorMessage.value),
+                      SizedBox(height: 16),
+                      ElevatedButton(
+                        onPressed: () => controller.fetchAddresses(),
+                        child: Text('Coba Lagi'),
+                      ),
+                    ],
+                  ),
+                );
+              }
+
+              if (controller.addresses.isEmpty) {
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.asset(
+                        'assets/image/image_empty.png', 
+                        width: 100,
+                        height: 100,
+                      ),
+                      SizedBox(height: 16),
+                      Text(
+                        'Belum ada alamat tersimpan',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(height: 8),
+                      Text(
+                        'Tambahkan alamat favoritmu untuk memudahkan pengiriman',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: Colors.grey),
+                      ),
+                    ],
+                  ),
+                );
+              }
+
+              return RefreshIndicator(
+                onRefresh: () => controller.fetchAddresses(),
+                child: ListView.separated(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  itemCount: controller.addresses.length,
+                  separatorBuilder:
+                      (context, index) => const SizedBox(height: 16),
+                  itemBuilder: (context, index) {
+                    final address = controller.addresses[index];
+                    final isSelected =
+                        controller.selectedAddressId.value == address.id;
+
+                    return _buildAddressItem(
+                      context: context,
+                      address: address,
+                      isHighlighted: isSelected,
+                    );
+                  },
                 ),
-                const SizedBox(height: 16),
-                _buildAddressItem(
-                  context: context,
-                  title: 'Perum Perhutani',
-                  name: 'Mahadevi Katarina',
-                  phone: '628785359166',
-                  address:
-                      'Jl. Genteng Kali No.8, Genteng, Kec. Genteng, Surabaya, Jawa Timur 60275, Indonesia',
-                  isHighlighted: true,
-                ),
-                const SizedBox(height: 16),
-                _buildAddressItem(
-                  context: context,
-                  title: 'Ordo apps',
-                  name: 'Mahadevi Katarina',
-                  phone: '628222311668695',
-                  address:
-                      'Taman Jemursari Selatan I, Jemur Wonosari, Surabaya, Jawa Timur, Indonesia',
-                  isHighlighted: false,
-                ),
-              ],
-            ),
+              );
+            }),
           ),
         ],
       ),
@@ -103,11 +149,7 @@ class DeliveryPage extends StatelessWidget {
 
   Widget _buildAddressItem({
     required BuildContext context,
-    required String title,
-    required String name,
-    required String phone,
-    required String address,
-    String? note,
+    required AddressModel address,
     bool isHighlighted = false,
   }) {
     return Container(
@@ -123,6 +165,10 @@ class DeliveryPage extends StatelessWidget {
             offset: const Offset(0, 1),
           ),
         ],
+        border:
+            isHighlighted
+                ? Border.all(color: BaseColors.primary, width: 2)
+                : null,
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -150,7 +196,7 @@ class DeliveryPage extends StatelessWidget {
                       const SizedBox(width: 12),
                       Expanded(
                         child: Text(
-                          title,
+                          address.label,
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 18,
@@ -165,8 +211,8 @@ class DeliveryPage extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.fromLTRB(60, 12, 16, 12),
                   child: Text(
-                    '$name - $phone',
-                    style: TextStyle(color: Colors.grey.shade400, fontSize: 14),
+                    '${address.recipientName} - ${address.phoneNumber}',
+                    style: TextStyle(color: Colors.grey.shade500, fontSize: 14),
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
                   ),
@@ -174,7 +220,7 @@ class DeliveryPage extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.fromLTRB(60, 0, 16, 0),
                   child: Text(
-                    address,
+                    address.address,
                     style: TextStyle(
                       color: Colors.grey.shade500,
                       fontSize: 14,
@@ -216,7 +262,7 @@ class DeliveryPage extends StatelessWidget {
                           const SizedBox(width: 8),
                           Expanded(
                             child: Text(
-                              note != null && note.isNotEmpty ? note : '-',
+                              address.note.isNotEmpty ? address.note : '-',
                               style: TextStyle(
                                 color: Colors.grey.shade500,
                                 fontSize: 14,
@@ -239,20 +285,26 @@ class DeliveryPage extends StatelessWidget {
               children: [
                 GestureDetector(
                   onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder:
-                            (context) => UpdateAddressPage(
-                              addressData: {
-                                'title': title,
-                                'name': name,
-                                'phone': phone.replaceFirst('+62', ''),
-                                'address': address,
-                              },
-                            ),
-                      ),
-                    );
+Navigator.push(
+  context,
+  MaterialPageRoute(
+    builder: (context) => UpdateAddressPage(
+      addressData: {
+        'title': address.label,
+        'address': address.address,
+        'name': address.recipientName,
+        'phone': address.phoneNumber,
+        'note': address.note,
+        'latitude': address.latitude.toString(),
+        'longitude': address.longitude.toString(),
+      },
+      addressId: address.id,
+    ),
+  ),
+).then((result) {
+  if (result == true) {
+  }
+});
                   },
                   child: Container(
                     width: 25,
@@ -270,7 +322,7 @@ class DeliveryPage extends StatelessWidget {
                 const SizedBox(height: 16),
                 GestureDetector(
                   onTap: () {
-                    showModalBottomDeleteAddress(context);
+                    showModalBottomDeleteAddress(context, address.id);
                   },
                   child: Container(
                     width: 25,
@@ -285,6 +337,26 @@ class DeliveryPage extends StatelessWidget {
                     ),
                   ),
                 ),
+                if (!isHighlighted) ...[
+                  const SizedBox(height: 16),
+                  GestureDetector(
+                    onTap: () {
+                      controller.selectAddress(address.id);
+                    },
+                    child: Container(
+                      width: 25,
+                      height: 25,
+                      child: CircleAvatar(
+                        backgroundColor: BaseColors.greyBG,
+                        child: Icon(
+                          Icons.check_circle_outline,
+                          color: BaseColors.primary,
+                          size: 20,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ],
             ),
           ),

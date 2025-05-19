@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:jiwaapp_task7/controller/address_controller.dart';
 import 'package:jiwaapp_task7/theme/color.dart';
 
-//MODAL BOTTOM HAPUS ALAMAT
+Future<void> showModalBottomDeleteAddress(BuildContext context, int addressId) async {
+  final controller = Get.find<AddressController>(); // pastikan sudah di-bind di GetX
 
-Future<void> showModalBottomDeleteAddress(BuildContext context) async {
   return showModalBottomSheet(
     context: context,
     isScrollControlled: true,
@@ -31,7 +33,6 @@ Future<void> showModalBottomDeleteAddress(BuildContext context) async {
                 borderRadius: BorderRadius.circular(4),
               ),
             ),
-
             Container(
               width: 120,
               height: 120,
@@ -83,13 +84,16 @@ Future<void> showModalBottomDeleteAddress(BuildContext context) async {
                 const SizedBox(width: 12),
                 Expanded(
                   child: ElevatedButton(
-                    onPressed: () {
-                      // Navigator.pushReplacement(
-                      //   context,
-                      //   MaterialPageRoute(
-                      //     builder: (context) => const MenuPage(),
-                      //   ),
-                      // );
+                    onPressed: () async {
+                      final success = await controller.deleteAddress(addressId);
+                      if (success) {
+                        Navigator.of(context).pop(); // Tutup modal
+                        Get.snackbar('Sukses', 'Alamat berhasil dihapus',
+                            backgroundColor: Colors.green, colorText: Colors.white);
+                      } else {
+                        Get.snackbar('Gagal', controller.errorMessage.value,
+                            backgroundColor: Colors.red, colorText: Colors.white);
+                      }
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Color(0xFFE65952),

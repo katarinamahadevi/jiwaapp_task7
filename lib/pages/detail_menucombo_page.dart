@@ -518,18 +518,17 @@ class _DetailMenucomboPageState extends State<DetailMenucomboPage> {
                               if (isSelected)
                                 IconButton(
                                   onPressed: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder:
-                                            (context) => DetailMenuPage(
-                                              title: widget.title,
-                                              description: 'selera',
-                                              imageUrl: widget.imageUrl,
-                                              price: widget.price,
-                                            ),
-                                      ),
-                                    );
+                                    // Navigator.push(
+                                    //   context,
+                                    //   MaterialPageRoute(
+                                    //     builder:
+                                    //         (context) => DetailMenuPage(
+                                    //           menu:menu ,
+                                    //           imageUrl: widget.imageUrl,
+                                    //           price: widget.price,
+                                    //         ),
+                                    //   ),
+                                    // );
                                   },
                                   icon: Icon(
                                     Icons.edit,

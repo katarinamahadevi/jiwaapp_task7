@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:jiwaapp_task7/pages/find_location_page.dart';
+import 'package:get/get.dart';
+import 'package:jiwaapp_task7/controller/address_controller.dart';
+import 'package:jiwaapp_task7/pages/address_page.dart/find_location_page.dart';
 import 'package:jiwaapp_task7/theme/color.dart';
 import 'package:jiwaapp_task7/widgets/appbar_primary.dart';
 
-//TAMBAH ALAMAT
-
 class CreateAddressPage extends StatefulWidget {
-  final Map<String, String> addressData;
+  final Map<String, dynamic> addressData;
 
   const CreateAddressPage({super.key, required this.addressData});
 
@@ -16,127 +16,127 @@ class CreateAddressPage extends StatefulWidget {
 }
 
 class _CreateAddressPageState extends State<CreateAddressPage> {
-  late TextEditingController _labelController;
-  late TextEditingController _noteController;
-  late TextEditingController _nameController;
-  late TextEditingController _phoneController;
+  final AddressController _addressController = Get.find<AddressController>();
 
   @override
   void initState() {
     super.initState();
-    _labelController = TextEditingController(text: widget.addressData['title']);
-    _noteController = TextEditingController(text: '-');
-    _nameController = TextEditingController(text: widget.addressData['name']);
-    _phoneController = TextEditingController(text: widget.addressData['phone']);
+    _addressController.initAddressData(widget.addressData);
   }
-
-  @override
-  void dispose() {
-    _labelController.dispose();
-    _noteController.dispose();
-    _nameController.dispose();
-    _phoneController.dispose();
-    super.dispose();
-  }
-
-  bool get _isFormValid =>
-      _labelController.text.isNotEmpty &&
-      (widget.addressData['address'] ?? '').isNotEmpty &&
-      _nameController.text.isNotEmpty &&
-      _phoneController.text.isNotEmpty;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppbarPrimary(title: 'Tambah Alamat'),
-      body: Column(
-        children: [
-          Expanded(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _buildContainerTextField(
-                        controller: _labelController,
-                        label: 'Label Alamat *',
-                        hint: 'Masukkan label alamat',
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        'Contoh: rumah, kantor, dan lainnya',
-                        style: TextStyle(
-                          color: Colors.grey.shade600,
-                          fontSize: 12,
+      body: Obx(
+        () => Stack(
+          children: [
+            Column(
+              children: [
+                Expanded(
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            _buildContainerTextField(
+                              controller: _addressController.labelController,
+                              label: 'Label Alamat *',
+                              hint: 'Masukkan label alamat',
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              'Contoh: rumah, kantor, dan lainnya',
+                              style: TextStyle(
+                                color: Colors.grey.shade600,
+                                fontSize: 12,
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-                  _buildAddressField(
-                    address: widget.addressData['address'] ?? '',
-                  ),
-                  const SizedBox(height: 16),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _buildContainerTextField(
-                        controller: _noteController,
-                        label: 'Catatan',
-                        hint: 'Masukkan catatan tambahan',
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        'Contoh: lantai, blok, nomor rumah',
-                        style: TextStyle(
-                          color: Colors.grey.shade600,
-                          fontSize: 12,
+                        const SizedBox(height: 16),
+                        _buildAddressField(
+                          address:
+                              _addressController.addressData.value['address'] ??
+                              '',
                         ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-                  _buildContainerTextField(
-                    controller: _nameController,
-                    label: 'Nama Penerima *',
-                    hint: 'Masukkan nama penerima',
-                  ),
-                  const SizedBox(height: 16),
-                  _buildPhoneField(),
-                ],
-              ),
-            ),
-          ),
-          Divider(color: Colors.grey.shade300),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: _isFormValid ? _saveAddress : null,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor:
-                      _isFormValid ? BaseColors.primary : Colors.grey.shade400,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                  padding: const EdgeInsets.symmetric(vertical: 15),
-                ),
-                child: const Text(
-                  'Simpan',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w500,
+                        const SizedBox(height: 16),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            _buildContainerTextField(
+                              controller: _addressController.noteController,
+                              label: 'Catatan',
+                              hint: 'Masukkan catatan tambahan',
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              'Contoh: lantai, blok, nomor rumah',
+                              style: TextStyle(
+                                color: Colors.grey.shade600,
+                                fontSize: 12,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 16),
+                        _buildContainerTextField(
+                          controller: _addressController.nameController,
+                          label: 'Nama Penerima *',
+                          hint: 'Masukkan nama penerima',
+                        ),
+                        const SizedBox(height: 16),
+                        _buildPhoneField(),
+                      ],
+                    ),
                   ),
                 ),
-              ),
+                Divider(color: Colors.grey.shade300),
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed:
+                          _addressController.isFormValid &&
+                                  !_addressController.isLoading.value
+                              ? _saveAddress
+                              : null,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor:
+                            _addressController.isFormValid
+                                ? BaseColors.primary
+                                : Colors.grey.shade400,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        padding: const EdgeInsets.symmetric(vertical: 15),
+                      ),
+                      child: Text(
+                        _addressController.isLoading.value
+                            ? 'Menyimpan...'
+                            : 'Simpan',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ),
-        ],
+            if (_addressController.isLoading.value)
+              Container(
+                color: Colors.black.withOpacity(0.3),
+                child: const Center(child: CircularProgressIndicator()),
+              ),
+          ],
+        ),
       ),
     );
   }
@@ -295,7 +295,7 @@ class _CreateAddressPageState extends State<CreateAddressPage> {
                 ),
                 Expanded(
                   child: TextField(
-                    controller: _phoneController,
+                    controller: _addressController.phoneController,
                     keyboardType: TextInputType.phone,
                     inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                     decoration: const InputDecoration(
@@ -315,10 +315,18 @@ class _CreateAddressPageState extends State<CreateAddressPage> {
     );
   }
 
-  void _saveAddress() {
-    Navigator.pop(context);
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(const SnackBar(content: Text('Alamat berhasil disimpan')));
+  Future<void> _saveAddress() async {
+    final success = await _addressController.addAddress();
+
+    if (success) {
+      Navigator.pop(context);
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Alamat berhasil disimpan')));
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(_addressController.errorMessage.value)),
+      );
+    }
   }
 }

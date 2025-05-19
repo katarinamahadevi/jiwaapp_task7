@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jiwaapp_task7/controller/profile_controller.dart';
-import 'package:jiwaapp_task7/pages/delivery_page.dart';
+import 'package:jiwaapp_task7/pages/address_page.dart/delivery_page.dart';
 import 'package:jiwaapp_task7/pages/home_page.dart';
 import 'package:jiwaapp_task7/pages/loyalty_membership_page.dart';
 import 'package:jiwaapp_task7/pages/menu_page.dart';
@@ -371,7 +371,7 @@ class ProfilePage extends StatelessWidget {
         Get.offAll(() => const HomePage());
         break;
       case 1:
-        Get.offAll(() => const MenuPage());
+        Get.offAll(() =>  MenuPage());
         break;
       case 2:
         Get.offAll(() => const OrderPage());

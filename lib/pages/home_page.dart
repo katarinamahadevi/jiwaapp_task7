@@ -30,7 +30,7 @@ class _HomePageState extends State<HomePage> {
       case 1:
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => const MenuPage()),
+          MaterialPageRoute(builder: (context) =>  MenuPage()),
         );
         break;
       case 2:

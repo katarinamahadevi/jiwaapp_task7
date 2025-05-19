@@ -4,8 +4,8 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:jiwaapp_task7/pages/create_address_page.dart';
-import 'package:jiwaapp_task7/pages/search_location_page.dart';
+import 'package:jiwaapp_task7/pages/address_page.dart/create_address_page.dart';
+import 'package:jiwaapp_task7/pages/address_page.dart/search_location_page.dart';
 import 'package:jiwaapp_task7/theme/color.dart';
 
 class FindLocationPage extends StatefulWidget {
@@ -88,9 +88,7 @@ class _FindLocationPageState extends State<FindLocationPage> {
           ),
           Center(
             child: Container(
-              padding: const EdgeInsets.only(
-                bottom: 200,
-              ), 
+              padding: const EdgeInsets.only(bottom: 200),
               child: Icon(
                 Icons.location_on,
                 size: 65,
@@ -186,7 +184,6 @@ class _FindLocationPageState extends State<FindLocationPage> {
                     ),
                     Divider(color: BaseColors.border),
                     const SizedBox(height: 20),
-                    // (Contoh dummy alamat)
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                       child: Row(
@@ -244,19 +241,15 @@ class _FindLocationPageState extends State<FindLocationPage> {
                                 builder:
                                     (context) => CreateAddressPage(
                                       addressData: {
-                                        'latitude':
-                                            _selectedPosition.latitude
-                                                .toString(),
+                                        'latitude': _selectedPosition.latitude,
                                         'longitude':
-                                            _selectedPosition.longitude
-                                                .toString(),
+                                            _selectedPosition.longitude,
                                         'address': _address,
                                       },
                                     ),
                               ),
                             );
                           },
-
                           style: ElevatedButton.styleFrom(
                             backgroundColor: BaseColors.primary,
                             shape: RoundedRectangleBorder(

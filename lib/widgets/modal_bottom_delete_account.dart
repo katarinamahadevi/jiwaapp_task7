@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:jiwaapp_task7/controller/profile_controller.dart';
 import 'package:jiwaapp_task7/pages/menu_page.dart';
 import 'package:jiwaapp_task7/theme/color.dart';
 
@@ -82,14 +84,15 @@ Future<void> showModalBottomDeleteAccount(BuildContext context) async {
                 const SizedBox(width: 12),
                 Expanded(
                   child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.pushReplacement(
+                    onPressed: () async {
+                      Navigator.of(
                         context,
-                        MaterialPageRoute(
-                          builder: (context) => const MenuPage(),
-                        ),
-                      );
+                      ).pop(); // Tutup modal terlebih dahulu
+                      final controller = Get.find<ProfileController>();
+                      await controller
+                          .deleteUserProfile(); // Panggil fungsi delete
                     },
+
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Color(0xFFE65952),
                       shape: RoundedRectangleBorder(

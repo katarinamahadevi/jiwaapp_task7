@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:jiwaapp_task7/pages/delivery_page.dart';
+import 'package:jiwaapp_task7/pages/address_page.dart/delivery_page.dart';
 import 'package:jiwaapp_task7/pages/menu_page.dart';
 import 'package:jiwaapp_task7/widgets/home_page/order_option.dart';
 
@@ -34,7 +34,7 @@ class OrderOptions extends StatelessWidget {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const DeliveryPage()),
+                MaterialPageRoute(builder: (context) => DeliveryPage()),
               );
             },
           ),

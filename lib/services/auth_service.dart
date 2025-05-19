@@ -8,6 +8,47 @@ class AuthService {
   final ApiClient _apiClient = ApiClient();
   final StorageService _tokenService = StorageService();
 
+  String _handleError(DioException error) {
+    String errorMessage = 'Something went wrong. Please try again.';
+
+    if (error.response != null) {
+      if (error.response!.data != null) {
+        if (error.response!.data is Map &&
+            error.response!.data['message'] != null) {
+          errorMessage = error.response!.data['message'];
+        } else if (error.response!.data is String) {
+          errorMessage = error.response!.data;
+        }
+      } else {
+        switch (error.response!.statusCode) {
+          case 400:
+            errorMessage = 'Bad request';
+            break;
+          case 401:
+            errorMessage = 'Unauthorized';
+            break;
+          case 403:
+            errorMessage = 'Forbidden';
+            break;
+          case 404:
+            errorMessage = 'Not found';
+            break;
+          case 500:
+            errorMessage = 'Server error';
+            break;
+        }
+      }
+    } else if (error.type == DioExceptionType.connectionTimeout) {
+      errorMessage = 'Connection timeout';
+    } else if (error.type == DioExceptionType.receiveTimeout) {
+      errorMessage = 'Receive timeout';
+    } else if (error.type == DioExceptionType.unknown) {
+      errorMessage = 'Network error';
+    }
+
+    return errorMessage;
+  }
+
   //UNTUK LOGIN
   Future<Map<String, dynamic>> login(String email) async {
     try {
@@ -117,47 +158,6 @@ class AuthService {
     }
   }
 
-  String _handleError(DioException error) {
-    String errorMessage = 'Something went wrong. Please try again.';
-
-    if (error.response != null) {
-      if (error.response!.data != null) {
-        if (error.response!.data is Map &&
-            error.response!.data['message'] != null) {
-          errorMessage = error.response!.data['message'];
-        } else if (error.response!.data is String) {
-          errorMessage = error.response!.data;
-        }
-      } else {
-        switch (error.response!.statusCode) {
-          case 400:
-            errorMessage = 'Bad request';
-            break;
-          case 401:
-            errorMessage = 'Unauthorized';
-            break;
-          case 403:
-            errorMessage = 'Forbidden';
-            break;
-          case 404:
-            errorMessage = 'Not found';
-            break;
-          case 500:
-            errorMessage = 'Server error';
-            break;
-        }
-      }
-    } else if (error.type == DioExceptionType.connectionTimeout) {
-      errorMessage = 'Connection timeout';
-    } else if (error.type == DioExceptionType.receiveTimeout) {
-      errorMessage = 'Receive timeout';
-    } else if (error.type == DioExceptionType.unknown) {
-      errorMessage = 'Network error';
-    }
-
-    return errorMessage;
-  }
-
   //UNTUK MENGIRIM OTP
   Future<void> sendOtp(String email) async {
     try {
@@ -167,16 +167,32 @@ class AuthService {
     }
   }
 
-//UNTUK UPDATE PROFILE USER
-  Future<Map<String, dynamic>> updateUserProfile(Map<String, dynamic> userData) async {
+  //UNTUK UPDATE PROFILE USER
+  Future<Map<String, dynamic>> updateUserProfile(
+    Map<String, dynamic> userData,
+  ) async {
     try {
       final response = await _apiClient.dio.post(
-        '/api/v1/auth/edit-profile',
+        '/auth/edit-profile',
         data: userData,
       );
 
       if (response.data['data'] != null) {
         await _tokenService.saveUserData(json.encode(response.data['data']));
+      }
+
+      return response.data;
+    } on DioException catch (e) {
+      throw _handleError(e);
+    }
+  }
+
+  //UNTUK HAPUS AKUN USER
+  Future<Map<String, dynamic>> deleteUserProfile() async {
+    try {
+      final response = await _apiClient.dio.delete('/auth/delete-account');
+      if (response.data['data'] != null) {
+        await _tokenService.deleteToken();
       }
 
       return response.data;

@@ -1,49 +1,39 @@
 import 'package:flutter/material.dart';
-import 'package:jiwaapp_task7/pages/menu_page.dart'; 
+import 'package:get/get.dart';
+import 'package:jiwaapp_task7/controller/menu_controller.dart';
+import 'package:jiwaapp_task7/model/menu_model.dart';
+import 'package:jiwaapp_task7/pages/menu_page.dart';
 import 'package:jiwaapp_task7/theme/color.dart';
 
 // MENU BIASA
-class DetailMenuPage extends StatefulWidget {
-  final String title;
-  final String description;
-  final String imageUrl;
-  final double price;
+class DetailMenuPage extends StatelessWidget {
+  final MenuModel menu;
 
-  const DetailMenuPage({
-    Key? key,
-    required this.title,
-    required this.description,
-    required this.imageUrl,
-    required this.price,
-  }) : super(key: key);
+  DetailMenuPage({Key? key, required this.menu}) : super(key: key);
 
-  @override
-  State<DetailMenuPage> createState() => _DetailMenuPageState();
-}
+  final MenuItemController controller = Get.find<MenuItemController>();
 
-class _DetailMenuPageState extends State<DetailMenuPage> {
-  int quantity = 1;
-  String selectedTemp = 'Ice';
-  String selectedSize = 'Regular';
-  String selectedIce = 'Normal';
-  String selectedSugar = 'Normal';
+  final RxInt quantity = 1.obs;
+  final RxString selectedTemp = 'Ice'.obs;
+  final RxString selectedSize = 'Regular'.obs;
+  final RxString selectedIce = 'Normal'.obs;
+  final RxString selectedSugar = 'Normal'.obs;
 
   void incrementQuantity() {
-    setState(() {
-      quantity++;
-    });
+    quantity.value++;
   }
 
   void decrementQuantity() {
-    if (quantity > 1) {
-      setState(() {
-        quantity--;
-      });
+    if (quantity.value > 1) {
+      quantity.value--;
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    double priceValue =
+        double.tryParse(menu.price.replaceAll(RegExp(r'[^0-9.]'), '')) ?? 0.0;
+
     return Scaffold(
       backgroundColor: Colors.grey[100],
       bottomNavigationBar: Container(
@@ -70,7 +60,7 @@ class _DetailMenuPageState extends State<DetailMenuPage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Rp${widget.price.toInt()}.000',
+                  'Rp${menu.price}',
                   style: const TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
@@ -90,14 +80,16 @@ class _DetailMenuPageState extends State<DetailMenuPage> {
                         child: const Icon(Icons.remove),
                       ),
                     ),
-                    SizedBox(
-                      width: 40,
-                      child: Text(
-                        quantity.toString(),
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
+                    Obx(
+                      () => SizedBox(
+                        width: 40,
+                        child: Text(
+                          quantity.value.toString(),
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ),
@@ -123,19 +115,14 @@ class _DetailMenuPageState extends State<DetailMenuPage> {
               height: 55,
               child: ElevatedButton(
                 onPressed: () {
-                  // Calculate the total price
-                  double totalPrice = widget.price * quantity;
+                  final totalPrice = priceValue * quantity.value;
 
-                  // Navigate back to MenuPage with StackViewOrder
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder:
-                          (context) => MenuPage(
-                            showStackViewOrder: true,
-                            totalPrice: totalPrice,
-                            itemCount: quantity,
-                          ),
+                  controller.addItemToCart(totalPrice);
+                  Get.off(
+                    () => MenuPage(
+                      showStackViewOrder: true,
+                      totalPrice: controller.totalPrice.value,
+                      itemCount: controller.itemCount.value,
                     ),
                   );
                 },
@@ -176,7 +163,7 @@ class _DetailMenuPageState extends State<DetailMenuPage> {
                   child: Row(
                     children: [
                       InkWell(
-                        onTap: () => Navigator.pop(context),
+                        onTap: () => Get.back(),
                         child: const Icon(
                           Icons.arrow_back,
                           color: Colors.black,
@@ -185,7 +172,7 @@ class _DetailMenuPageState extends State<DetailMenuPage> {
                       ),
                       const SizedBox(width: 24),
                       Text(
-                        widget.title,
+                        menu.name,
                         style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
@@ -223,8 +210,8 @@ class _DetailMenuPageState extends State<DetailMenuPage> {
                       children: [
                         Padding(
                           padding: const EdgeInsets.all(32.0),
-                          child: Image.asset(
-                            widget.imageUrl,
+                          child: Image.network(
+                            menu.imageUrlText,
                             height: 180,
                             fit: BoxFit.contain,
                           ),
@@ -266,7 +253,7 @@ class _DetailMenuPageState extends State<DetailMenuPage> {
                       child: Column(
                         children: [
                           Text(
-                            widget.title,
+                            menu.name,
                             style: const TextStyle(
                               fontSize: 24,
                               fontWeight: FontWeight.bold,
@@ -275,7 +262,7 @@ class _DetailMenuPageState extends State<DetailMenuPage> {
                             textAlign: TextAlign.center,
                           ),
                           Text(
-                            widget.description,
+                            menu.name,
                             style: TextStyle(
                               fontSize: 16,
                               color: Colors.grey[500],
@@ -307,45 +294,19 @@ class _DetailMenuPageState extends State<DetailMenuPage> {
                   padding: const EdgeInsets.all(16.0),
                   child: Column(
                     children: [
-                      _buildOptionRow('Temp', ['Ice'], selectedTemp, (value) {
-                        setState(() {
-                          selectedTemp = value;
-                        });
-                      }),
-
+                      _buildOptionRow('Temp', ['Ice'], selectedTemp),
                       const SizedBox(height: 24),
-
-                      _buildOptionRow(
-                        'Size',
-                        ['Large', 'Regular'],
-                        selectedSize,
-                        (value) {
-                          setState(() {
-                            selectedSize = value;
-                          });
-                        },
-                      ),
-
+                      _buildOptionRow('Size', [
+                        'Large',
+                        'Regular',
+                      ], selectedSize),
                       const SizedBox(height: 24),
-                      _buildOptionRow('Ice', ['Less', 'Normal'], selectedIce, (
-                        value,
-                      ) {
-                        setState(() {
-                          selectedIce = value;
-                        });
-                      }),
-
+                      _buildOptionRow('Ice', ['Less', 'Normal'], selectedIce),
                       const SizedBox(height: 24),
-                      _buildOptionRow(
-                        'Sugar',
-                        ['Less', 'Normal'],
-                        selectedSugar,
-                        (value) {
-                          setState(() {
-                            selectedSugar = value;
-                          });
-                        },
-                      ),
+                      _buildOptionRow('Sugar', [
+                        'Less',
+                        'Normal',
+                      ], selectedSugar),
                     ],
                   ),
                 ),
@@ -414,8 +375,7 @@ class _DetailMenuPageState extends State<DetailMenuPage> {
   Widget _buildOptionRow(
     String label,
     List<String> options,
-    String selectedOption,
-    Function(String) onOptionSelected,
+    RxString selectedOption,
   ) {
     return Row(
       children: [
@@ -431,38 +391,40 @@ class _DetailMenuPageState extends State<DetailMenuPage> {
             mainAxisAlignment: MainAxisAlignment.end,
             children:
                 options.map((option) {
-                  bool isSelected = selectedOption == option;
-                  return Padding(
-                    padding: const EdgeInsets.only(left: 8.0),
-                    child: InkWell(
-                      onTap: () => onOptionSelected(option),
-                      child: Container(
-                        width: option == 'Ice' ? 80 : 80,
-                        padding: const EdgeInsets.symmetric(vertical: 12),
-                        decoration: BoxDecoration(
-                          color:
-                              isSelected
-                                  ? const Color(0xFF3B1D52)
-                                  : Colors.white,
-                          borderRadius: BorderRadius.circular(5),
-                          border: Border.all(
+                  return Obx(() {
+                    bool isSelected = selectedOption.value == option;
+                    return Padding(
+                      padding: const EdgeInsets.only(left: 8.0),
+                      child: InkWell(
+                        onTap: () => selectedOption.value = option,
+                        child: Container(
+                          width: option == 'Ice' ? 80 : 80,
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                          decoration: BoxDecoration(
                             color:
                                 isSelected
                                     ? const Color(0xFF3B1D52)
-                                    : Colors.grey.withOpacity(0.3),
+                                    : Colors.white,
+                            borderRadius: BorderRadius.circular(5),
+                            border: Border.all(
+                              color:
+                                  isSelected
+                                      ? const Color(0xFF3B1D52)
+                                      : Colors.grey.withOpacity(0.3),
+                            ),
                           ),
-                        ),
-                        alignment: Alignment.center,
-                        child: Text(
-                          option,
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: isSelected ? Colors.white : Colors.black,
+                          alignment: Alignment.center,
+                          child: Text(
+                            option,
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: isSelected ? Colors.white : Colors.black,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  );
+                    );
+                  });
                 }).toList(),
           ),
         ),

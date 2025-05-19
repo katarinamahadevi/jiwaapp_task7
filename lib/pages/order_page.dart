@@ -45,7 +45,7 @@ class _OrderPageState extends State<OrderPage>
       case 1:
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => const MenuPage()),
+          MaterialPageRoute(builder: (context) =>  MenuPage()),
         );
         break;
       case 2:
@@ -615,7 +615,7 @@ class EmptyOrderState extends StatelessWidget {
             onPressed: () {
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(builder: (context) => const MenuPage()),
+                MaterialPageRoute(builder: (context) =>  MenuPage()),
               );
             },
             style: ElevatedButton.styleFrom(

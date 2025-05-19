@@ -6,7 +6,7 @@ import '../../theme/color.dart';
 
 class LoginPage extends StatelessWidget {
   LoginPage({Key? key}) : super(key: key);
-  
+
   final LoginController controller = Get.put(LoginController());
 
   @override
@@ -30,17 +30,18 @@ class LoginPage extends StatelessWidget {
         viewportFraction: 1.0,
         autoPlayInterval: Duration(seconds: 4),
       ),
-      items: controller.bannerImages.map((imagePath) {
-        return Builder(
-          builder: (BuildContext context) {
-            return Image.asset(
-              imagePath,
-              fit: BoxFit.cover,
-              width: double.infinity,
+      items:
+          controller.bannerImages.map((imagePath) {
+            return Builder(
+              builder: (BuildContext context) {
+                return Image.asset(
+                  imagePath,
+                  fit: BoxFit.cover,
+                  width: double.infinity,
+                );
+              },
             );
-          },
-        );
-      }).toList(),
+          }).toList(),
     );
   }
 
@@ -110,35 +111,34 @@ class LoginPage extends StatelessWidget {
       children: [
         InkWell(
           onTap: controller.toggleCheckbox,
-          child: Obx(() => Container(
-            width: 24,
-            height: 24,
-            decoration: BoxDecoration(
-              color: controller.isChecked.value
-                  ? BaseColors.primary
-                  : Colors.transparent,
-              border: Border.all(color: BaseColors.greyText),
-              borderRadius: BorderRadius.circular(4),
+          child: Obx(
+            () => Container(
+              width: 24,
+              height: 24,
+              decoration: BoxDecoration(
+                color:
+                    controller.isChecked.value
+                        ? BaseColors.primary
+                        : Colors.transparent,
+                border: Border.all(color: BaseColors.greyText),
+                borderRadius: BorderRadius.circular(4),
+              ),
+              child:
+                  controller.isChecked.value
+                      ? Icon(Icons.check, size: 20, color: Colors.white)
+                      : null,
             ),
-            child: controller.isChecked.value
-                ? Icon(
-                    Icons.check,
-                    size: 20,
-                    color: Colors.white,
-                  )
-                : null,
-          )),
+          ),
         ),
         SizedBox(width: 8),
         Expanded(
           child: RichText(
             text: TextSpan(
-              style: Theme.of(context).textTheme.bodyMedium
-                  ?.copyWith(color: Colors.black87),
+              style: Theme.of(
+                context,
+              ).textTheme.bodyMedium?.copyWith(color: Colors.black87),
               children: [
-                const TextSpan(
-                  text: 'Dengan masuk kamu menyetujui ',
-                ),
+                const TextSpan(text: 'Dengan masuk kamu menyetujui '),
                 TextSpan(
                   text: 'Syarat & Ketentuan dan kebijakan Privasi',
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -157,29 +157,33 @@ class LoginPage extends StatelessWidget {
 
   Widget _buildLoginButton() {
     return GestureDetector(
-      onTap: controller.handleLogin,
-      child: Obx(() => Container(
-        width: double.infinity,
-        padding: EdgeInsets.symmetric(vertical: 16),
-        decoration: BoxDecoration(
-          color: controller.isButtonEnabled.value
-              ? BaseColors.primary
-              : BaseColors.border,
-          borderRadius: BorderRadius.circular(32),
+      onTap: () async {
+        await controller.handleLogin();
+      },
+      child: Obx(
+        () => Container(
+          width: double.infinity,
+          padding: EdgeInsets.symmetric(vertical: 16),
+          decoration: BoxDecoration(
+            color:
+                controller.isButtonEnabled.value
+                    ? BaseColors.primary
+                    : BaseColors.border,
+            borderRadius: BorderRadius.circular(32),
+          ),
+          alignment: Alignment.center,
+          child:
+              controller.isLoading.value
+                  ? CircularProgressIndicator(color: Colors.white)
+                  : Text(
+                    'Masuk',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
         ),
-        alignment: Alignment.center,
-        child: controller.isLoading.value
-            ? CircularProgressIndicator(
-                color: Colors.white,
-              )
-            : Text(
-                'Masuk',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-      )),
+      ),
     );
   }
 }

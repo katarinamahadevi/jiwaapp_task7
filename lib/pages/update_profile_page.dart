@@ -5,7 +5,6 @@ import 'package:jiwaapp_task7/controller/profile_controller.dart';
 import 'package:jiwaapp_task7/model/user_model.dart';
 import 'package:jiwaapp_task7/theme/color.dart';
 import 'package:jiwaapp_task7/widgets/appbar_primary.dart';
-import 'package:jiwaapp_task7/widgets/button_primary.dart';
 import 'package:jiwaapp_task7/widgets/modal_bottom_country_register.dart';
 import 'package:jiwaapp_task7/widgets/modal_bottom_delete_account.dart';
 import 'package:jiwaapp_task7/widgets/modal_bottom_occupation.dart';
@@ -21,7 +20,6 @@ class UpdateProfilePage extends StatefulWidget {
 
 class _UpdateProfilePageState extends State<UpdateProfilePage> {
   final ProfileController _profileController = Get.put(ProfileController());
-
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
@@ -43,6 +41,7 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
     'Thailand',
     'Other',
   ];
+
   final List<String> _occupations = [
     'Pelajar / Mahasiswa',
     'Bekerja',
@@ -62,36 +61,30 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
     _profileController.fetchUserData().then((_) {
       if (_profileController.user.value != null) {
         UserModel user = _profileController.user.value!;
-
         // Set text controllers with user data
-        _nameController.text = user.name ?? '';
-        _emailController.text = user.email ?? '';
-        _phoneController.text = user.phoneNumber ?? '';
-        _referralCodeController.text = user.referralCode ?? '';
+        _nameController.text = user.name;
+        _emailController.text = user.email;
+        _phoneController.text = user.phoneNumber;
+        _referralCodeController.text = user.referralCode;
 
         // Set gender
         setState(() {
-          _selectedGender = user.gender ?? 'Perempuan';
+          _selectedGender = user.gender;
         });
 
         // Set date of birth if available
-        if (user.dateOfBirth != null) {
-          try {
-            _selectedDate = DateTime.parse(user.dateOfBirth!);
-            _dateController.text = DateFormat(
-              'dd/MM/yyyy',
-            ).format(_selectedDate);
-          } catch (e) {
-            _dateController.text = '';
-          }
+        try {
+          _selectedDate = DateTime.parse(user.dateOfBirth!);
+          _dateController.text = DateFormat('dd/MM/yyyy').format(_selectedDate);
+        } catch (e) {
+          _dateController.text = '';
         }
 
         // Set nationality and occupation
-        _countryController.text = user.region ?? 'Indonesia';
-        _selectedNationality = user.region ?? 'Indonesia';
-
-        _occupationController.text = user.job ?? 'Pelajar / Mahasiswa';
-        _selectedOccupation = user.job ?? 'Pelajar / Mahasiswa';
+        _countryController.text = user.region;
+        _selectedNationality = user.region;
+        _occupationController.text = user.job;
+        _selectedOccupation = user.job;
       }
     });
   }
@@ -131,7 +124,9 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
       appBar: AppbarPrimary(title: 'Ubah Profil'),
       body: Obx(() {
         if (_profileController.isLoading.value) {
-          // return Center(child: LoadingIndicator(color: BaseColors.primary));
+          return Center(
+            child: CircularProgressIndicator(color: BaseColors.primary),
+          );
         }
 
         return SingleChildScrollView(
@@ -139,7 +134,6 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // Referral Code (disabled)
               Container(
                 decoration: BoxDecoration(
                   color: Colors.grey.shade200,
@@ -178,7 +172,7 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
                       children: [
                         Radio<String>(
                           activeColor: BaseColors.primary,
-                          value: 'Laki-Laki',
+                          value: 'Male',
                           groupValue: _selectedGender,
                           onChanged: (value) {
                             setState(() {
@@ -186,7 +180,7 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
                             });
                           },
                         ),
-                        Text('Laki-Laki'),
+                        Text('Male'),
                       ],
                     ),
                   ),
@@ -195,7 +189,7 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
                       children: [
                         Radio<String>(
                           activeColor: BaseColors.primary,
-                          value: 'Perempuan',
+                          value: 'Female',
                           groupValue: _selectedGender,
                           onChanged: (value) {
                             setState(() {
@@ -203,12 +197,13 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
                             });
                           },
                         ),
-                        Text('Perempuan'),
+                        Text('Female'),
                       ],
                     ),
                   ),
                 ],
               ),
+
               const SizedBox(height: 16),
 
               // Date of Birth
@@ -247,6 +242,7 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
                   },
                 ),
               ),
+
               const SizedBox(height: 16),
 
               // Email
@@ -397,28 +393,52 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
                   ],
                 ),
               ),
+
               const SizedBox(height: 24),
             ],
           ),
         );
       }),
-      // bottomNavigationBar: Obx(() => ButtonPrimary(
-      //   label: 'Simpan',
-      //   onPressed: _profileController.isLoading.value ? null : _saveUserData,
-      //   // isLoading: _profileController.isLoading.value,
-      // )),
+      bottomNavigationBar: Obx(
+        () => Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: ElevatedButton(
+            onPressed:
+                _profileController.isLoading.value
+                    ? null
+                    : () => _saveUserData(),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: BaseColors.primary,
+              foregroundColor: Colors.white,
+              padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 10),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(50),
+              ),
+            ),
+            child: Text('Simpan'),
+          ),
+        ),
+      ),
     );
   }
 
   void _saveUserData() {
-    // Create updated user data
+    // Get current user data to maintain any fields we're not changing
+    UserModel? currentUser = _profileController.user.value;
+
+    // Create updated user data - include all required fields
     Map<String, dynamic> updatedUserData = {
       'name': _nameController.text,
       'gender': _selectedGender,
       'date_of_birth': DateFormat('yyyy-MM-dd').format(_selectedDate),
       'email': _emailController.text,
-      'nationality': _selectedNationality,
-      'occupation': _selectedOccupation,
+      'region': _selectedNationality,
+      'job': _selectedOccupation,
+      // Add the required fields that should not be changed
+      'phone_number': currentUser?.phoneNumber ?? _phoneController.text,
+      // 'pin_code': currentUser?.pinCode ?? '', // Use existing pin code
+      'referral_code':
+          currentUser?.referralCode ?? _referralCodeController.text,
     };
 
     // Call the update user profile method in the controller

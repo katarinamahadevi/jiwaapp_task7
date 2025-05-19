@@ -81,10 +81,7 @@ class ProfileController extends GetxController {
   }
 
   //UNTUK MENGAMBIL DATA USER YANG LOGIN
-
   Future<void> fetchUserData() async {
-    // isLoading.value = true;
-
     try {
       final userData = await _authService.getCurrentUser();
       user.value = userData;
@@ -117,8 +114,7 @@ class ProfileController extends GetxController {
     }
   }
 
-
-//UNTUK UPDATE PROFILE USER (TAPI BELUM BISA)
+  //UNTUK UPDATE PROFILE USER (TAPI BELUM BISA)
   Future<void> updateUserProfile(Map<String, dynamic> userData) async {
     isLoading.value = true;
 
@@ -137,6 +133,33 @@ class ProfileController extends GetxController {
       Get.snackbar(
         'Error',
         'Error updating profile: $e',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.red[100],
+        colorText: Colors.red[900],
+      );
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  // UNTUK MENGHAPUS AKUN
+  Future<void> deleteUserProfile() async {
+    isLoading.value = true;
+    try {
+      await _authService.deleteUserProfile();
+      Get.offAll(() => OnboardingPage());
+
+      Get.snackbar(
+        'Success',
+        'Akun Anda berhasil dihapus',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.green[100],
+        colorText: Colors.green[900],
+      );
+    } catch (e) {
+      Get.snackbar(
+        'Error',
+        'Gagal menghapus akun: $e',
         snackPosition: SnackPosition.BOTTOM,
         backgroundColor: Colors.red[100],
         colorText: Colors.red[900],

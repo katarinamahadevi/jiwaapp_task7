@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:jiwaapp_task7/pages/delivery_page.dart';
+import 'package:jiwaapp_task7/pages/address_page.dart/delivery_page.dart';
 import 'package:jiwaapp_task7/pages/menu_page.dart';
 import 'package:jiwaapp_task7/pages/my_voucher_page.dart';
 import 'package:jiwaapp_task7/pages/outlet_options_page.dart';

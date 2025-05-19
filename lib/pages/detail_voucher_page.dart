@@ -6,7 +6,7 @@ import 'package:jiwaapp_task7/widgets/appbar_primary.dart';
 import 'package:jiwaapp_task7/widgets/button_primary.dart';
 import 'package:jiwaapp_task7/widgets/modal_bottom_tnc_voucher.dart';
 
-  //DETAIL VOUCHER DISKON
+//DETAIL VOUCHER DISKON
 
 class DetailVoucherPage extends StatelessWidget {
   const DetailVoucherPage({Key? key}) : super(key: key);
@@ -220,7 +220,7 @@ class DetailVoucherPage extends StatelessWidget {
             ),
 
             const SizedBox(height: 16),
-            // ButtonPrimary(label: 'Pakai Voucher', onPressed: () => MenuPage()),
+            ButtonPrimary(label: 'Pakai Voucher', onPressed: () => MenuPage()),
           ],
         ),
       ),
