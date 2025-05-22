@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jiwaapp_task7/model/menu_model.dart';
-import 'package:jiwaapp_task7/pages/detail_menu_page.dart';
-import 'package:jiwaapp_task7/pages/detail_menucombo_page.dart';
+import 'package:jiwaapp_task7/pages/menu_page/detail_menu_page.dart';
 import 'package:jiwaapp_task7/theme/color.dart';
 import 'package:jiwaapp_task7/widgets/modal_bottom_view_cart.dart';
 
@@ -25,10 +24,6 @@ class MenuItemCard extends StatelessWidget {
         if (showStackViewOrder) {
           showModalBottomViewCart(context);
         } else {
-          final priceString = menuItem.price
-              .replaceAll('Rp', '')
-              .replaceAll('.', '');
-          final price = double.parse(priceString) / 1000;
           Get.to(() => DetailMenuPage(menu: menuItem));
         }
       },

@@ -19,6 +19,7 @@ class ProfileController extends GetxController {
     fetchUserData();
   }
 
+//UNTUK MENGCOPY REFERRAL CODE
   void copyReferralCode() {
     if (user.value?.referralCode != null) {
       Clipboard.setData(ClipboardData(text: user.value!.referralCode));
@@ -32,12 +33,15 @@ class ProfileController extends GetxController {
     }
   }
 
+
+//METHOD UNTUK SHARE REFERRAL CODE
   void shareReferralCode() {
     Share.share(
       'Hai, coba order menu favoritmu pakai JIWA+, yuk! Gunakan kode referral saya: ${user.value?.referralCode ?? ""}',
     );
   }
 
+//METHOD UNTUK BUKA JIWACARE
   Future<void> openJiwaCare() async {
     final Uri jiwaCareAppUri = Uri.parse(
       'https://api.whatsapp.com/send/?phone=628118891915&text&type=phone_number&app_absent=0',
@@ -114,7 +118,7 @@ class ProfileController extends GetxController {
     }
   }
 
-  //UNTUK UPDATE PROFILE USER (TAPI BELUM BISA)
+  //UNTUK UPDATE PROFILE USER
   Future<void> updateUserProfile(Map<String, dynamic> userData) async {
     isLoading.value = true;
 
@@ -142,7 +146,7 @@ class ProfileController extends GetxController {
     }
   }
 
-  // UNTUK MENGHAPUS AKUN
+//UNTUK MENGHAPUS AKUN
   Future<void> deleteUserProfile() async {
     isLoading.value = true;
     try {

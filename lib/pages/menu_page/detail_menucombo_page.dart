@@ -1,8 +1,22 @@
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
-import 'package:jiwaapp_task7/pages/detail_menu_page.dart';
+import 'package:jiwaapp_task7/pages/menu_page/detail_menu_page.dart';
 import 'package:jiwaapp_task7/pages/menu_page.dart';
 import 'package:jiwaapp_task7/theme/color.dart';
+
+// cara manggil: 
+// Navigator.push(
+//                     context,
+//                     MaterialPageRoute(
+//                       builder:
+//                           (context) => const DetailMenucomboPage(
+//                             title: 'Combo A',
+//                             description: 'Delicious sandwich with toppings',
+//                             imageUrl: 'assets/image/image_menu.png',
+//                             price: 25000.0,
+//                           ),
+//                     ),
+//                   );
 
 //MENU COMBO
 

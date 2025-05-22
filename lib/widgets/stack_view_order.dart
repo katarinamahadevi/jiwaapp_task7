@@ -31,7 +31,6 @@ class StackViewOrder extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          // Total price section
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
@@ -52,7 +51,6 @@ class StackViewOrder extends StatelessWidget {
             ],
           ),
 
-          // View Order button with badge
           Stack(
             clipBehavior: Clip.none,
             children: [

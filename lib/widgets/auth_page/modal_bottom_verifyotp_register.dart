@@ -50,8 +50,6 @@ class _ModalBottomVerifyOTPRegisterState
   bool _isVerifyingOtp = false;
 
   String _email = '';
-
-  // API service
   final AuthService _authService = AuthService();
 
   @override

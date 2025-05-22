@@ -18,12 +18,10 @@ class OutletDetailPage extends StatefulWidget {
 }
 
 class _OutletDetailPageState extends State<OutletDetailPage> {
-  // Default coordinate for outlet (Surabaya example coordinates)
-  // Replace with actual outlet coordinates
   final LatLng _outletLocation = const LatLng(
     -7.2575,
     112.7521,
-  ); // dari google_maps_flutter
+  ); 
 
   void _openMaps(BuildContext context) async {
     // Create map URL with the coordinates

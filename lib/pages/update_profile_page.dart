@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:jiwaapp_task7/controller/profile_controller.dart';
+import 'package:jiwaapp_task7/controller/update_pin_controller.dart';
 import 'package:jiwaapp_task7/model/user_model.dart';
 import 'package:jiwaapp_task7/theme/color.dart';
 import 'package:jiwaapp_task7/widgets/appbar_primary.dart';
@@ -9,7 +10,7 @@ import 'package:jiwaapp_task7/widgets/modal_bottom_country_register.dart';
 import 'package:jiwaapp_task7/widgets/modal_bottom_delete_account.dart';
 import 'package:jiwaapp_task7/widgets/modal_bottom_occupation.dart';
 import 'package:jiwaapp_task7/widgets/modal_bottom_pickerdate.dart';
-import 'package:jiwaapp_task7/widgets/auth_page/modal_bottom_verifyotp.dart';
+import 'package:jiwaapp_task7/widgets/auth_page/modal_bottom_verifyotp_register.dart';
 
 class UpdateProfilePage extends StatefulWidget {
   const UpdateProfilePage({Key? key}) : super(key: key);
@@ -20,6 +21,8 @@ class UpdateProfilePage extends StatefulWidget {
 
 class _UpdateProfilePageState extends State<UpdateProfilePage> {
   final ProfileController _profileController = Get.put(ProfileController());
+  final updatePinController = Get.find<UpdatePinController>();
+
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
@@ -61,18 +64,15 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
     _profileController.fetchUserData().then((_) {
       if (_profileController.user.value != null) {
         UserModel user = _profileController.user.value!;
-        // Set text controllers with user data
         _nameController.text = user.name;
         _emailController.text = user.email;
         _phoneController.text = user.phoneNumber;
         _referralCodeController.text = user.referralCode;
 
-        // Set gender
         setState(() {
           _selectedGender = user.gender;
         });
 
-        // Set date of birth if available
         try {
           _selectedDate = DateTime.parse(user.dateOfBirth!);
           _dateController.text = DateFormat('dd/MM/yyyy').format(_selectedDate);
@@ -80,7 +80,6 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
           _dateController.text = '';
         }
 
-        // Set nationality and occupation
         _countryController.text = user.region;
         _selectedNationality = user.region;
         _occupationController.text = user.job;
@@ -156,14 +155,12 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
               ),
               const SizedBox(height: 16),
 
-              // Name
               _buildContainerTextField(
                 controller: _nameController,
                 labelText: 'Nama Kamu *',
               ),
               const SizedBox(height: 16),
 
-              // Gender
               Text('Jenis Kelamin *', style: TextStyle(fontSize: 16)),
               Row(
                 children: [
@@ -206,7 +203,6 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
 
               const SizedBox(height: 16),
 
-              // Date of Birth
               Container(
                 decoration: BoxDecoration(
                   color: Colors.white,
@@ -245,24 +241,23 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
 
               const SizedBox(height: 16),
 
-              // Email
               _buildContainerTextField(
                 controller: _emailController,
                 labelText: 'Email Address',
                 keyboardType: TextInputType.emailAddress,
+                enabled: false,
               ),
               const SizedBox(height: 16),
 
-              // Phone Number (disabled)
               Container(
                 decoration: BoxDecoration(
-                  color: Colors.grey.shade200,
+                  color: Colors.white,
                   borderRadius: BorderRadius.circular(8),
                   border: Border.all(color: Colors.grey.shade300),
                 ),
                 child: TextField(
                   controller: _phoneController,
-                  enabled: false,
+                  enabled: true,
                   keyboardType: TextInputType.phone,
                   decoration: InputDecoration(
                     labelText: 'Nomor Ponsel *',
@@ -277,7 +272,6 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
               ),
               const SizedBox(height: 16),
 
-              // Nationality
               Container(
                 decoration: BoxDecoration(
                   color: Colors.white,
@@ -314,7 +308,6 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
               ),
               const SizedBox(height: 16),
 
-              // Occupation
               Container(
                 decoration: BoxDecoration(
                   color: Colors.white,
@@ -351,7 +344,6 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
               ),
               const SizedBox(height: 16),
 
-              // Change PIN container
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 12, vertical: 15),
                 decoration: BoxDecoration(
@@ -359,22 +351,53 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
                   borderRadius: BorderRadius.circular(8),
                   border: Border.all(color: Colors.grey.shade300),
                 ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Ubah PIN', style: TextStyle(fontSize: 16)),
-                    GestureDetector(
-                      onTap: () {
-                        showModalBottomVerifyOTPRegister(context);
-                      },
-                      child: Text('Ubah', style: TextStyle(color: Colors.red)),
+                    Text('PIN', style: TextStyle(fontSize: 14)),
+                    SizedBox(height: 8),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: List.generate(6, (index) {
+                            return Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 2,
+                              ),
+                              child: Icon(
+                                Icons.circle,
+                                size: 4,
+                                color: Colors.black,
+                              ),
+                            );
+                          }),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            final email = _emailController.text.trim();
+                            if (email.isEmpty) {
+                              Get.snackbar("Error", "Email tidak boleh kosong");
+                              return;
+                            }
+                            updatePinController.sendOtp(email: email);
+                          },
+                          child: Text(
+                            'Ubah',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
               ),
               const SizedBox(height: 16),
 
-              // Delete account
               GestureDetector(
                 onTap: () {
                   showModalBottomDeleteAccount(context);
@@ -423,10 +446,7 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
   }
 
   void _saveUserData() {
-    // Get current user data to maintain any fields we're not changing
     UserModel? currentUser = _profileController.user.value;
-
-    // Create updated user data - include all required fields
     Map<String, dynamic> updatedUserData = {
       'name': _nameController.text,
       'gender': _selectedGender,
@@ -434,14 +454,10 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
       'email': _emailController.text,
       'region': _selectedNationality,
       'job': _selectedOccupation,
-      // Add the required fields that should not be changed
       'phone_number': currentUser?.phoneNumber ?? _phoneController.text,
-      // 'pin_code': currentUser?.pinCode ?? '', // Use existing pin code
       'referral_code':
           currentUser?.referralCode ?? _referralCodeController.text,
     };
-
-    // Call the update user profile method in the controller
     _profileController.updateUserProfile(updatedUserData);
   }
 

@@ -1,4 +1,3 @@
-// widgets/sliver_search_bar_delegate.dart
 import 'package:flutter/material.dart';
 
 class SliverSearchBarDelegate extends SliverPersistentHeaderDelegate {

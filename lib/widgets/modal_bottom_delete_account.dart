@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jiwaapp_task7/controller/profile_controller.dart';
-import 'package:jiwaapp_task7/pages/menu_page.dart';
 import 'package:jiwaapp_task7/theme/color.dart';
 
 //MODAL BOTTOM HAPUS AKUN

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:jiwaapp_task7/pages/auth_page/login_page.dart';
 import 'package:jiwaapp_task7/theme/color.dart';
 import 'package:jiwaapp_task7/widgets/modal_bottom_privacy_license.dart';
-import 'package:jiwaapp_task7/widgets/auth_page/modal_bottom_verifyotp.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 //HALAMAN ONBOARDING (MASUK KE LOGIN/REGISTER)

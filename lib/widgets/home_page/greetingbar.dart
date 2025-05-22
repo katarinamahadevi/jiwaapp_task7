@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
+import '../../controller/profile_controller.dart';
 
 //HI MAHADEVI KATARINA DAN NOTIFIKASI
 
@@ -6,54 +9,60 @@ class Greetingbar extends StatelessWidget {
   final double imageHeight;
   final VoidCallback onNotificationTap;
 
-  const Greetingbar({
+  Greetingbar({
     Key? key,
     required this.imageHeight,
     required this.onNotificationTap,
   }) : super(key: key);
 
+  final ProfileController profileController = Get.find<ProfileController>();
+
   @override
   Widget build(BuildContext context) {
-    return Positioned(
-      top: imageHeight - 60,
-      left: 20,
-      right: 20,
-      child: Container(
-        height: 50,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(15),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.1),
-              blurRadius: 10,
-              spreadRadius: 1,
-              offset: const Offset(0, 3),
-            ),
-          ],
-        ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text(
-                "Hi, Mahadevi Katarina",
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.black87,
-                ),
-              ),
-              GestureDetector(
-                onTap: onNotificationTap,
-                child: _buildNotificationBadge(),
+    return Obx(() {
+      final name = profileController.user.value?.name ?? '';
+
+      return Positioned(
+        top: imageHeight - 60,
+        left: 20,
+        right: 20,
+        child: Container(
+          height: 50,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(15),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.1),
+                blurRadius: 10,
+                spreadRadius: 1,
+                offset: const Offset(0, 3),
               ),
             ],
           ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Hi, $name",
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.black87,
+                  ),
+                ),
+                GestureDetector(
+                  onTap: onNotificationTap,
+                  child: _buildNotificationBadge(),
+                ),
+              ],
+            ),
+          ),
         ),
-      ),
-    );
+      );
+    });
   }
 
   Widget _buildNotificationBadge() {

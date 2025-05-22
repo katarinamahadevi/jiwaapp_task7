@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:jiwaapp_task7/controller/profile_controller.dart';
 import 'package:jiwaapp_task7/pages/menu_page.dart';
 import 'package:jiwaapp_task7/pages/notification_page.dart';
 import 'package:jiwaapp_task7/pages/order_page.dart';
@@ -19,6 +21,8 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
+final ProfileController controller = Get.put(ProfileController());
+
 class _HomePageState extends State<HomePage> {
   int _currentIndex = 0;
   void _onItemTapped(int index) {
@@ -30,7 +34,7 @@ class _HomePageState extends State<HomePage> {
       case 1:
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) =>  MenuPage()),
+          MaterialPageRoute(builder: (context) => MenuPage()),
         );
         break;
       case 2:
@@ -46,6 +50,12 @@ class _HomePageState extends State<HomePage> {
         );
         break;
     }
+  }
+
+  @override
+  void initState() {
+    controller.fetchUserData();
+    super.initState();
   }
 
   @override

@@ -14,10 +14,10 @@ class DetailMenuPage extends StatelessWidget {
   final MenuItemController controller = Get.find<MenuItemController>();
 
   final RxInt quantity = 1.obs;
-  final RxString selectedTemp = 'Ice'.obs;
-  final RxString selectedSize = 'Regular'.obs;
-  final RxString selectedIce = 'Normal'.obs;
-  final RxString selectedSugar = 'Normal'.obs;
+  // final RxString selectedTemp = 'Ice'.obs;
+  // final RxString selectedSize = 'Regular'.obs;
+  // final RxString selectedIce = 'Normal'.obs;
+  // final RxString selectedSugar = 'Normal'.obs;
 
   void incrementQuantity() {
     quantity.value++;
@@ -33,7 +33,6 @@ class DetailMenuPage extends StatelessWidget {
   Widget build(BuildContext context) {
     double priceValue =
         double.tryParse(menu.price.replaceAll(RegExp(r'[^0-9.]'), '')) ?? 0.0;
-
     return Scaffold(
       backgroundColor: Colors.grey[100],
       bottomNavigationBar: Container(
@@ -276,41 +275,41 @@ class DetailMenuPage extends StatelessWidget {
                   ],
                 ),
               ),
-              Container(
-                margin: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(16),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.1),
-                      spreadRadius: 1,
-                      blurRadius: 4,
-                      offset: const Offset(0, 1),
-                    ),
-                  ],
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    children: [
-                      _buildOptionRow('Temp', ['Ice'], selectedTemp),
-                      const SizedBox(height: 24),
-                      _buildOptionRow('Size', [
-                        'Large',
-                        'Regular',
-                      ], selectedSize),
-                      const SizedBox(height: 24),
-                      _buildOptionRow('Ice', ['Less', 'Normal'], selectedIce),
-                      const SizedBox(height: 24),
-                      _buildOptionRow('Sugar', [
-                        'Less',
-                        'Normal',
-                      ], selectedSugar),
-                    ],
-                  ),
-                ),
-              ),
+              // Container(
+              //   margin: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+              //   decoration: BoxDecoration(
+              //     color: Colors.white,
+              //     borderRadius: BorderRadius.circular(16),
+              //     boxShadow: [
+              //       BoxShadow(
+              //         color: Colors.grey.withOpacity(0.1),
+              //         spreadRadius: 1,
+              //         blurRadius: 4,
+              //         offset: const Offset(0, 1),
+              //       ),
+              //     ],
+              //   ),
+              //   child: Padding(
+              //     padding: const EdgeInsets.all(16.0),
+              //     child: Column(
+              //       children: [
+              //         _buildOptionRow('Temp', ['Ice'], selectedTemp),
+              //         const SizedBox(height: 24),
+              //         _buildOptionRow('Size', [
+              //           'Large',
+              //           'Regular',
+              //         ], selectedSize),
+              //         const SizedBox(height: 24),
+              //         _buildOptionRow('Ice', ['Less', 'Normal'], selectedIce),
+              //         const SizedBox(height: 24),
+              //         _buildOptionRow('Sugar', [
+              //           'Less',
+              //           'Normal',
+              //         ], selectedSugar),
+              //       ],
+              //     ),
+              //   ),
+              // ),
               Container(
                 margin: const EdgeInsets.fromLTRB(16, 0, 16, 16),
                 decoration: BoxDecoration(

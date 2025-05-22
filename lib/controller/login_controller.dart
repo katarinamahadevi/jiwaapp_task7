@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:jiwaapp_task7/pages/profile_page.dart';
 import '../pages/auth_page/pin_verification_login_page.dart';
 import '../services/auth_service.dart';
-import '../widgets/auth_page/modal_bottom_verifyotp.dart';
+import '../widgets/auth_page/modal_bottom_verifyotp_register.dart';
 
 class LoginController extends GetxController {
   final TextEditingController emailController = TextEditingController();
@@ -31,6 +31,8 @@ class LoginController extends GetxController {
     super.onClose();
   }
 
+
+//VALIDASI INPUT EMAIL MENGGUNAKAN .COM DAN @
   void validateForm() {
     String email = emailController.text.trim();
     final emailRegex = RegExp(r'^.+@.+\..+$');
@@ -42,6 +44,8 @@ class LoginController extends GetxController {
     validateForm();
   }
 
+
+//MEMVALIDASI APAKAH EMAIL TERDAFTAR/TIDAK JIKA IYA DIA KE PINVERIFICATIONLOGINPAGE, JIKA TIDAK KE MODALBOTTOMVERIFYOTPREGISTER
   Future<void> handleLogin() async {
     if (!isButtonEnabled.value) return;
 
@@ -49,47 +53,35 @@ class LoginController extends GetxController {
     final email = emailController.text.trim();
 
     try {
-      await _authService.login(email); 
+      final response = await _authService.login(email);
       isLoading.value = false;
-      Get.to(() => PinVerificationLoginPage(), arguments: {'email': email});
-    } catch (e) {
-      isLoading.value = false;
-      final errorMessage = e.toString();
 
-      if (_isEmailNotRegistered(errorMessage)) {
-        try {
-          await _authService.sendOtp(email);
-          if (Get.context != null) {
-            showModalBottomVerifyOTPRegister(Get.context!, email: email);
-          }
-          Get.snackbar(
-            'OTP Dikirim',
-            'Silakan cek email Anda.',
-            snackPosition: SnackPosition.BOTTOM,
-          );
-        } catch (otpError) {
-          Get.snackbar(
-            'Gagal Mengirim OTP',
-            otpError.toString(),
-            snackPosition: SnackPosition.BOTTOM,
-          );
-        }
+      final isRegistered = response['is_registered'] as bool? ?? false;
+
+      if (isRegistered) {
+        Get.to(() => PinVerificationLoginPage(), arguments: {'email': email});
       } else {
+        await _authService.sendOtp(email);
+        if (Get.context != null) {
+          showModalBottomVerifyOTPRegister(Get.context!, email: email);
+        }
         Get.snackbar(
-          'Login Gagal',
-          errorMessage,
+          'OTP Dikirim',
+          'Silakan cek email Anda.',
           snackPosition: SnackPosition.BOTTOM,
         );
       }
+    } catch (e) {
+      isLoading.value = false;
+      Get.snackbar(
+        'Login Gagal',
+        e.toString(),
+        snackPosition: SnackPosition.BOTTOM,
+      );
     }
   }
 
-  bool _isEmailNotRegistered(String error) {
-    return error.contains('not found') ||
-        error.contains('tidak terdaftar') ||
-        error.contains('not registered');
-  }
-
+//VERIFIKASI PIN AKUN BENAR ATAU TIDAK
   Future<void> verifyPinLogin(
     String email,
     String pin,

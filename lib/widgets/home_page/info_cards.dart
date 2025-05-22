@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:jiwaapp_task7/pages/my_voucher_page.dart';
-import 'package:jiwaapp_task7/pages/referral_page.dart';
+import 'package:jiwaapp_task7/pages/referral_page/referral_page.dart';
 import 'package:jiwaapp_task7/widgets/home_page/info_card.dart';
 
 //VOUCHER DAN REFERRAL
 
 class InfoCards extends StatelessWidget {
   const InfoCards({Key? key}) : super(key: key);
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -34,10 +32,10 @@ class InfoCards extends StatelessWidget {
             subtitle: "Undang Temanmu",
             iconAsset: 'assets/image/image_referral.png',
             marginLeft: 8,
-           onTap: () {
+            onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const ReferralPage()),
+                MaterialPageRoute(builder: (context) => ReferralPage()),
               );
             },
           ),

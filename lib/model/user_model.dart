@@ -12,7 +12,7 @@ class UserModel {
   final String job;
   final String phoneNumber;
   final String referralCode;
-  final String? referredBy;
+  final int? referredBy;
 
   UserModel({
     required this.id,

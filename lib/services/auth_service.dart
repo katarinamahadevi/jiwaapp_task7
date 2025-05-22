@@ -57,8 +57,8 @@ class AuthService {
         data: {'email': email},
       );
       return response.data;
-    } on DioException catch (e) {
-      throw _handleError(e);
+    } catch (e) {
+      throw Exception("Terjadi kesalahan saat login");
     }
   }
 
@@ -105,6 +105,12 @@ class AuthService {
         '/auth/register',
         data: userData,
       );
+      if (response.data['token'] != null) {
+        await _tokenService.saveToken(response.data['token']);
+      }
+      if (response.data['user'] != null) {
+        await _tokenService.saveUserData(json.encode(response.data['user']));
+      }
 
       return response.data;
     } on DioException catch (e) {
@@ -161,7 +167,7 @@ class AuthService {
   //UNTUK MENGIRIM OTP
   Future<void> sendOtp(String email) async {
     try {
-      await _apiClient.dio.post('/auth/verify-otp', data: {'email': email});
+      await _apiClient.dio.post('/auth/login', data: {'email': email});
     } on DioException catch (e) {
       throw _handleError(e);
     }

@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:jiwaapp_task7/pages/detail_referral_page.dart';
+import 'package:get/get.dart';
+import 'package:jiwaapp_task7/controller/profile_controller.dart';
+import 'package:jiwaapp_task7/pages/referral_page/detail_referral_page.dart';
 import 'package:jiwaapp_task7/theme/color.dart';
 import 'package:jiwaapp_task7/widgets/modal_bottom_referral.dart';
 import 'package:share_plus/share_plus.dart';
 
 class ReferralPage extends StatelessWidget {
-  const ReferralPage({Key? key}) : super(key: key);
+  ReferralPage({Key? key}) : super(key: key);
+
+  final ProfileController profileController = Get.find<ProfileController>();
 
   @override
   Widget build(BuildContext context) {
@@ -237,20 +241,34 @@ class ReferralPage extends StatelessWidget {
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          const Text(
-                            'MK5US6',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                              color: Colors.black,
-                            ),
-                          ),
+                          Obx(() {
+                            final code =
+                                profileController.user.value?.referralCode ??
+                                '-';
+                            return Text(
+                              code,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                                color: Colors.black,
+                              ),
+                            );
+                          }),
+
                           const SizedBox(width: 12),
                           GestureDetector(
                             onTap: () {
                               Clipboard.setData(
-                                const ClipboardData(text: 'MK5US6'),
+                                ClipboardData(
+                                  text:
+                                      profileController
+                                          .user
+                                          .value
+                                          ?.referralCode ??
+                                      '',
+                                ),
                               );
+
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
                                   content: Text('Kode disalin ke clipboard'),
@@ -272,7 +290,7 @@ class ReferralPage extends StatelessWidget {
                       onTap: () {
                         // ignore: deprecated_member_use
                         Share.share(
-                          'Hai, coba order menu favoritmu pakai JIWA+, yuk!',
+                          'Hai, coba order menu favoritmu pakai JIWA+, yuk! Gunakan kode referral saya: ${profileController.user.value?.referralCode ?? ""}',
                         );
                       },
                       child: Container(
@@ -343,7 +361,6 @@ class CurvePainter extends CustomPainter {
 
     var path = Path();
 
-    // Draw a curved arc
     path.moveTo(0, size.height * 0.7);
     path.quadraticBezierTo(
       size.width * 0.5,
@@ -366,13 +383,10 @@ class TicketClipper extends CustomClipper<Path> {
   Path getClip(Size size) {
     Path path = Path();
 
-    // Starting point (top-left corner)
     path.moveTo(0, 0);
 
-    // Top line to right side
     path.lineTo(size.width, 0);
 
-    // Right side with a circular notch
     path.lineTo(size.width, size.height * 0.5 - 15);
     path.arcToPoint(
       Offset(size.width, size.height * 0.5 + 15),
@@ -381,10 +395,8 @@ class TicketClipper extends CustomClipper<Path> {
     );
     path.lineTo(size.width, size.height);
 
-    // Bottom line to left side
     path.lineTo(0, size.height);
 
-    // Left side with a circular notch
     path.lineTo(0, size.height * 0.5 + 15);
     path.arcToPoint(
       Offset(0, size.height * 0.5 - 15),

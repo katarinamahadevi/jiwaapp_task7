@@ -7,7 +7,7 @@ void showModalBottomViewCart(BuildContext context) {
   showModalBottomSheet(
     backgroundColor: Colors.white,
     context: context,
-    isScrollControlled: true, 
+    isScrollControlled: true,
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
     ),
@@ -17,10 +17,10 @@ void showModalBottomViewCart(BuildContext context) {
           left: 16,
           right: 16,
           top: 12,
-          bottom: navbarHeight, 
+          bottom: navbarHeight,
         ),
         child: Column(
-          mainAxisSize: MainAxisSize.min, 
+          mainAxisSize: MainAxisSize.min,
           children: [
             Container(
               width: 40,
@@ -100,8 +100,7 @@ void showModalBottomViewCart(BuildContext context) {
                           Row(
                             children: [
                               GestureDetector(
-                                onTap: () {
-                                },
+                                onTap: () {},
                                 child: Image.asset(
                                   'assets/image/image_update.png',
                                   width: 24,
@@ -111,6 +110,7 @@ void showModalBottomViewCart(BuildContext context) {
                               const SizedBox(width: 120),
                               GestureDetector(
                                 onTap: () {
+                                  
                                 },
                                 child: Image.asset(
                                   'assets/image/image_delete.png',

@@ -28,7 +28,6 @@ class MenuModel {
       price: json['price'] ?? '0',
       originalPrice: json['original_price'] ?? '0',
       imageUrlText: json['image_url_text'],
-
       createdAt:
           json['created_at'] != null
               ? DateTime.parse(json['created_at'])

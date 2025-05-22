@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:jiwaapp_task7/controller/login_controller.dart';
+import 'package:jiwaapp_task7/controller/forget_pin_controller.dart';
 import 'package:jiwaapp_task7/theme/color.dart';
-import 'package:jiwaapp_task7/widgets/auth_page/modal_bottom_verifyotp.dart';
 
 class PinVerificationLoginPage extends StatefulWidget {
   @override
@@ -16,19 +16,19 @@ class _PinVerificationLoginPageState extends State<PinVerificationLoginPage> {
   String currentPin = '';
   String email = '';
   bool isLoading = false;
-  
-    
+
   final TextEditingController _pinController = TextEditingController();
-  
+
   final FocusNode _focusNode = FocusNode();
 
   final LoginController _loginController = Get.find<LoginController>();
 
+  final pinController = Get.put(ForgetPinController());
 
   @override
   void initState() {
     super.initState();
-    
+
     if (Get.arguments != null && Get.arguments['email'] != null) {
       email = Get.arguments['email'];
     } else {
@@ -41,7 +41,7 @@ class _PinVerificationLoginPageState extends State<PinVerificationLoginPage> {
         );
       });
     }
-    
+
     _pinController.addListener(() {
       setState(() {
         currentPin = _pinController.text;
@@ -50,7 +50,7 @@ class _PinVerificationLoginPageState extends State<PinVerificationLoginPage> {
         }
       });
     });
-        Future.delayed(Duration(milliseconds: 100), () {
+    Future.delayed(Duration(milliseconds: 100), () {
       FocusScope.of(context).requestFocus(_focusNode);
     });
   }
@@ -62,19 +62,21 @@ class _PinVerificationLoginPageState extends State<PinVerificationLoginPage> {
     super.dispose();
   }
 
+  void _verifyPin() {
+    _focusNode.unfocus();
+    final enteredPin = _pinController.text.trim();
 
- void _verifyPin() {
-  _focusNode.unfocus();
-  final enteredPin = _pinController.text.trim();
+    if (enteredPin.isEmpty || enteredPin.length < pinLength) {
+      Get.snackbar(
+        'Error',
+        'PIN harus terdiri dari 6 angka',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+      return;
+    }
 
-  if (enteredPin.isEmpty || enteredPin.length < pinLength) {
-    Get.snackbar('Error', 'PIN harus terdiri dari 6 angka', snackPosition: SnackPosition.BOTTOM);
-    return;
+    _loginController.verifyPinLogin(email, enteredPin, _pinController);
   }
-
-  _loginController.verifyPinLogin(email, enteredPin, _pinController);
-}
-
 
   @override
   Widget build(BuildContext context) {
@@ -135,9 +137,7 @@ class _PinVerificationLoginPageState extends State<PinVerificationLoginPage> {
                   ),
                   SizedBox(height: 20),
                   if (isLoading)
-                    CircularProgressIndicator(
-                      color: BaseColors.primary,
-                    ),
+                    CircularProgressIndicator(color: BaseColors.primary),
                   Opacity(
                     opacity: 0,
                     child: Container(
@@ -171,15 +171,10 @@ class _PinVerificationLoginPageState extends State<PinVerificationLoginPage> {
                       ),
                       TextButton(
                         onPressed: () {
-                          // Pastikan kita memiliki email valid sebelum menampilkan modal OTP
                           if (email.isNotEmpty) {
-                            showModalBottomVerifyOTPRegister(context, email: email);
+                            pinController.forgotPin(email);
                           } else {
-                            Get.snackbar(
-                              'Error',
-                              'Email tidak ditemukan, silakan kembali ke halaman login',
-                              snackPosition: SnackPosition.BOTTOM,
-                            );
+                            Get.snackbar("Error", "Email tidak boleh kosong");
                           }
                         },
                         child: Text(

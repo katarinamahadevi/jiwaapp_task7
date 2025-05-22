@@ -36,7 +36,6 @@ class RegisterPage extends GetView<RegisterController> {
               ),
               const SizedBox(height: 30),
 
-              // Kode Referral Field
               TextField(
                 controller: controller.referralCodeController,
                 decoration: InputDecoration(
@@ -62,7 +61,6 @@ class RegisterPage extends GetView<RegisterController> {
               ),
               const SizedBox(height: 16),
 
-              // Nama Field
               TextField(
                 controller: controller.nameController,
                 decoration: InputDecoration(
@@ -88,7 +86,6 @@ class RegisterPage extends GetView<RegisterController> {
               ),
               const SizedBox(height: 16),
 
-              // Jenis Kelamin Radio
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -122,7 +119,6 @@ class RegisterPage extends GetView<RegisterController> {
               ),
               const SizedBox(height: 16),
 
-              // Phone Number Field
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 12),
                 decoration: BoxDecoration(
@@ -167,7 +163,7 @@ class RegisterPage extends GetView<RegisterController> {
               ),
               SizedBox(height: 16),
 
-              // Tanggal Lahir Field
+
               TextField(
                 controller: controller.dateController,
                 decoration: InputDecoration(
@@ -196,7 +192,6 @@ class RegisterPage extends GetView<RegisterController> {
               ),
               const SizedBox(height: 16),
 
-              // Kewarganegaraan Field
               TextField(
                 controller: controller.countryController,
                 decoration: InputDecoration(
@@ -225,7 +220,6 @@ class RegisterPage extends GetView<RegisterController> {
               ),
               const SizedBox(height: 16),
 
-              // Pekerjaan Field
               TextField(
                 controller: controller.occupationController,
                 decoration: InputDecoration(
@@ -254,7 +248,6 @@ class RegisterPage extends GetView<RegisterController> {
               ),
               const SizedBox(height: 30),
 
-              // Lanjut Button
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(

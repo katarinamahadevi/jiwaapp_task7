@@ -525,7 +525,7 @@ class OrderHistoryCard extends StatelessWidget {
                     padding: EdgeInsets.symmetric(
                       horizontal: 10,
                       vertical: 6,
-                    ), // padding internal
+                    ), 
                   ),
                   child: Text(
                     'Pesan Ulang',
@@ -552,7 +552,7 @@ class OrderHistoryCard extends StatelessWidget {
                     padding: EdgeInsets.symmetric(
                       horizontal: 12,
                       vertical: 6,
-                    ), // padding internal
+                    ), 
                   ),
                   child: Text(
                     'Detail Pesanan',

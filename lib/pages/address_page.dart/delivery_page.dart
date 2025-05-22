@@ -56,7 +56,7 @@ class DeliveryPage extends GetView<AddressController> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Image.asset(
-                        'assets/image/image_empty.png', 
+                        'assets/image/image_empty.png',
                         width: 100,
                         height: 100,
                       ),
@@ -285,26 +285,26 @@ class DeliveryPage extends GetView<AddressController> {
               children: [
                 GestureDetector(
                   onTap: () {
-Navigator.push(
-  context,
-  MaterialPageRoute(
-    builder: (context) => UpdateAddressPage(
-      addressData: {
-        'title': address.label,
-        'address': address.address,
-        'name': address.recipientName,
-        'phone': address.phoneNumber,
-        'note': address.note,
-        'latitude': address.latitude.toString(),
-        'longitude': address.longitude.toString(),
-      },
-      addressId: address.id,
-    ),
-  ),
-).then((result) {
-  if (result == true) {
-  }
-});
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder:
+                            (context) => UpdateAddressPage(
+                              addressData: {
+                                'title': address.label,
+                                'address': address.address,
+                                'name': address.recipientName,
+                                'phone': address.phoneNumber,
+                                'note': address.note,
+                                'latitude': address.latitude.toString(),
+                                'longitude': address.longitude.toString(),
+                              },
+                              addressId: address.id,
+                            ),
+                      ),
+                    ).then((result) {
+                      if (result == true) {}
+                    });
                   },
                   child: Container(
                     width: 25,

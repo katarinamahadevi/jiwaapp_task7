@@ -27,13 +27,12 @@ class MenuPage extends StatelessWidget {
     this.itemCount = 0,
   }) : super(key: key);
 
-  // Get the controller
   final MenuItemController menuController = Get.put(MenuItemController());
   final ScrollController _categoryScrollController = ScrollController();
   final ScrollController _menuScrollController = ScrollController();
 
   void _onItemTapped(int index, BuildContext context) {
-    if (index == 1) return; // Current page
+    if (index == 1) return; 
 
     switch (index) {
       case 0:
@@ -59,7 +58,6 @@ class MenuPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Initialize controller values if coming from another page with items
     if (showStackViewOrder && menuController.totalPrice.value == 0) {
       menuController.totalPrice.value = totalPrice;
       menuController.itemCount.value = itemCount;
@@ -71,7 +69,7 @@ class MenuPage extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           CustomBottomNavBar(
-            selectedIndex: 1, // Menu page index
+            selectedIndex: 1, 
             onItemTapped: (index) => _onItemTapped(index, context),
           ),
         ],
@@ -264,7 +262,7 @@ class MenuPage extends StatelessWidget {
     return SliverToBoxAdapter(
       child: Obx(() {
         if (menuController.isTakeAwaySelected.value) {
-          return const SizedBox.shrink(); 
+          return const SizedBox.shrink();
         }
 
         return AnimatedContainer(
@@ -432,10 +430,10 @@ class MenuPage extends StatelessWidget {
                 itemBuilder: (context, index) {
                   CategoryModel category =
                       menuController.categories.value[index];
-                  bool isNew = index < 3; // First 3 categories marked as new
+                  bool isNew = index < 3; 
 
                   return CategoryListItem(
-                    category: category, // Passing the full CategoryModel object
+                    category: category, 
                     isNew: isNew,
                     isSelected:
                         index == menuController.selectedCategoryIndex.value,
@@ -494,6 +492,8 @@ class MenuPage extends StatelessWidget {
                                 menuItem:
                                     menuController
                                         .selectedCategoryProducts[index],
+                                showStackViewOrder:
+                                    menuController.itemCount.value > 0,
                                 onAddToCart:
                                     () => menuController.addItemToCart(
                                       double.parse(

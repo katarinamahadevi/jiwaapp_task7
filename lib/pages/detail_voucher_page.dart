@@ -6,7 +6,6 @@ import 'package:jiwaapp_task7/widgets/appbar_primary.dart';
 import 'package:jiwaapp_task7/widgets/button_primary.dart';
 import 'package:jiwaapp_task7/widgets/modal_bottom_tnc_voucher.dart';
 
-//DETAIL VOUCHER DISKON
 
 class DetailVoucherPage extends StatelessWidget {
   const DetailVoucherPage({Key? key}) : super(key: key);

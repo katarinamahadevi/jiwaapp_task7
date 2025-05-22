@@ -20,7 +20,6 @@ class _MyVoucherPageState extends State<MyVoucherPage> {
   void initState() {
     super.initState();
     _controller.addListener(() {
-      // Mengubah warna border menjadi merah saat mengetik
       _borderColor.value =
           _controller.text.isNotEmpty ? Colors.red : Colors.grey.shade300;
     });

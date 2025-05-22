@@ -4,4 +4,5 @@ class AppRoutes {
   static const homepage = '/homepage';
   static const detailmenupage = '/detailmenupage';
   static const deliverypage = '/deliverypage';
+  static const profilepage = '/profile';
 }

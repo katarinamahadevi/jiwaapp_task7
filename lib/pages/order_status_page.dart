@@ -258,7 +258,6 @@ class OrderStatusPage extends StatelessWidget {
                                       ),
                                     ],
                                   ),
-                                  //
                                 ],
                               ),
                             ),
@@ -527,9 +526,8 @@ class OrderStatusPage extends StatelessWidget {
             right: 0,
             bottom: 0,
             child: ButtonStatusPayment(
-              timeoutSeconds: 270, // 4:30 as shown in the image
+              timeoutSeconds: 270, 
               onCancelPayment: () {
-                // Handle cancel payment
                 showDialog(
                   context: context,
                   builder:
@@ -546,7 +544,6 @@ class OrderStatusPage extends StatelessWidget {
                           TextButton(
                             onPressed: () {
                               Navigator.pop(context);
-                              // Additional cancel logic
                             },
                             child: const Text('Ya'),
                           ),

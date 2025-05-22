@@ -11,25 +11,20 @@ class RegisterController extends GetxController {
   final TextEditingController countryController = TextEditingController();
   final TextEditingController occupationController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
-
   final RxString selectedGender = ''.obs;
   final Rx<DateTime?> selectedDate = Rx<DateTime?>(null);
   final RxString selectedCountry = ''.obs;
   final RxString selectedOccupation = ''.obs;
-
   final RxString selectedCountryPhone = 'Indonesia'.obs;
   final RxString selectedDialCode = '+62'.obs;
-  final RxString selectedFlagAsset =
-      'assets/image/image_bendera_indonesia.png'.obs;
-
+  final RxString selectedFlagAsset = 'assets/image/image_bendera_indonesia.png'.obs;
   final RxBool isChecked = false.obs;
   final RxBool isButtonEnabled = false.obs;
   final RxBool isLoading = false.obs;
-
   final RxString email = ''.obs;
-
   final AuthService _authService = AuthService();
 
+//DATA DUMMY NEGARA
   final List<String> countries = [
     'Indonesia',
     'Singapore',
@@ -39,6 +34,7 @@ class RegisterController extends GetxController {
     'Other',
   ];
 
+//DATA DUMMY PEKERJAAN
   final List<String> occupations = [
     'Dokter',
     'Pengusaha',
@@ -48,6 +44,7 @@ class RegisterController extends GetxController {
     'Other',
   ];
 
+//DATA DUMMY TELEPON NEGARA
   final List<Map<String, String>> phoneCountries = [
     {
       'name': 'Afghanistan',
@@ -98,32 +95,38 @@ class RegisterController extends GetxController {
     super.onClose();
   }
 
+//UNTUK VALIDASI PANJANG ANGKA TELEPON
   void validateForm() {
     String phone = phoneController.text;
     isButtonEnabled.value = phone.length >= 9 && isChecked.value;
   }
 
+//UNTUK MEMILIH GENDER
   void setGender(String? value) {
     if (value != null) {
       selectedGender.value = value;
     }
   }
-
+  
+//UNTUK SET FORMAT TANGGAL 
   void setDate(DateTime date) {
     selectedDate.value = date;
     dateController.text = DateFormat('dd/MM/yyyy').format(date);
   }
 
+//UNTUK MEMILIH NEGARA
   void setCountry(String country) {
     selectedCountry.value = country;
     countryController.text = country;
   }
 
+//UNTUK MEMILIH PEKERJAAN
   void setOccupation(String occupation) {
     selectedOccupation.value = occupation;
     occupationController.text = occupation;
   }
-
+  
+//UNTUK MEMILIH TELEPON NEGARA
   void setPhoneCountry(Map<String, String> country) {
     selectedCountryPhone.value = country['name']!;
     selectedDialCode.value = country['code']!;
@@ -168,10 +171,10 @@ class RegisterController extends GetxController {
       return false;
     }
 
-    if (email.value.isEmpty) {
-      Get.snackbar('Error', 'lid');
-      return false;
-    }
+    // if (email.value.isEmpty) {
+    //   Get.snackbar('Error', 'lid');
+    //   return false;
+    // }
 
     return true;
   }
@@ -180,6 +183,8 @@ class RegisterController extends GetxController {
     return gender;
   }
 
+
+//JIKA FORM SUDAH SELESAI TERISI MAKA AKAN LANJUT MENGISI PIN DAN JIKA SUDAH LANGSUNG NAVIGASI KE HOMEPAGE
   Future<void> processRegistration(String pin) async {
     if (!validateFormData()) return;
 
