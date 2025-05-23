@@ -38,7 +38,7 @@ class AppBindings extends Bindings {
     Get.put(ProfileController());
     Get.put(AddressController());
     Get.lazyPut<MenuItemController>(() => MenuItemController());
-    Get.lazyPut<CartController>(() => CartController());
+    Get.put(CartController());
     Get.lazyPut<ForgetPinController>(() => ForgetPinController());
     Get.put(UpdatePinController());
     Get.put(ReferralController());

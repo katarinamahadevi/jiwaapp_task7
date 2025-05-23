@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:dotted_line/dotted_line.dart';
 import 'package:jiwaapp_task7/theme/color.dart';
 
-//UNTUK TAMPILAN COMBO
+//UNTUK TAMPILAN COMBO - Modified untuk menampilkan food & drink
 
 class ItemOptionsWidget extends StatelessWidget {
   final String label;
@@ -29,106 +29,115 @@ class ItemOptionsWidget extends StatelessWidget {
         ),
         const SizedBox(height: 16),
         Column(
-          children: options.map((option) {
-            bool isSelected = selectedOption == option['name'];
-            return Padding(
-              padding: const EdgeInsets.symmetric(vertical: 6.0),
-              child: InkWell(
-                onTap: () => onOptionSelected(option['name']),
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 16,
-                  ),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFF5F5F5),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
+          children:
+              options.map((option) {
+                bool isSelected = selectedOption == option['name'];
+
+                // Parse harga untuk tampilan
+                String priceValue = '';
+
+                return Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 6.0),
+                  child: InkWell(
+                    onTap: () => onOptionSelected(option['name']),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 16,
+                      ),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFF5F5F5),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Icon(
-                            isSelected
-                                ? Icons.radio_button_checked
-                                : Icons.radio_button_unchecked,
-                            color: isSelected
-                                ? BaseColors.primary
-                                : Colors.grey,
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Icon(
+                                isSelected
+                                    ? Icons.radio_button_checked
+                                    : Icons.radio_button_unchecked,
+                                color:
+                                    isSelected
+                                        ? BaseColors.primary
+                                        : Colors.grey,
+                              ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      option['name'],
+                                      style: const TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.normal,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 4),
+                                    //
+                                  ],
+                                ),
+                              ),
+                              if (isSelected)
+                                IconButton(
+                                  onPressed: () {
+                                    // Aksi ketika tombol edit ditekan (jika ada)
+                                  },
+                                  icon: const Icon(
+                                    Icons.edit,
+                                    size: 20,
+                                    color: Color(0xFF3B1D52),
+                                  ),
+                                )
+                              else
+                                Text(
+                                  priceValue = 'Free',
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xFF3B1D52),
+                                  ),
+                                ),
+                            ],
                           ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: Text(
-                              option['name'],
-                              style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.normal,
-                              ),
+                          if (isSelected) ...[
+                            const SizedBox(height: 8),
+                            const DottedLine(
+                              direction: Axis.horizontal,
+                              dashLength: 8,
+                              dashColor: Colors.grey,
                             ),
-                          ),
-                          if (isSelected)
-                            IconButton(
-                              onPressed: () {
-                                // Aksi ketika tombol edit ditekan (jika ada)
-                              },
-                              icon: const Icon(
-                                Icons.edit,
-                                size: 20,
-                                color: Color(0xFF3B1D52),
-                              ),
-                            )
-                          else
-                            Text(
-                              option['price'] == 0
-                                  ? 'Free'
-                                  : '+${option['price'] ~/ 1000}.000',
-                              style: const TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                                color: Color(0xFF3B1D52),
-                              ),
-                            ),
-                        ],
-                      ),
-                      if (isSelected) ...[
-                        const SizedBox(height: 8),
-                        const DottedLine(
-                          direction: Axis.horizontal,
-                          dashLength: 8,
-                          dashColor: Colors.grey,
-                        ),
-                        const SizedBox(height: 8),
-                        Row(
-                          children: [
-                            const Text(
-                              'Toast: Original',
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: Colors.grey,
-                              ),
-                            ),
-                            const Spacer(),
-                            Text(
-                              option['price'] == 0
-                                  ? 'Free'
-                                  : '+${option['price'] ~/ 1000}.000',
-                              style: const TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold,
-                                color: Color(0xFF3B1D52),
-                              ),
+                            const SizedBox(height: 8),
+                            Row(
+                              children: [
+                                Text(
+                                  '${option['type'] == 'food' ? 'Food' : 'Drink'}: ${option['name']}',
+                                  style: const TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                                const Spacer(),
+                                Text(
+                                  priceValue = 'Free',
+                                  style: const TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xFF3B1D52),
+                                  ),
+                                ),
+                              ],
                             ),
                           ],
-                        ),
-                      ],
-                    ],
+                        ],
+                      ),
+                    ),
                   ),
-                ),
-              ),
-            );
-          }).toList(),
+                );
+              }).toList(),
         ),
       ],
     );

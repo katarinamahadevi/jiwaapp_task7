@@ -3,6 +3,7 @@ import 'package:jiwaapp_task7/model/menu_model.dart';
 class CategoryModel {
   final int id;
   final String name;
+  final String type;
   final DateTime createdAt;
   final DateTime updatedAt;
   final List<MenuModel> products;
@@ -10,6 +11,7 @@ class CategoryModel {
   CategoryModel({
     required this.id,
     required this.name,
+    required this.type, 
     required this.createdAt,
     required this.updatedAt,
     required this.products,
@@ -19,16 +21,14 @@ class CategoryModel {
     return CategoryModel(
       id: json['id'] ?? 0,
       name: json['name'] ?? '',
-      createdAt:
-          json['created_at'] != null
-              ? DateTime.parse(json['created_at'])
-              : DateTime.now(),
-      updatedAt:
-          json['updated_at'] != null
-              ? DateTime.parse(json['updated_at'])
-              : DateTime.now(),
-      products:
-          (json['products'] as List?)
+      type: json['type'] ?? '', 
+      createdAt: json['created_at'] != null
+          ? DateTime.parse(json['created_at'])
+          : DateTime.now(),
+      updatedAt: json['updated_at'] != null
+          ? DateTime.parse(json['updated_at'])
+          : DateTime.now(),
+      products: (json['products'] as List?)
               ?.map((product) => MenuModel.fromJson(product))
               .toList() ??
           [],

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:jiwaapp_task7/controller/menu_controller.dart';
 import 'package:jiwaapp_task7/model/menu_model.dart';
 import 'package:jiwaapp_task7/pages/menu_page/detail_menu_page.dart';
 import 'package:jiwaapp_task7/theme/color.dart';
@@ -9,22 +10,36 @@ class MenuItemCard extends StatelessWidget {
   final MenuModel menuItem;
   final bool showStackViewOrder;
   final Function() onAddToCart;
+  final String? categoryType;
 
   const MenuItemCard({
     Key? key,
     required this.menuItem,
     this.showStackViewOrder = false,
     required this.onAddToCart,
+    this.categoryType,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final MenuItemController controller = Get.find<MenuItemController>();
+
     return GestureDetector(
       onTap: () {
         if (showStackViewOrder) {
           showModalBottomViewCart(context);
         } else {
-          Get.to(() => DetailMenuPage(menu: menuItem));
+          // Get the current category type from controller
+          String? currentCategoryType =
+              categoryType ?? controller.selectedCategory?.type;
+
+          // Navigate to detail page with category type
+          Get.to(
+            () => DetailMenuPage(
+              menu: menuItem,
+              categoryType: currentCategoryType,
+            ),
+          );
         }
       },
       child: Stack(
@@ -88,7 +103,10 @@ class MenuItemCard extends StatelessWidget {
                           ],
                         ),
                         GestureDetector(
-                          onTap: onAddToCart,
+                          onTap: () {
+                            // Prevent navigation when add button is tapped
+                            onAddToCart();
+                          },
                           child: Container(
                             width: 30,
                             height: 30,

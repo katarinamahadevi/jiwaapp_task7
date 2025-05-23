@@ -4,35 +4,21 @@ import 'package:jiwaapp_task7/controller/menu_controller.dart';
 import 'package:jiwaapp_task7/model/menu_model.dart';
 import 'package:jiwaapp_task7/pages/menu_page.dart';
 import 'package:jiwaapp_task7/theme/color.dart';
+import 'package:jiwaapp_task7/widgets/item_option.dart';
 
-// MENU BIASA
 class DetailMenuPage extends StatelessWidget {
   final MenuModel menu;
+  final String? categoryType;
 
-  DetailMenuPage({Key? key, required this.menu}) : super(key: key);
+  DetailMenuPage({Key? key, required this.menu, this.categoryType})
+    : super(key: key);
 
   final MenuItemController controller = Get.find<MenuItemController>();
 
-  final RxInt quantity = 1.obs;
-  // final RxString selectedTemp = 'Ice'.obs;
-  // final RxString selectedSize = 'Regular'.obs;
-  // final RxString selectedIce = 'Normal'.obs;
-  // final RxString selectedSugar = 'Normal'.obs;
-
-  void incrementQuantity() {
-    quantity.value++;
-  }
-
-  void decrementQuantity() {
-    if (quantity.value > 1) {
-      quantity.value--;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    double priceValue =
-        double.tryParse(menu.price.replaceAll(RegExp(r'[^0-9.]'), '')) ?? 0.0;
+    controller.initializeDetailPage(categoryType);
+
     return Scaffold(
       backgroundColor: Colors.grey[100],
       bottomNavigationBar: Container(
@@ -58,17 +44,20 @@ class DetailMenuPage extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  'Rp${menu.price}',
-                  style: const TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
+                Obx(() {
+                  double finalPrice = controller.calculateTotalPrice(menu);
+                  return Text(
+                    'Rp${(finalPrice * controller.quantity.value).toStringAsFixed(0)}',
+                    style: const TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  );
+                }),
                 Row(
                   children: [
                     GestureDetector(
-                      onTap: decrementQuantity,
+                      onTap: controller.decrementQuantity,
                       child: Container(
                         width: 30,
                         height: 30,
@@ -83,7 +72,7 @@ class DetailMenuPage extends StatelessWidget {
                       () => SizedBox(
                         width: 40,
                         child: Text(
-                          quantity.value.toString(),
+                          controller.quantity.value.toString(),
                           textAlign: TextAlign.center,
                           style: const TextStyle(
                             fontSize: 20,
@@ -93,7 +82,7 @@ class DetailMenuPage extends StatelessWidget {
                       ),
                     ),
                     GestureDetector(
-                      onTap: incrementQuantity,
+                      onTap: controller.incrementQuantity,
                       child: Container(
                         width: 30,
                         height: 30,
@@ -114,7 +103,9 @@ class DetailMenuPage extends StatelessWidget {
               height: 55,
               child: ElevatedButton(
                 onPressed: () {
-                  final totalPrice = priceValue * quantity.value;
+                  final totalPrice =
+                      controller.calculateTotalPrice(menu) *
+                      controller.quantity.value;
 
                   controller.addItemToCart(totalPrice);
                   Get.off(
@@ -146,7 +137,6 @@ class DetailMenuPage extends StatelessWidget {
           ],
         ),
       ),
-
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
@@ -188,6 +178,7 @@ class DetailMenuPage extends StatelessWidget {
                 color: Colors.grey[100],
               ),
 
+              // Menu Image and Details
               Container(
                 margin: const EdgeInsets.fromLTRB(16, 0, 16, 16),
                 decoration: BoxDecoration(
@@ -275,41 +266,99 @@ class DetailMenuPage extends StatelessWidget {
                   ],
                 ),
               ),
-              // Container(
-              //   margin: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-              //   decoration: BoxDecoration(
-              //     color: Colors.white,
-              //     borderRadius: BorderRadius.circular(16),
-              //     boxShadow: [
-              //       BoxShadow(
-              //         color: Colors.grey.withOpacity(0.1),
-              //         spreadRadius: 1,
-              //         blurRadius: 4,
-              //         offset: const Offset(0, 1),
-              //       ),
-              //     ],
-              //   ),
-              //   child: Padding(
-              //     padding: const EdgeInsets.all(16.0),
-              //     child: Column(
-              //       children: [
-              //         _buildOptionRow('Temp', ['Ice'], selectedTemp),
-              //         const SizedBox(height: 24),
-              //         _buildOptionRow('Size', [
-              //           'Large',
-              //           'Regular',
-              //         ], selectedSize),
-              //         const SizedBox(height: 24),
-              //         _buildOptionRow('Ice', ['Less', 'Normal'], selectedIce),
-              //         const SizedBox(height: 24),
-              //         _buildOptionRow('Sugar', [
-              //           'Less',
-              //           'Normal',
-              //         ], selectedSugar),
-              //       ],
-              //     ),
-              //   ),
-              // ),
+              if (categoryType == 'combo') ...[
+                Obx(() {
+                  if (controller.isLoadingComboOptions.value) {
+                    return Container(
+                      margin: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(16),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.1),
+                            spreadRadius: 1,
+                            blurRadius: 4,
+                            offset: const Offset(0, 1),
+                          ),
+                        ],
+                      ),
+                      child: const Center(
+                        child: Padding(
+                          padding: EdgeInsets.all(20.0),
+                          child: CircularProgressIndicator(),
+                        ),
+                      ),
+                    );
+                  }
+
+                  return Column(
+                    children: [
+                      if (controller.foodOptions.isNotEmpty) ...[
+                        Container(
+                          margin: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(16),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.1),
+                                spreadRadius: 1,
+                                blurRadius: 4,
+                                offset: const Offset(0, 1),
+                              ),
+                            ],
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: ItemOptionsWidget(
+                              label: 'Item 1',
+                              options: controller.foodOptions,
+                              selectedOption:
+                                  controller.selectedFoodOption.value,
+                              onOptionSelected:
+                                  controller.setSelectedFoodOption,
+                            ),
+                          ),
+                        ),
+                      ],
+
+                      // Drink Options Widget
+                      if (controller.drinkOptions.isNotEmpty) ...[
+                        Container(
+                          margin: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(16),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.1),
+                                spreadRadius: 1,
+                                blurRadius: 4,
+                                offset: const Offset(0, 1),
+                              ),
+                            ],
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: ItemOptionsWidget(
+                              label: 'Item 2',
+                              options: controller.drinkOptions,
+                              selectedOption:
+                                  controller.selectedDrinkOption.value,
+                              onOptionSelected:
+                                  controller.setSelectedDrinkOption,
+                            ),
+                          ),
+                        ),
+                      ],
+                      
+                    ],
+                  );
+                }),
+              ],
+
+              // Notes Section
               Container(
                 margin: const EdgeInsets.fromLTRB(16, 0, 16, 16),
                 decoration: BoxDecoration(
@@ -368,66 +417,6 @@ class DetailMenuPage extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-
-  Widget _buildOptionRow(
-    String label,
-    List<String> options,
-    RxString selectedOption,
-  ) {
-    return Row(
-      children: [
-        SizedBox(
-          width: 80,
-          child: Text(
-            label,
-            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-          ),
-        ),
-        Expanded(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children:
-                options.map((option) {
-                  return Obx(() {
-                    bool isSelected = selectedOption.value == option;
-                    return Padding(
-                      padding: const EdgeInsets.only(left: 8.0),
-                      child: InkWell(
-                        onTap: () => selectedOption.value = option,
-                        child: Container(
-                          width: option == 'Ice' ? 80 : 80,
-                          padding: const EdgeInsets.symmetric(vertical: 12),
-                          decoration: BoxDecoration(
-                            color:
-                                isSelected
-                                    ? const Color(0xFF3B1D52)
-                                    : Colors.white,
-                            borderRadius: BorderRadius.circular(5),
-                            border: Border.all(
-                              color:
-                                  isSelected
-                                      ? const Color(0xFF3B1D52)
-                                      : Colors.grey.withOpacity(0.3),
-                            ),
-                          ),
-                          alignment: Alignment.center,
-                          child: Text(
-                            option,
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: isSelected ? Colors.white : Colors.black,
-                            ),
-                          ),
-                        ),
-                      ),
-                    );
-                  });
-                }).toList(),
-          ),
-        ),
-      ],
     );
   }
 }

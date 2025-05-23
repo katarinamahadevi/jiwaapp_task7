@@ -66,7 +66,6 @@ class ReferralByModel {
     print('Parsing ReferralByModel from JSON: $json');
 
     try {
-      // Handle different possible field names
       String name = '';
       if (json.containsKey('name')) {
         name = json['name'] as String? ?? '';

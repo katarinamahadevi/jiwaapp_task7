@@ -55,11 +55,6 @@ class DeliveryPage extends GetView<AddressController> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Image.asset(
-                        'assets/image/image_empty.png',
-                        width: 100,
-                        height: 100,
-                      ),
                       SizedBox(height: 16),
                       Text(
                         'Belum ada alamat tersimpan',
@@ -122,7 +117,7 @@ class DeliveryPage extends GetView<AddressController> {
         onTap: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const SearchLocationPage()),
+            MaterialPageRoute(builder: (context) => SearchLocationPage()),
           );
         },
         leading: Container(
