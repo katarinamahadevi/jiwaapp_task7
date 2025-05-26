@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:jiwaapp_task7/model/category_model.dart';
 
+//KATEGORI
+
 class CategoryListItem extends StatelessWidget {
   final CategoryModel category;
   final bool isSelected;

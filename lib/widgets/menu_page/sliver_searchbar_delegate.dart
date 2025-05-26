@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+//ANIMASI SEARCHBAR
+
 class SliverSearchBarDelegate extends SliverPersistentHeaderDelegate {
   final double minHeight;
   final double maxHeight;

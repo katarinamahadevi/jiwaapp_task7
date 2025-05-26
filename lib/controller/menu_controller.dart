@@ -8,10 +8,8 @@ class MenuItemController extends GetxController {
   var selectedCategoryIndex = 0.obs;
   var totalPrice = 0.0.obs;
   var itemCount = 0.obs;
-
   final Rx<List<CategoryModel>> categories = Rx<List<CategoryModel>>([]);
   final MenuService _menuService = MenuService();
-
   final RxInt quantity = 1.obs;
   final RxString selectedFoodOption = ''.obs;
   final RxString selectedDrinkOption = ''.obs;
@@ -31,14 +29,11 @@ class MenuItemController extends GetxController {
 
   void selectCategory(int index) async {
     selectedCategoryIndex.value = index;
-
     final categoryId = categories.value[index].id;
-
     try {
       final updatedCategory = await _menuService.fetchMenuByCategory(
         categoryId,
       );
-
       categories.value[index] = updatedCategory;
       categories.refresh();
     } catch (e) {
@@ -54,10 +49,25 @@ class MenuItemController extends GetxController {
       print('Error loading menus: $e');
     }
   }
-
   void addItemToCart(double price) {
     totalPrice.value += price;
     itemCount.value += 1;
+  }
+  void removeItemFromCart(double price) {
+    if (totalPrice.value >= price) {
+      totalPrice.value -= price;
+    }
+    if (itemCount.value > 0) {
+      itemCount.value -= 1;
+    }
+  }
+  void resetCartState() {
+    totalPrice.value = 0.0;
+    itemCount.value = 0;
+  }
+  void updateCartState(double newTotalPrice, int newItemCount) {
+    totalPrice.value = newTotalPrice;
+    itemCount.value = newItemCount;
   }
 
   // UNTUK MENDETEKSI DIA COMBO ATAU NGGAK
@@ -75,20 +85,18 @@ class MenuItemController extends GetxController {
 
   void loadComboOptions() async {
     isLoadingComboOptions.value = true;
-
     try {
       if (categories.value.isEmpty) {
          fetchCategories();
       }
-      final foodCategories =
-          categories.value
-              .where((category) => category.type == 'food')
-              .toList();
 
-      final drinkCategories =
-          categories.value
-              .where((category) => category.type == 'drink')
-              .toList();
+      final foodCategories = categories.value
+          .where((category) => category.type == 'food')
+          .toList();
+      final drinkCategories = categories.value
+          .where((category) => category.type == 'drink')
+          .toList();
+
       List<Map<String, dynamic>> allFoodOptions = [];
       for (var category in foodCategories) {
         for (var product in category.products) {
@@ -100,6 +108,7 @@ class MenuItemController extends GetxController {
           });
         }
       }
+
       List<Map<String, dynamic>> allDrinkOptions = [];
       for (var category in drinkCategories) {
         for (var product in category.products) {
@@ -141,8 +150,9 @@ class MenuItemController extends GetxController {
   }
 
   double calculateTotalPrice(MenuModel menu) {
-    // Selalu gunakan harga menu asli, baik untuk combo maupun non-combo
-    return double.tryParse(menu.price.replaceAll(RegExp(r'[^0-9.]'), '')) ?? 0.0;
+    // Extract numeric value from price string (remove 'Rp', '.', etc.)
+    String cleanPrice = menu.price.replaceAll(RegExp(r'[^\d]'), '');
+    return double.tryParse(cleanPrice) ?? 0.0;
   }
 
   void setSelectedFoodOption(String option) {

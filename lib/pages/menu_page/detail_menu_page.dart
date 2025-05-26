@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jiwaapp_task7/controller/menu_controller.dart';
+import 'package:jiwaapp_task7/controller/cart_controller.dart';
 import 'package:jiwaapp_task7/model/menu_model.dart';
 import 'package:jiwaapp_task7/pages/menu_page.dart';
 import 'package:jiwaapp_task7/theme/color.dart';
@@ -14,6 +15,8 @@ class DetailMenuPage extends StatelessWidget {
     : super(key: key);
 
   final MenuItemController controller = Get.find<MenuItemController>();
+  final CartController cartController = Get.put(CartController());
+  final TextEditingController noteController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -98,39 +101,40 @@ class DetailMenuPage extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 16),
-            SizedBox(
-              width: double.infinity,
-              height: 55,
-              child: ElevatedButton(
-                onPressed: () {
-                  final totalPrice =
-                      controller.calculateTotalPrice(menu) *
-                      controller.quantity.value;
-
-                  controller.addItemToCart(totalPrice);
-                  Get.off(
-                    () => MenuPage(
-                      showStackViewOrder: true,
-                      totalPrice: controller.totalPrice.value,
-                      itemCount: controller.itemCount.value,
+            Obx(
+              () => SizedBox(
+                width: double.infinity,
+                height: 55,
+                child: ElevatedButton(
+                  onPressed:
+                      cartController.isLoading.value
+                          ? null
+                          : () => _addToCart(),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: BaseColors.primary,
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(50),
                     ),
-                  );
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: BaseColors.primary,
-                  foregroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(50),
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 12,
+                      horizontal: 16,
+                    ),
+                    elevation: 0,
                   ),
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 12,
-                    horizontal: 16,
-                  ),
-                  elevation: 0,
-                ),
-                child: const Text(
-                  'Tambah ke Keranjang',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
+                  child:
+                      cartController.isLoading.value
+                          ? const CircularProgressIndicator(
+                            color: Colors.white,
+                            strokeWidth: 2,
+                          )
+                          : const Text(
+                            'Tambah ke Keranjang',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.normal,
+                            ),
+                          ),
                 ),
               ),
             ),
@@ -177,7 +181,6 @@ class DetailMenuPage extends StatelessWidget {
                 height: 10,
                 color: Colors.grey[100],
               ),
-
               // Menu Image and Details
               Container(
                 margin: const EdgeInsets.fromLTRB(16, 0, 16, 16),
@@ -291,7 +294,6 @@ class DetailMenuPage extends StatelessWidget {
                       ),
                     );
                   }
-
                   return Column(
                     children: [
                       if (controller.foodOptions.isNotEmpty) ...[
@@ -322,7 +324,6 @@ class DetailMenuPage extends StatelessWidget {
                           ),
                         ),
                       ],
-
                       // Drink Options Widget
                       if (controller.drinkOptions.isNotEmpty) ...[
                         Container(
@@ -352,12 +353,10 @@ class DetailMenuPage extends StatelessWidget {
                           ),
                         ),
                       ],
-                      
                     ],
                   );
                 }),
               ],
-
               // Notes Section
               Container(
                 margin: const EdgeInsets.fromLTRB(16, 0, 16, 16),
@@ -387,6 +386,7 @@ class DetailMenuPage extends StatelessWidget {
                       ),
                       const SizedBox(height: 10),
                       TextField(
+                        controller: noteController,
                         decoration: InputDecoration(
                           hintText: 'Masukan catatan pesanan kamu',
                           hintStyle: TextStyle(
@@ -418,5 +418,70 @@ class DetailMenuPage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  // Update untuk method _addToCart di DetailMenuPage
+  void _addToCart() async {
+    try {
+      // Prepare cart data
+      Map<String, dynamic> cartData = {
+        'product_id': menu.id,
+        'quantity': controller.quantity.value,
+        'note': noteController.text.trim(),
+      };
+
+      if (categoryType == 'combo') {
+        if (controller.selectedFoodOption.value.isNotEmpty) {
+          cartData['food_option'] = controller.selectedFoodOption.value;
+        }
+        if (controller.selectedDrinkOption.value.isNotEmpty) {
+          cartData['drink_option'] = controller.selectedDrinkOption.value;
+        }
+      }
+
+      // Add to cart using CartController
+      await cartController.addItemToCart(cartData);
+
+      // Calculate and add to local cart state (for backwards compatibility)
+      final totalPrice =
+          controller.calculateTotalPrice(menu) * controller.quantity.value;
+      controller.addItemToCart(totalPrice);
+
+      // Force refresh cart data to ensure UI is updated
+      await cartController.fetchCartItems();
+
+      Get.snackbar(
+        'Success',
+        'Item berhasil ditambahkan ke keranjang',
+        snackPosition: SnackPosition.TOP,
+        backgroundColor: Colors.green,
+        colorText: Colors.white,
+        duration: const Duration(seconds: 2),
+      );
+
+      // Navigate back to menu page with updated cart info
+      Get.off(
+        () => MenuPage(
+          showStackViewOrder: true,
+          totalPrice:
+              cartController.totalCartPrice.value > 0
+                  ? cartController.totalCartPrice.value
+                  : controller.totalPrice.value,
+          itemCount:
+              cartController.totalCartItems.value > 0
+                  ? cartController.totalCartItems.value
+                  : controller.itemCount.value,
+        ),
+      );
+    } catch (e) {
+      Get.snackbar(
+        'Error',
+        'Gagal menambahkan item ke keranjang: ${e.toString()}',
+        snackPosition: SnackPosition.TOP,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+        duration: const Duration(seconds: 3),
+      );
+    }
   }
 }
