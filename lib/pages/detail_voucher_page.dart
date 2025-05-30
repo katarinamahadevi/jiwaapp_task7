@@ -1,6 +1,6 @@
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
-import 'package:jiwaapp_task7/pages/menu_page.dart';
+import 'package:jiwaapp_task7/pages/menu_page/menu_page.dart';
 import 'package:jiwaapp_task7/theme/color.dart';
 import 'package:jiwaapp_task7/widgets/appbar_primary.dart';
 import 'package:jiwaapp_task7/widgets/button_primary.dart';

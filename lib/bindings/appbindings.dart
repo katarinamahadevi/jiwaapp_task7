@@ -5,6 +5,7 @@ import 'package:jiwaapp_task7/controller/cart_controller.dart';
 import 'package:jiwaapp_task7/controller/login_controller.dart';
 import 'package:jiwaapp_task7/controller/menu_controller.dart';
 import 'package:jiwaapp_task7/controller/forget_pin_controller.dart';
+import 'package:jiwaapp_task7/controller/order_controller.dart';
 import 'package:jiwaapp_task7/controller/profile_controller.dart';
 import 'package:jiwaapp_task7/controller/referral_controller.dart';
 import 'package:jiwaapp_task7/controller/register_controller.dart';
@@ -33,6 +34,7 @@ class AppBindings extends Bindings {
     Get.put(UpdatePinService(), permanent: true);
     Get.put(ReferralService(), permanent: true);
 
+
     // CONTROLLER
     Get.lazyPut<LoginController>(() => LoginController());
     Get.lazyPut<RegisterController>(() => RegisterController());
@@ -43,5 +45,7 @@ class AppBindings extends Bindings {
     Get.lazyPut<ForgetPinController>(() => ForgetPinController());
     Get.put(UpdatePinController());
     Get.put(ReferralController());
+        Get.put(OrderController());
+
   }
 }

@@ -5,7 +5,6 @@ class CartService {
   final ApiClient _apiClient = ApiClient();
   final String _basePath = '/auth/cart';
 
-  // Get all cart items
   Future<Response> getCartItems() async {
     try {
       final response = await _apiClient.dio.get(_basePath);
@@ -15,7 +14,6 @@ class CartService {
     }
   }
 
-  // Add item to cart
   Future<Response> addToCart(Map<String, dynamic> cartData) async {
     try {
       final response = await _apiClient.dio.post(_basePath, data: cartData);
@@ -25,17 +23,6 @@ class CartService {
     }
   }
 
-  // Get single cart item by ID
-  Future<Response> getCartItemById(int id) async {
-    try {
-      final response = await _apiClient.dio.get('$_basePath/$id');
-      return response;
-    } on DioException catch (e) {
-      throw Exception('Failed to fetch cart item: ${e.response?.data ?? e.message}');
-    }
-  }
-
-  // Delete cart item by ID
   Future<Response> deleteCartItem(int id) async {
     try {
       final response = await _apiClient.dio.delete('$_basePath/$id');

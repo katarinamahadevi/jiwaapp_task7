@@ -14,7 +14,8 @@ class MenuItemController extends GetxController {
   final RxString selectedFoodOption = ''.obs;
   final RxString selectedDrinkOption = ''.obs;
   final RxList<Map<String, dynamic>> foodOptions = <Map<String, dynamic>>[].obs;
-  final RxList<Map<String, dynamic>> drinkOptions = <Map<String, dynamic>>[].obs;
+  final RxList<Map<String, dynamic>> drinkOptions =
+      <Map<String, dynamic>>[].obs;
   final RxBool isLoadingComboOptions = false.obs;
 
   @override
@@ -27,6 +28,7 @@ class MenuItemController extends GetxController {
     isTakeAwaySelected.value = isTakeAway;
   }
 
+  //METHOD NGAMBIL DATA MENU BERDASARKAN KATEGORI
   void selectCategory(int index) async {
     selectedCategoryIndex.value = index;
     final categoryId = categories.value[index].id;
@@ -41,6 +43,7 @@ class MenuItemController extends GetxController {
     }
   }
 
+  //NGAMBIL DATA KATEGORI DARI API
   void fetchCategories() async {
     try {
       final fetchedCategories = await _menuService.fetchAllMenus();
@@ -49,35 +52,21 @@ class MenuItemController extends GetxController {
       print('Error loading menus: $e');
     }
   }
+
+  //FUNGSI ADD TO CART DI  DETAIL MENU PAGE DAN DI MENU PAGE (MENUITEMCARD)
   void addItemToCart(double price) {
     totalPrice.value += price;
     itemCount.value += 1;
   }
-  void removeItemFromCart(double price) {
-    if (totalPrice.value >= price) {
-      totalPrice.value -= price;
-    }
-    if (itemCount.value > 0) {
-      itemCount.value -= 1;
-    }
-  }
-  void resetCartState() {
-    totalPrice.value = 0.0;
-    itemCount.value = 0;
-  }
-  void updateCartState(double newTotalPrice, int newItemCount) {
-    totalPrice.value = newTotalPrice;
-    itemCount.value = newItemCount;
-  }
 
-  // UNTUK MENDETEKSI DIA COMBO ATAU NGGAK
+  // UNTUK MENDETEKSI PAGE UNTUK COMBO ATAU NGGAK
   void initializeDetailPage(String? categoryType) {
     quantity.value = 1;
     selectedFoodOption.value = '';
     selectedDrinkOption.value = '';
     foodOptions.clear();
     drinkOptions.clear();
-    
+
     if (categoryType == 'combo') {
       loadComboOptions();
     }
@@ -87,15 +76,17 @@ class MenuItemController extends GetxController {
     isLoadingComboOptions.value = true;
     try {
       if (categories.value.isEmpty) {
-         fetchCategories();
+        fetchCategories();
       }
 
-      final foodCategories = categories.value
-          .where((category) => category.type == 'food')
-          .toList();
-      final drinkCategories = categories.value
-          .where((category) => category.type == 'drink')
-          .toList();
+      final foodCategories =
+          categories.value
+              .where((category) => category.type == 'food')
+              .toList();
+      final drinkCategories =
+          categories.value
+              .where((category) => category.type == 'drink')
+              .toList();
 
       List<Map<String, dynamic>> allFoodOptions = [];
       for (var category in foodCategories) {
@@ -150,7 +141,6 @@ class MenuItemController extends GetxController {
   }
 
   double calculateTotalPrice(MenuModel menu) {
-    // Extract numeric value from price string (remove 'Rp', '.', etc.)
     String cleanPrice = menu.price.replaceAll(RegExp(r'[^\d]'), '');
     return double.tryParse(cleanPrice) ?? 0.0;
   }

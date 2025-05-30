@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jiwaapp_task7/controller/profile_controller.dart';
-import 'package:jiwaapp_task7/pages/menu_page.dart';
+import 'package:jiwaapp_task7/pages/menu_page/menu_page.dart';
 import 'package:jiwaapp_task7/pages/notification_page.dart';
 import 'package:jiwaapp_task7/pages/order_page.dart';
 import 'package:jiwaapp_task7/pages/profile_page.dart';

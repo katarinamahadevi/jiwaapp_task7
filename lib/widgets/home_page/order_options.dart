@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jiwaapp_task7/pages/address_page.dart/delivery_page.dart';
-import 'package:jiwaapp_task7/pages/menu_page.dart';
+import 'package:jiwaapp_task7/pages/menu_page/menu_page.dart';
 import 'package:jiwaapp_task7/widgets/home_page/order_option.dart';
 
 //OPSI TAKEAWAY ATAU DELIVERY

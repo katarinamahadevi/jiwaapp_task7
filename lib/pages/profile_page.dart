@@ -4,7 +4,7 @@ import 'package:jiwaapp_task7/controller/profile_controller.dart';
 import 'package:jiwaapp_task7/pages/address_page.dart/delivery_page.dart';
 import 'package:jiwaapp_task7/pages/home_page.dart';
 import 'package:jiwaapp_task7/pages/loyalty_membership_page.dart';
-import 'package:jiwaapp_task7/pages/menu_page.dart';
+import 'package:jiwaapp_task7/pages/menu_page/menu_page.dart';
 import 'package:jiwaapp_task7/pages/my_voucher_page.dart';
 import 'package:jiwaapp_task7/pages/order_page.dart';
 import 'package:jiwaapp_task7/pages/referral_page/referral_page.dart';

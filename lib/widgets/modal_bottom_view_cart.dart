@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jiwaapp_task7/controller/cart_controller.dart';
-import 'package:jiwaapp_task7/pages/menu_page.dart';
+import 'package:jiwaapp_task7/model/menu_model.dart';
+import 'package:jiwaapp_task7/pages/menu_page/menu_page.dart';
 import 'package:jiwaapp_task7/theme/color.dart';
-
-// ... tetap import seperti sebelumnya
 
 void showModalBottomViewCart(BuildContext context) {
   final CartController cartController = Get.put(CartController());
@@ -20,7 +19,7 @@ void showModalBottomViewCart(BuildContext context) {
     ),
     builder: (context) {
       return FractionallySizedBox(
-        heightFactor: 0.6, // tetap memberikan tinggi modal
+        heightFactor: 0.6,
         child: Obx(() {
           if (cartController.isLoading.value) {
             return const Padding(
@@ -58,8 +57,6 @@ void showModalBottomViewCart(BuildContext context) {
                 ),
                 Divider(color: BaseColors.border),
                 const SizedBox(height: 12),
-
-                // Scrollable area
                 Expanded(
                   child: ListView.builder(
                     itemCount: cartController.cartItems.length,
@@ -155,14 +152,46 @@ void showModalBottomViewCart(BuildContext context) {
                                       Row(
                                         children: [
                                           IconButton(
-                                            onPressed: () {},
+                                            onPressed: () async {
+                                              if (quantity > 1) {
+                                                await cartController.addToCart(
+                                                  menu: MenuModel.fromJson(
+                                                    product,
+                                                  ),
+                                                  quantity: quantity - 1,
+                                                  // note: item['note'] ?? '',
+                                                  // categoryType:
+                                                  //     product['category_type'],
+                                                  // selectedFoodOption:
+                                                  //     item['food_option'],
+                                                  // selectedDrinkOption:
+                                                  //     item['drink_option'],
+                                                  // showSnackbar: false,
+                                                );
+                                              }
+                                            },
                                             icon: Icon(
                                               Icons.remove_circle_outline,
                                             ),
                                           ),
                                           Text(quantity.toString()),
                                           IconButton(
-                                            onPressed: () {},
+                                            onPressed: () async {
+                                              await cartController.addToCart(
+                                                menu: MenuModel.fromJson(
+                                                  product,
+                                                ),
+                                                quantity: quantity + 1,
+                                                // note: item['note'] ?? '',
+                                                // categoryType:
+                                                //     product['category_type'],
+                                                // selectedFoodOption:
+                                                //     item['food_option'],
+                                                // selectedDrinkOption:
+                                                //     item['drink_option'],
+                                                // showSnackbar: false,
+                                              );
+                                            },
                                             icon: Icon(
                                               Icons.add_circle_outline,
                                             ),
@@ -180,8 +209,6 @@ void showModalBottomViewCart(BuildContext context) {
                     },
                   ),
                 ),
-
-                // Button di bawah, tetap
                 const SizedBox(height: 24),
                 SizedBox(
                   width: double.infinity,

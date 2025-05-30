@@ -98,19 +98,16 @@ class MenuPage extends StatelessWidget {
               body: _buildMenuContent(),
             ),
           ),
-          // StackViewOrder - Only show when there are actual items in cart
           Obx(
-            () => cartController.totalCartItems.value > 0
-                ? Positioned(
-                    bottom: 20,
-                    left: 16,
-                    right: 16,
-                    child: StackViewOrder(
-                      totalPrice: cartController.totalCartPrice.value,
-                      itemCount: cartController.totalCartItems.value,
-                    ),
-                  )
-                : const SizedBox.shrink(),
+            () =>
+                cartController.totalCartItems.value > 0
+                    ? Positioned(
+                      bottom: 20,
+                      left: 16,
+                      right: 16,
+                      child: StackViewOrder(),
+                    )
+                    : const SizedBox.shrink(),
           ),
         ],
       ),
@@ -131,25 +128,27 @@ class MenuPage extends StatelessWidget {
             border: Border.all(color: const Color(0xFFE5E5E5)),
             color: Colors.grey[100],
             borderRadius: BorderRadius.circular(50),
-            boxShadow: innerBoxIsScrolled
-                ? [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.3),
-                      spreadRadius: 1,
-                      blurRadius: 3,
-                      offset: const Offset(0, 2),
-                    ),
-                  ]
-                : null,
+            boxShadow:
+                innerBoxIsScrolled
+                    ? [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.3),
+                        spreadRadius: 1,
+                        blurRadius: 3,
+                        offset: const Offset(0, 2),
+                      ),
+                    ]
+                    : null,
           ),
           child: Stack(
             children: [
               AnimatedAlign(
                 duration: const Duration(milliseconds: 450),
                 curve: Curves.easeInOut,
-                alignment: menuController.isTakeAwaySelected.value
-                    ? Alignment.centerLeft
-                    : Alignment.centerRight,
+                alignment:
+                    menuController.isTakeAwaySelected.value
+                        ? Alignment.centerLeft
+                        : Alignment.centerRight,
                 child: Container(
                   width: Get.width / 2 - 32,
                   margin: const EdgeInsets.all(4),
@@ -172,9 +171,10 @@ class MenuPage extends StatelessWidget {
                             Text(
                               'Take Away',
                               style: TextStyle(
-                                color: menuController.isTakeAwaySelected.value
-                                    ? Colors.white
-                                    : Colors.black,
+                                color:
+                                    menuController.isTakeAwaySelected.value
+                                        ? Colors.white
+                                        : Colors.black,
                                 fontWeight: FontWeight.normal,
                                 fontSize: 16,
                               ),
@@ -182,9 +182,10 @@ class MenuPage extends StatelessWidget {
                             const SizedBox(width: 8),
                             Icon(
                               Icons.directions_walk,
-                              color: menuController.isTakeAwaySelected.value
-                                  ? Colors.white
-                                  : const Color(0xFF3B1D52),
+                              color:
+                                  menuController.isTakeAwaySelected.value
+                                      ? Colors.white
+                                      : const Color(0xFF3B1D52),
                               size: 20,
                             ),
                           ],
@@ -203,9 +204,10 @@ class MenuPage extends StatelessWidget {
                             Text(
                               'Delivery',
                               style: TextStyle(
-                                color: !menuController.isTakeAwaySelected.value
-                                    ? Colors.white
-                                    : Colors.black,
+                                color:
+                                    !menuController.isTakeAwaySelected.value
+                                        ? Colors.white
+                                        : Colors.black,
                                 fontWeight: FontWeight.normal,
                                 fontSize: 16,
                               ),
@@ -213,9 +215,10 @@ class MenuPage extends StatelessWidget {
                             const SizedBox(width: 8),
                             Icon(
                               Icons.delivery_dining,
-                              color: !menuController.isTakeAwaySelected.value
-                                  ? Colors.white
-                                  : const Color(0xFF3B1D52),
+                              color:
+                                  !menuController.isTakeAwaySelected.value
+                                      ? Colors.white
+                                      : const Color(0xFF3B1D52),
                               size: 20,
                             ),
                           ],
@@ -245,13 +248,15 @@ class MenuPage extends StatelessWidget {
                 padding: EdgeInsets.zero,
                 itemCount: menuController.categories.value.length,
                 itemBuilder: (context, index) {
-                  CategoryModel category = menuController.categories.value[index];
+                  CategoryModel category =
+                      menuController.categories.value[index];
                   bool isNew = index < 3;
 
                   return CategoryListItem(
                     category: category,
                     isNew: isNew,
-                    isSelected: index == menuController.selectedCategoryIndex.value,
+                    isSelected:
+                        index == menuController.selectedCategoryIndex.value,
                     onTap: () => menuController.selectCategory(index),
                   );
                 },
@@ -279,43 +284,53 @@ class MenuPage extends StatelessWidget {
                   ),
                 ),
                 Expanded(
-                  child: menuController.selectedCategoryProducts.isEmpty
-                      ? const Center(
-                          child: Text(
-                            "No items available in this category",
-                            style: TextStyle(
-                              color: Colors.grey,
-                              fontSize: 16,
-                            ),
-                          ),
-                        )
-                      : GridView.builder(
-                          controller: _menuScrollController,
-                          padding: const EdgeInsets.all(12),
-                          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            childAspectRatio: 0.7,
-                            crossAxisSpacing: 12,
-                            mainAxisSpacing: 15,
-                          ),
-                          itemCount: menuController.selectedCategoryProducts.length,
-                          itemBuilder: (context, index) {
-                            return MenuItemCard(
-                              menuItem: menuController.selectedCategoryProducts[index],
-                              // Pass whether there are items in cart for StackViewOrder visibility
-                              showStackViewOrder: cartController.totalCartItems.value > 0,
-                              onAddToCart: () => menuController.addItemToCart(
-                                double.parse(
-                                      menuController.selectedCategoryProducts[index].price
-                                          .replaceAll('Rp', '')
-                                          .replaceAll('.', ''),
-                                    ) /
-                                    1000,
+                  child:
+                      menuController.selectedCategoryProducts.isEmpty
+                          ? const Center(
+                            child: Text(
+                              "No items available in this category",
+                              style: TextStyle(
+                                color: Colors.grey,
+                                fontSize: 16,
                               ),
-                              categoryType: menuController.selectedCategory?.type,
-                            );
-                          },
-                        ),
+                            ),
+                          )
+                          : GridView.builder(
+                            controller: _menuScrollController,
+                            padding: const EdgeInsets.all(12),
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 2,
+                                  childAspectRatio: 0.7,
+                                  crossAxisSpacing: 12,
+                                  mainAxisSpacing: 15,
+                                ),
+                            itemCount:
+                                menuController.selectedCategoryProducts.length,
+                            itemBuilder: (context, index) {
+                              return MenuItemCard(
+                                menuItem:
+                                    menuController
+                                        .selectedCategoryProducts[index],
+                                // Pass whether there are items in cart for StackViewOrder visibility
+                                showStackViewOrder:
+                                    cartController.totalCartItems.value > 0,
+                                onAddToCart:
+                                    () => menuController.addItemToCart(
+                                      double.parse(
+                                            menuController
+                                                .selectedCategoryProducts[index]
+                                                .price
+                                                .replaceAll('Rp', '')
+                                                .replaceAll('.', ''),
+                                          ) /
+                                          1000,
+                                    ),
+                                categoryType:
+                                    menuController.selectedCategory?.type,
+                              );
+                            },
+                          ),
                 ),
               ],
             );

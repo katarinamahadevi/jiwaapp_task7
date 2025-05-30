@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:jiwaapp_task7/controller/menu_controller.dart';
 import 'package:jiwaapp_task7/controller/cart_controller.dart';
 import 'package:jiwaapp_task7/model/menu_model.dart';
-import 'package:jiwaapp_task7/pages/menu_page.dart';
+import 'package:jiwaapp_task7/pages/menu_page/menu_page.dart';
 import 'package:jiwaapp_task7/theme/color.dart';
 import 'package:jiwaapp_task7/widgets/item_option.dart';
 
@@ -420,46 +420,22 @@ class DetailMenuPage extends StatelessWidget {
     );
   }
 
-  // Update untuk method _addToCart di DetailMenuPage
   void _addToCart() async {
     try {
-      // Prepare cart data
-      Map<String, dynamic> cartData = {
-        'product_id': menu.id,
-        'quantity': controller.quantity.value,
-        'note': noteController.text.trim(),
-      };
-
-      if (categoryType == 'combo') {
-        if (controller.selectedFoodOption.value.isNotEmpty) {
-          cartData['food_option'] = controller.selectedFoodOption.value;
-        }
-        if (controller.selectedDrinkOption.value.isNotEmpty) {
-          cartData['drink_option'] = controller.selectedDrinkOption.value;
-        }
-      }
-
-      // Add to cart using CartController
-      await cartController.addItemToCart(cartData);
-
-      // Calculate and add to local cart state (for backwards compatibility)
-      final totalPrice =
-          controller.calculateTotalPrice(menu) * controller.quantity.value;
-      controller.addItemToCart(totalPrice);
-
-      // Force refresh cart data to ensure UI is updated
-      await cartController.fetchCartItems();
-
-      Get.snackbar(
-        'Success',
-        'Item berhasil ditambahkan ke keranjang',
-        snackPosition: SnackPosition.TOP,
-        backgroundColor: Colors.green,
-        colorText: Colors.white,
-        duration: const Duration(seconds: 2),
+      await cartController.addToCart(
+        menu: menu,
+        quantity: controller.quantity.value,
+        note: noteController.text.trim(),
+        categoryType: categoryType,
+        selectedFoodOption:
+            controller.selectedFoodOption.value.isNotEmpty
+                ? controller.selectedFoodOption.value
+                : null,
+        selectedDrinkOption:
+            controller.selectedDrinkOption.value.isNotEmpty
+                ? controller.selectedDrinkOption.value
+                : null,
       );
-
-      // Navigate back to menu page with updated cart info
       Get.off(
         () => MenuPage(
           showStackViewOrder: true,
