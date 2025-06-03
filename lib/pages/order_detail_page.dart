@@ -39,7 +39,7 @@ class OrderDetailPage extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   const Text(
-                                    'Terima kasih #temansejiwa!',
+                                    'Terima kasih #temansejiwa!', //ORDER STATUS
                                     style: TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold,
@@ -48,7 +48,7 @@ class OrderDetailPage extends StatelessWidget {
                                   ),
                                   const SizedBox(height: 4),
                                   Text(
-                                    'Selamat menikmati dan terus gunakan JIWA+ ya!',
+                                    'Selamat menikmati dan terus gunakan JIWA+ ya!', //ORDER STATUS
                                     style: TextStyle(
                                       fontSize: 14,
                                       color: Colors.grey[600],
@@ -58,7 +58,7 @@ class OrderDetailPage extends StatelessWidget {
                                   Row(
                                     children: [
                                       const Text(
-                                        'ORDER ID: J-202512617405493000001',
+                                        'ORDER ID: J-202512617405493000001', //ORDER ID
                                         style: TextStyle(
                                           fontSize: 10,
                                           fontWeight: FontWeight.w500,
@@ -69,7 +69,8 @@ class OrderDetailPage extends StatelessWidget {
                                         onTap: () {
                                           Clipboard.setData(
                                             ClipboardData(
-                                              text: 'J-202512617405493000001',
+                                              text:
+                                                  'J-202512617405493000001', //ORDER ID
                                             ),
                                           );
                                           ScaffoldMessenger.of(
@@ -159,7 +160,7 @@ class OrderDetailPage extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const Text(
-                          'Informasi Kurir',
+                          'Informasi Kurir', //COURIER
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
@@ -188,7 +189,7 @@ class OrderDetailPage extends StatelessWidget {
                                     child: Padding(
                                       padding: const EdgeInsets.all(3),
                                       child: Image.asset(
-                                        'assets/logo/logo_gosend.jpeg',
+                                        'assets/logo/logo_gosend.jpeg', //COURIER
                                         fit: BoxFit.contain,
                                       ),
                                     ),
@@ -200,81 +201,13 @@ class OrderDetailPage extends StatelessWidget {
                                           CrossAxisAlignment.start,
                                       children: [
                                         const Text(
-                                          'GoSend',
+                                          'GoSend', //COURIER
                                           style: TextStyle(
                                             fontSize: 16,
                                             fontWeight: FontWeight.w500,
                                           ),
                                         ),
-                                        Row(
-                                          children: [
-                                            const Text(
-                                              'GK-11-804875780',
-                                              style: TextStyle(fontSize: 14),
-                                            ),
-                                            const SizedBox(width: 4),
-                                            InkWell(
-                                              onTap: () {
-                                                Clipboard.setData(
-                                                  const ClipboardData(
-                                                    text: 'GK-11-804875780',
-                                                  ),
-                                                );
-                                                ScaffoldMessenger.of(
-                                                  context,
-                                                ).showSnackBar(
-                                                  const SnackBar(
-                                                    content: Text(
-                                                      'Tracking ID copied to clipboard',
-                                                    ),
-                                                    duration: Duration(
-                                                      seconds: 1,
-                                                    ),
-                                                  ),
-                                                );
-                                              },
-                                              child: const Icon(
-                                                Icons.copy,
-                                                size: 14,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
                                       ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-
-                              const Padding(
-                                padding: EdgeInsets.symmetric(vertical: 16),
-                                child: Divider(
-                                  height: 1,
-                                  color: Color(0xFFDDDDDD),
-                                ),
-                              ),
-
-                              Row(
-                                children: [
-                                  Container(
-                                    width: 40,
-                                    height: 40,
-                                    decoration: BoxDecoration(
-                                      color: Colors.grey[300],
-                                      shape: BoxShape.circle,
-                                    ),
-                                    child: Icon(
-                                      Icons.person,
-                                      color: Colors.grey[700],
-                                      size: 24,
-                                    ),
-                                  ),
-                                  const SizedBox(width: 12),
-                                  const Text(
-                                    'santri Hengki Purnomo',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w500,
                                     ),
                                   ),
                                 ],
@@ -298,7 +231,7 @@ class OrderDetailPage extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const Text(
-                          'Detail Delivery',
+                          'Detail Delivery', //ORDER TYPE
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
@@ -309,44 +242,20 @@ class OrderDetailPage extends StatelessWidget {
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Column(
-                              children: [
-                                Container(
-                                  width: 36,
-                                  height: 36,
-                                  decoration: const BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: Color(0xFFE65952),
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(5),
-                                    child: Image.asset(
-                                      'assets/image/image_outlet_delivery.png',
-                                      fit: BoxFit.contain,
-                                    ),
-                                  ),
+                            Container(
+                              width: 36,
+                              height: 36,
+                              decoration: const BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Color(0xFFE65952),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(5),
+                                child: Image.asset(
+                                  'assets/image/image_location.png',
+                                  fit: BoxFit.contain,
                                 ),
-                                Container(
-                                  width: 1,
-                                  height: 60,
-                                  color: Colors.grey[300],
-                                ),
-                                Container(
-                                  width: 36,
-                                  height: 36,
-                                  decoration: const BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: Color(0xFFE65952),
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(5),
-                                    child: Image.asset(
-                                      'assets/image/image_location.png',
-                                      fit: BoxFit.contain,
-                                    ),
-                                  ),
-                                ),
-                              ],
+                              ),
                             ),
                             const SizedBox(width: 16),
                             Expanded(
@@ -354,38 +263,17 @@ class OrderDetailPage extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    'Lokasi Outlet',
+                                    'Alamat Pengiriman', //ADDRESS ID
                                     style: TextStyle(
                                       fontSize: 14,
                                       color: BaseColors.black,
                                     ),
                                   ),
-                                  const Text(
-                                    'BARATA',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  Text(
-                                    'Jl. Barata Jaya 19 No 52B Surabaya',
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      color: BaseColors.black,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 40),
-                                  Text(
-                                    'Alamat Pengiriman',
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      color: BaseColors.black,
-                                    ),
-                                  ),
+                                  const SizedBox(height: 4),
                                   Row(
                                     children: [
                                       const Text(
-                                        'Mahadevi Katarina',
+                                        'Mahadevi Katarina', //ADDRESS ID
                                         style: TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.w500,
@@ -393,7 +281,7 @@ class OrderDetailPage extends StatelessWidget {
                                         ),
                                       ),
                                       Text(
-                                        ' - 628223116895',
+                                        ' - 628223116895', //ADDRESS ID
                                         style: TextStyle(
                                           fontSize: 14,
                                           color: Colors.grey[600],
@@ -401,8 +289,9 @@ class OrderDetailPage extends StatelessWidget {
                                       ),
                                     ],
                                   ),
+                                  const SizedBox(height: 4),
                                   Text(
-                                    'Taman Jemursari Selatan I, Jemur Wonosari, Surabaya, Jawa Timur, Indonesia',
+                                    'Taman Jemursari Selatan I, Jemur Wonosari, Surabaya, Jawa Timur, Indonesia', //ADDRESS ID
                                     style: TextStyle(
                                       fontSize: 14,
                                       color: Colors.grey[600],
@@ -429,7 +318,7 @@ class OrderDetailPage extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const Text(
-                          'Daftar Pesanan',
+                          'Daftar Pesanan', //ITEMS
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
@@ -460,14 +349,14 @@ class OrderDetailPage extends StatelessWidget {
                                   ),
                                   const SizedBox(height: 4),
                                   Text(
-                                    'Item 1: 1 Kopi Susu Sahabat Large',
+                                    'Item 1: 1 Kopi Susu Sahabat Large', //ITEMS
                                     style: TextStyle(
                                       fontSize: 14,
                                       color: Colors.grey[600],
                                     ),
                                   ),
                                   Text(
-                                    'Item 2: 1 Kopi Susu Sahabat Large',
+                                    'Item 2: 1 Kopi Susu Sahabat Large', //ITEMS
                                     style: TextStyle(
                                       fontSize: 14,
                                       color: Colors.grey[600],
@@ -533,7 +422,7 @@ class OrderDetailPage extends StatelessWidget {
                               ),
                             ),
                             Text(
-                              'Rp25.000',
+                              'Rp25.000', //SUBTOTAL
                               style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w500,
@@ -542,27 +431,7 @@ class OrderDetailPage extends StatelessWidget {
                             ),
                           ],
                         ),
-                        const SizedBox(height: 12),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'Takeaway Charge',
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: Colors.black,
-                              ),
-                            ),
-                            Text(
-                              'Rp3.500',
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500,
-                                color: Colors.black,
-                              ),
-                            ),
-                          ],
-                        ),
+
                         const SizedBox(height: 12),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -575,7 +444,7 @@ class OrderDetailPage extends StatelessWidget {
                               ),
                             ),
                             Text(
-                              'Rp13.000',
+                              'Rp13.000', //DELIVERY FEE
                               style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w500,
@@ -584,42 +453,6 @@ class OrderDetailPage extends StatelessWidget {
                             ),
                           ],
                         ),
-                        const SizedBox(height: 12),
-
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'JIWA POINT',
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: Color(0xFFE25C4B),
-                              ),
-                            ),
-                            Row(
-                              children: [
-                                Container(
-                                  width: 20,
-                                  height: 20,
-
-                                  child: Image.asset(
-                                    'assets/image/image_jiwapoint_white.png',
-                                  ),
-                                ),
-                                const SizedBox(width: 4),
-                                Text(
-                                  '-9.728',
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w500,
-                                    color: Color(0xFFE25C4B),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-
                         const SizedBox(height: 16),
                         Divider(color: Colors.grey[300]),
                         const SizedBox(height: 16),
@@ -636,7 +469,7 @@ class OrderDetailPage extends StatelessWidget {
                               ),
                             ),
                             Text(
-                              'Rp41.500',
+                              'Rp41.500', //TOTAL PRICE
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
@@ -646,52 +479,6 @@ class OrderDetailPage extends StatelessWidget {
                           ],
                         ),
                         const SizedBox(height: 12),
-
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'Total Point',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 14,
-                                color: Colors.green,
-                              ),
-                            ),
-                            Text(
-                              '694',
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500,
-                                color: Colors.green,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 12),
-
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'Total XP',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-
-                                fontSize: 14,
-                                color: Colors.green,
-                              ),
-                            ),
-                            Text(
-                              '16 XP',
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500,
-                                color: Colors.green,
-                              ),
-                            ),
-                          ],
-                        ),
                       ],
                     ),
                   ),
@@ -721,7 +508,7 @@ class OrderDetailPage extends StatelessWidget {
                               width: 30,
                               height: 30,
                               child: Image.asset(
-                                'assets/logo/logo_ovo.png',
+                                'assets/logo/logo_ovo.png', //ORDER STATUS
                                 fit: BoxFit.contain,
                               ),
                             ),
@@ -737,48 +524,11 @@ class OrderDetailPage extends StatelessWidget {
                                       fontWeight: FontWeight.w500,
                                     ),
                                   ),
-                                  Text(
-                                    '+6282231166895',
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      color: Colors.grey,
-                                    ),
-                                  ),
                                 ],
                               ),
                             ),
                             const Text(
-                              'Rp31.772',
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.normal,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const Padding(
-                          padding: EdgeInsets.symmetric(vertical: 8),
-                          child: Divider(height: 1, color: BaseColors.border),
-                        ),
-                        Row(
-                          children: [
-                            SizedBox(
-                              width: 30,
-                              height: 30,
-                              child: Image.asset(
-                                'assets/image/image_jiwapoint_white.png',
-                                fit: BoxFit.contain,
-                              ),
-                            ),
-                            const SizedBox(width: 12),
-                            const Expanded(
-                              child: Text(
-                                'Jiwa Point',
-                                style: TextStyle(fontSize: 14),
-                              ),
-                            ),
-                            const Text(
-                              '9.728',
+                              'Rp31.772', //TOTAL
                               style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.normal,

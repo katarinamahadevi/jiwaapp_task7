@@ -5,13 +5,8 @@ import 'package:jiwaapp_task7/controller/payment_summary_controller.dart';
 import 'package:jiwaapp_task7/theme/color.dart';
 
 Widget buildPaymentSummarySection(int orderId) {
-  final OrderController orderController = Get.put(OrderController());
-  final PaymentSummaryController paymentController = Get.put(
-    PaymentSummaryController(),
-  );
-
-  // Trigger fetch on widget build (sebaiknya dipindah ke page lifecycle jika perlu)
-  paymentController.fetchPaymentSummary();
+  final orderController = Get.find<OrderController>();
+  final paymentController = Get.find<PaymentSummaryController>();
 
   return Obx(() {
     if (paymentController.isLoading.value) {
@@ -91,55 +86,7 @@ Widget buildPaymentSummarySection(int orderId) {
                 ),
               ],
             ),
-            const Divider(height: 20),
             const SizedBox(height: 10),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    const Text(
-                      'Jiwa Point',
-                      style: TextStyle(color: Colors.green),
-                    ),
-                    const SizedBox(width: 6),
-                    GestureDetector(
-                      onTap:
-                          () => orderController.showJiwaPointSummaryModal(
-                            Get.context!,
-                          ),
-                      child: const Icon(
-                        Icons.info_outline,
-                        color: BaseColors.primary,
-                        size: 18,
-                      ),
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Image.asset(
-                      'assets/image/image_jiwapoint_white.png',
-                      width: 18,
-                      height: 18,
-                    ),
-                    const SizedBox(width: 4),
-                    const Text(
-                      'Rp1.932',
-                      style: TextStyle(color: Colors.green),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            const SizedBox(height: 8),
-            const Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text('Total XP', style: TextStyle(color: Colors.green)),
-                Text('17', style: TextStyle(color: Colors.green)),
-              ],
-            ),
           ],
         ),
       ),

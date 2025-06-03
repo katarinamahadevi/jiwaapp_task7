@@ -31,15 +31,15 @@ class ItemOptionsWidget extends StatelessWidget {
         Column(
           children:
               options.map((option) {
-                bool isSelected = selectedOption == option['name'];
+                bool isSelected = selectedOption == option['id'].toString();
 
-                // Parse harga untuk tampilan
                 String priceValue = '';
 
                 return Padding(
                   padding: const EdgeInsets.symmetric(vertical: 6.0),
                   child: InkWell(
-                    onTap: () => onOptionSelected(option['name']),
+                    // FIX: Pass ID, not name
+                    onTap: () => onOptionSelected(option['id'].toString()),
                     child: Container(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 12,
@@ -114,7 +114,7 @@ class ItemOptionsWidget extends StatelessWidget {
                             Row(
                               children: [
                                 Text(
-                                  '${option['type'] == 'food' ? 'Food' : 'Drink'}: ${option['name']}',
+                                  '${option['type'] == 'food' ? 'Food' : 'Drink'}: ${option['id']}',
                                   style: const TextStyle(
                                     fontSize: 12,
                                     color: Colors.grey,

@@ -92,6 +92,7 @@ class MenuItemController extends GetxController {
       for (var category in foodCategories) {
         for (var product in category.products) {
           allFoodOptions.add({
+            'id': product.id, // Make sure this is the numeric ID
             'name': product.name,
             'price': product.price,
             'category': category.name,
@@ -104,6 +105,7 @@ class MenuItemController extends GetxController {
       for (var category in drinkCategories) {
         for (var product in category.products) {
           allDrinkOptions.add({
+            'id': product.id, // Make sure this is the numeric ID
             'name': product.name,
             'price': product.price,
             'category': category.name,
@@ -115,11 +117,18 @@ class MenuItemController extends GetxController {
       foodOptions.value = allFoodOptions;
       drinkOptions.value = allDrinkOptions;
 
+      // Set default selection with ID, make sure it's stored as string for consistency
       if (allFoodOptions.isNotEmpty) {
-        selectedFoodOption.value = foodOptions.first['name'] ?? '';
+        selectedFoodOption.value = allFoodOptions.first['id'].toString();
+        print(
+          'Default food option selected: ${selectedFoodOption.value}',
+        ); // Debug log
       }
       if (allDrinkOptions.isNotEmpty) {
-        selectedDrinkOption.value = drinkOptions.first['name'] ?? '';
+        selectedDrinkOption.value = allDrinkOptions.first['id'].toString();
+        print(
+          'Default drink option selected: ${selectedDrinkOption.value}',
+        ); // Debug log
       }
     } catch (e) {
       print('Error loading combo options: $e');
@@ -145,12 +154,14 @@ class MenuItemController extends GetxController {
     return double.tryParse(cleanPrice) ?? 0.0;
   }
 
-  void setSelectedFoodOption(String option) {
-    selectedFoodOption.value = option;
+  void setSelectedFoodOption(String optionId) {
+    selectedFoodOption.value = optionId; // This should be the ID as string
+    print('Food option selected: $optionId'); // Debug log
   }
 
-  void setSelectedDrinkOption(String option) {
-    selectedDrinkOption.value = option;
+  void setSelectedDrinkOption(String optionId) {
+    selectedDrinkOption.value = optionId; // This should be the ID as string
+    print('Drink option selected: $optionId'); // Debug log
   }
 
   CategoryModel? get selectedCategory {

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jiwaapp_task7/pages/profile_page.dart';
+import 'package:jiwaapp_task7/pages/home_page.dart';
 import '../pages/auth_page/pin_verification_login_page.dart';
 import '../services/auth_service.dart';
+import '../services/storage_service.dart';
 import '../widgets/auth_page/modal_bottom_verifyotp_register.dart';
 
 class LoginController extends GetxController {
@@ -18,11 +20,13 @@ class LoginController extends GetxController {
   ];
 
   final AuthService _authService = AuthService();
+  final StorageService _storageService = StorageService();
 
   @override
   void onInit() {
     super.onInit();
     emailController.addListener(validateForm);
+    checkAutoLogin();
   }
 
   @override
@@ -31,8 +35,30 @@ class LoginController extends GetxController {
     super.onClose();
   }
 
+  Future<void> checkAutoLogin() async {
+    try {
+      final token = await _storageService.getToken();
+      
+      if (token != null && token.isNotEmpty) {
+        try {
+          await _authService.getCurrentUser();
+          Get.offAll(() => const HomePage());
+          Get.snackbar(
+            'Selamat Datang Kembali',
+            'Login otomatis berhasil',
+            snackPosition: SnackPosition.BOTTOM,
+          );
+        } catch (e) {
+          await _storageService.clearAll();
+          print('Token invalid, cleared: $e');
+        }
+      }
+    } catch (e) {
+      print('Error checking auto login: $e');
+    }
+  }
 
-//VALIDASI INPUT EMAIL MENGGUNAKAN .COM DAN @
+  //VALIDASI INPUT EMAIL MENGGUNAKAN .COM DAN @
   void validateForm() {
     String email = emailController.text.trim();
     final emailRegex = RegExp(r'^.+@.+\..+$');
@@ -44,8 +70,7 @@ class LoginController extends GetxController {
     validateForm();
   }
 
-
-//MEMVALIDASI APAKAH EMAIL TERDAFTAR/TIDAK JIKA IYA DIA KE PINVERIFICATIONLOGINPAGE, JIKA TIDAK KE MODALBOTTOMVERIFYOTPREGISTER
+  //MEMVALIDASI APAKAH EMAIL TERDAFTAR/TIDAK JIKA IYA DIA KE PINVERIFICATIONLOGINPAGE, JIKA TIDAK KE MODALBOTTOMVERIFYOTPREGISTER
   Future<void> handleLogin() async {
     if (!isButtonEnabled.value) return;
 
@@ -81,7 +106,7 @@ class LoginController extends GetxController {
     }
   }
 
-//VERIFIKASI PIN AKUN BENAR ATAU TIDAK
+  //VERIFIKASI PIN AKUN BENAR ATAU TIDAK
   Future<void> verifyPinLogin(
     String email,
     String pin,
@@ -103,7 +128,7 @@ class LoginController extends GetxController {
       isLoading.value = false;
 
       if (response['status'] == 'success') {
-        Get.offAll(() => const ProfilePage());
+        Get.offAll(() => const HomePage());
         Get.snackbar(
           'Berhasil',
           'Login berhasil',
@@ -127,4 +152,30 @@ class LoginController extends GetxController {
       );
     }
   }
+
+  Future<void> logout() async {
+    try {
+      isLoading.value = true;
+      await _authService.logout();
+      
+      await _storageService.clearAll();
+      
+      Get.offAllNamed('/login'); 
+      
+      Get.snackbar(
+        'Logout Berhasil',
+        'Anda telah keluar dari aplikasi',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    } catch (e) {
+      Get.snackbar(
+        'Error',
+        'Gagal logout: ${e.toString()}',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    } finally {
+      isLoading.value = false;
+    }
+  }
+  
 }

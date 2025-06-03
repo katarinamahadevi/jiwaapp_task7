@@ -63,40 +63,6 @@ Widget buildHeaderSection() {
             ],
           ),
           const SizedBox(height: 16),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              border: Border.all(color: Colors.grey.shade300),
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Row(
-              children: [
-                Image.asset(
-                  'assets/image/image_outlet.png',
-                  width: 20,
-                  height: 20,
-                ),
-                const SizedBox(width: 12),
-                const Expanded(
-                  child: Text(
-                    'KANNA HOMESTAY',
-                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-                  ),
-                ),
-                TextButton(
-                  onPressed: () => controller.navigateToOutletOptions(),
-                  child: const Text(
-                    'Ubah',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.normal,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
         ],
       ),
     ),

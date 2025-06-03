@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:jiwaapp_task7/services/cart_service.dart';
 import 'package:jiwaapp_task7/model/menu_model.dart';
+import 'package:jiwaapp_task7/controller/payment_summary_controller.dart';
 
 class CartController extends GetxController {
   final CartService _cartService = CartService();
@@ -18,6 +19,16 @@ class CartController extends GetxController {
     fetchCartItems();
   }
 
+  void _updatePaymentSummary() {
+    try {
+      final PaymentSummaryController paymentController =
+          Get.find<PaymentSummaryController>();
+      paymentController.fetchPaymentSummary();
+    } catch (e) {
+      print('PaymentSummaryController not found: $e');
+    }
+  }
+
   /// NGAMBIL DATA ITEM CART
   Future<void> fetchCartItems() async {
     try {
@@ -32,13 +43,15 @@ class CartController extends GetxController {
         _calculateCartTotals();
 
         print('Cart items fetched: ${cartItems.length}');
+        _updatePaymentSummary();
       } else {
         cartItems.clear();
         _resetCartTotals();
+        _updatePaymentSummary();
       }
     } catch (e) {
       print('Error fetching cart items: $e');
-      cartItems.clear();
+      // cartItems.clear();
       _resetCartTotals();
       if (!e.toString().contains('SocketException') &&
           !e.toString().contains('TimeoutException')) {
@@ -74,12 +87,30 @@ class CartController extends GetxController {
 
       if (categoryType == 'combo') {
         if (selectedFoodOption != null && selectedFoodOption.isNotEmpty) {
-          cartData['food_id'] = selectedFoodOption;
+          int? foodId = int.tryParse(selectedFoodOption);
+          if (foodId != null) {
+            cartData['food_id'] = foodId;
+          } else {
+            print(
+              'Error: selectedFoodOption is not a valid ID: $selectedFoodOption',
+            );
+            throw Exception('Invalid food option selected');
+          }
         }
         if (selectedDrinkOption != null && selectedDrinkOption.isNotEmpty) {
-          cartData['drink_id'] = selectedDrinkOption;
+          int? drinkId = int.tryParse(selectedDrinkOption);
+          if (drinkId != null) {
+            cartData['drink_id'] = drinkId;
+          } else {
+            print(
+              'Error: selectedDrinkOption is not a valid ID: $selectedDrinkOption',
+            );
+            throw Exception('Invalid drink option selected');
+          }
         }
       }
+
+      print('Cart data being sent: $cartData'); // Debug log
 
       final response = await _cartService.addToCart(cartData);
 
@@ -209,14 +240,12 @@ class CartController extends GetxController {
     }
   }
 
-  /// Cek apakah produk sudah ada dalam cart
   bool isProductInCart(int productId) {
     bool inCart = getCartItemByProductId(productId) != null;
     print('Product $productId is in cart: $inCart');
     return inCart;
   }
 
-  /// Ambil jumlah quantity produk tertentu di cart
   int getProductQuantityInCart(int productId) {
     var item = getCartItemByProductId(productId);
     int quantity = item?['quantity'] ?? 0;
@@ -224,7 +253,6 @@ class CartController extends GetxController {
     return quantity;
   }
 
-  /// HELPER FUNCTION UNTUK MENGHITUNG HARGA TOTAL DARI MENU MODEL
   double calculateTotalPrice(MenuModel menu) {
     String cleanPrice = menu.price.replaceAll(RegExp(r'[^\d]'), '');
     return double.tryParse(cleanPrice) ?? 0.0;

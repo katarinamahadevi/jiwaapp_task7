@@ -23,14 +23,14 @@ class CartItemModel {
 
   factory CartItemModel.fromJson(Map<String, dynamic> json) {
     return CartItemModel(
-      id: json['id'],
-      cartId: json['cart_id'],
-      productId: json['product_id'],
-      quantity: json['quantity'],
-      note: json['note'],
-      createdAt: json['created_at'],
-      updatedAt: json['updated_at'],
-      product: MenuModel.fromJson(json['product']),
+      id: json['id'] ?? 0,
+      cartId: json['cart_id'] ?? 0,
+      productId: json['product_id'] ?? 0,
+      quantity: json['quantity'] ?? 0,
+      note: json['note'] ?? '',
+      createdAt: json['created_at'] ?? '',
+      updatedAt: json['updated_at'] ?? '',
+      product: MenuModel.fromJson(json['product'] ?? {}),
     );
   }
 }

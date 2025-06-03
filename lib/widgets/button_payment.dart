@@ -2,16 +2,19 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:jiwaapp_task7/theme/color.dart';
 
-//BUTTON PILIH PEMBAYARAN DI ADD TO CART PAGE
+//BUTTON PEMBAYARAN YANG LANGSUNG KE ORDER STATUS PAGE
 
 class ButtonPayment extends StatefulWidget {
   final VoidCallback onPressed;
   final String assetPath;
-
+  final bool isLoading;
+  final bool isEnabled; 
   const ButtonPayment({
     Key? key,
     required this.onPressed,
     this.assetPath = 'assets/image/image_announcement.png',
+    this.isLoading = false,
+    this.isEnabled = true,
   }) : super(key: key);
 
   @override
@@ -156,7 +159,6 @@ class _ButtonPaymentState extends State<ButtonPayment> {
               ],
             ),
           ),
-
           Positioned(
             bottom: 0,
             left: 0,
@@ -174,19 +176,28 @@ class _ButtonPaymentState extends State<ButtonPayment> {
                 width: double.infinity,
                 height: 55,
                 child: ElevatedButton(
-                  onPressed: widget.onPressed,
+                  onPressed: widget.isEnabled && !widget.isLoading ? widget.onPressed : null,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFFE15B4C),
+                    backgroundColor: widget.isEnabled ? BaseColors.primary : Colors.grey[400],
                     foregroundColor: Colors.white,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30),
                     ),
                     elevation: 0,
                   ),
-                  child: const Text(
-                    'Pilih Pembayaran',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
+                  child: widget.isLoading
+                      ? const SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(
+                            color: Colors.white,
+                            strokeWidth: 2,
+                          ),
+                        )
+                      : const Text(
+                          'Bayar',
+                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
                 ),
               ),
             ),
@@ -196,7 +207,3 @@ class _ButtonPaymentState extends State<ButtonPayment> {
     );
   }
 }
-
-
-
-

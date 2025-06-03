@@ -6,6 +6,7 @@ import 'package:jiwaapp_task7/controller/login_controller.dart';
 import 'package:jiwaapp_task7/controller/menu_controller.dart';
 import 'package:jiwaapp_task7/controller/forget_pin_controller.dart';
 import 'package:jiwaapp_task7/controller/order_controller.dart';
+import 'package:jiwaapp_task7/controller/payment_summary_controller.dart';
 import 'package:jiwaapp_task7/controller/profile_controller.dart';
 import 'package:jiwaapp_task7/controller/referral_controller.dart';
 import 'package:jiwaapp_task7/controller/register_controller.dart';
@@ -16,6 +17,7 @@ import 'package:jiwaapp_task7/services/auth_service.dart';
 import 'package:jiwaapp_task7/services/cart_service.dart';
 import 'package:jiwaapp_task7/services/menu_service.dart';
 import 'package:jiwaapp_task7/services/forget_pin_service.dart';
+import 'package:jiwaapp_task7/services/payment_summary_service.dart';
 import 'package:jiwaapp_task7/services/referral_service.dart';
 import 'package:jiwaapp_task7/services/storage_service.dart';
 import 'package:jiwaapp_task7/services/update_pin_service.dart';
@@ -33,6 +35,8 @@ class AppBindings extends Bindings {
     Get.put(ForgetPinService(), permanent: true);
     Get.put(UpdatePinService(), permanent: true);
     Get.put(ReferralService(), permanent: true);
+        Get.put(PaymentSummaryService(), permanent: true);
+
 
 
     // CONTROLLER
@@ -46,6 +50,8 @@ class AppBindings extends Bindings {
     Get.put(UpdatePinController());
     Get.put(ReferralController());
         Get.put(OrderController());
+                Get.put(PaymentSummaryController());
+
 
   }
 }

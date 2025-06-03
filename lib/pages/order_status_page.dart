@@ -1,256 +1,415 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
+import 'package:jiwaapp_task7/controller/order_controller.dart';
 import 'package:jiwaapp_task7/theme/color.dart';
 import 'package:jiwaapp_task7/widgets/appbar_primary.dart';
 import 'package:jiwaapp_task7/widgets/button_status_payment.dart';
 import 'package:jiwaapp_task7/widgets/modal_bottom_tnc_voucher.dart';
 
-class OrderStatusPage extends StatelessWidget {
+class OrderStatusPage extends StatefulWidget {
   const OrderStatusPage({super.key});
+
+  @override
+  State<OrderStatusPage> createState() => _OrderStatusPageState();
+}
+
+class _OrderStatusPageState extends State<OrderStatusPage> {
+  late OrderController orderController;
+  int? orderId;
+
+  @override
+  void initState() {
+    super.initState();
+    orderController = Get.find<OrderController>();
+
+    final arguments = Get.arguments as Map<String, dynamic>?;
+    orderId = arguments?['orderId'];
+
+    if (orderId != null) {
+      orderController.fetchOrderDetail(orderId!);
+    }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  String _getOrderStatusText(String status) {
+    switch (status.toLowerCase()) {
+      case 'pending':
+      case 'pending payment':
+        return 'Menunggu Pembayaran';
+      case 'paid':
+        return 'Sudah Dibayar';
+      case 'processing':
+        return 'Sedang Diproses';
+      case 'ready':
+        return 'Siap Diambil';
+      case 'completed':
+        return 'Selesai';
+      case 'cancelled':
+        return 'Dibatalkan';
+      default:
+        return status;
+    }
+  }
+
+  String _getStatusDescription(String status) {
+    switch (status.toLowerCase()) {
+      case 'pending':
+      case 'pending payment':
+        return 'Silahkan buka aplikasi E-Wallet untuk menyelesaikan pembayaran kamu';
+      case 'paid':
+        return 'Pembayaran berhasil, pesanan sedang diproses';
+      case 'processing':
+        return 'Pesanan sedang dalam proses pembuatan';
+      case 'ready':
+        return 'Pesanan sudah siap untuk diambil atau diantar';
+      case 'completed':
+        return 'Pesanan telah selesai';
+      case 'cancelled':
+        return 'Pesanan telah dibatalkan';
+      default:
+        return 'Status pesanan';
+    }
+  }
+
+  String _getStatusIcon(String status) {
+    switch (status.toLowerCase()) {
+      case 'pending':
+      case 'pending payment':
+        return 'assets/image/image_awaiting_payment.png';
+      case 'paid':
+        return 'assets/image/image_paid.png';
+      case 'processing':
+        return 'assets/image/image_processing.png';
+      case 'ready':
+        return 'assets/image/image_ready.png';
+      case 'completed':
+        return 'assets/image/image_completed.png';
+      case 'cancelled':
+        return 'assets/image/image_cancelled.png';
+      default:
+        return 'assets/image/image_awaiting_payment.png';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xFFF5F5F5),
       appBar: AppbarPrimary(title: 'Detail Status Pesanan'),
-      body: Stack(
-        children: [
-          SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: 0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    margin: const EdgeInsets.all(16),
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(8),
+      body: Obx(() {
+        if (orderController.isLoadingOrderDetail) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        final order = orderController.orderDetail;
+        if (order == null) {
+          return const Center(child: Text('Order tidak ditemukan'));
+        }
+
+        return Stack(
+          children: [
+            SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.all(16),
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      _getOrderStatusText(order.orderStatus),
+                                      style: const TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 4),
+                                    Text(
+                                      _getStatusDescription(order.orderStatus),
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        color: Colors.grey[600],
+                                      ),
+                                    ),
+                                    const SizedBox(height: 20),
+                                    Row(
+                                      children: [
+                                        Text(
+                                          'ORDER ID: ${order.orderCode ?? 'N/A'}',
+                                          style: const TextStyle(
+                                            fontSize: 10,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                        const SizedBox(width: 4),
+                                        InkWell(
+                                          onTap: () {
+                                            Clipboard.setData(
+                                              ClipboardData(
+                                                text: order.orderCode ?? '',
+                                              ),
+                                            );
+                                            ScaffoldMessenger.of(
+                                              context,
+                                            ).showSnackBar(
+                                              const SnackBar(
+                                                content: Text(
+                                                  'Order ID copied to clipboard',
+                                                ),
+                                                duration: Duration(seconds: 1),
+                                              ),
+                                            );
+                                          },
+                                          child: const Icon(
+                                            Icons.copy,
+                                            size: 10,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(width: 16),
+                              Container(
+                                width: 65,
+                                height: 65,
+                                decoration: const BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: Color(0xFFE65952),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(12),
+                                  child: Image.asset(
+                                    _getStatusIcon(order.orderStatus),
+                                    fit: BoxFit.contain,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 8),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'Tanggal: ${orderController.formatDateTime(order.createdAt)}',
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 10,
+                                  color: Colors.black,
+                                ),
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  showModalBottomTNCVoucher(
+                                    context: context,
+                                    title:
+                                        "Syarat dan Ketentuan ${order.orderType}",
+                                    terms: [
+                                      'Harap pastikan alamat dan nomor telepon yang dimasukkan sudah benar dan dapat dihubungi oleh driver.',
+                                      'Customer harus mengambil produk yang dikembalikan oleh driver ke outlet jika tidak ada respons dari pembeli saat proses pengantaran. Outlet tidak berkewajiban mengantarkan kembali produk yang dikembalikan oleh driver.',
+                                      'Pesanan yang tidak diambil oleh customer apabila driver mengembalikan produk akan dianggap terjual dan tidak dapat di-refund atau digantikan.',
+                                      'Tunjukkan kode pick up kepada staf/barista saat mengambil pesanan Anda di outlet.',
+                                    ],
+                                  );
+                                },
+                                child: const Text(
+                                  'Syarat Dan Ketentuan',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 12,
+                                    color: Color(0xFFE25C4B),
+                                    decoration: TextDecoration.underline,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const Text(
-                                    'Menunggu Pembayaran',
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black,
-                                    ),
+
+                    const SizedBox(height: 16),
+                    Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 16),
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Detail ${order.orderType}',
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                            ),
+                          ),
+                          const SizedBox(height: 16),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                width: 36,
+                                height: 36,
+                                decoration: const BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: Color(0xFFE65952),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(5),
+                                  child: Image.asset(
+                                    order.orderType.toLowerCase() == 'take away'
+                                        ? 'assets/image/image_time.png'
+                                        : 'assets/image/image_delivery.png',
+                                    fit: BoxFit.contain,
                                   ),
-                                  const SizedBox(height: 4),
-                                  Text(
-                                    'Silahkan buka aplikasi E-Wallet untuk menyelesaikan pembayaran kamu',
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      color: Colors.grey[600],
+                                ),
+                              ),
+                              const SizedBox(width: 16),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      order.orderType.toLowerCase() ==
+                                              'take away'
+                                          ? 'Waktu Pick Up'
+                                          : 'Estimasi Pengiriman',
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.bold,
+                                        color: BaseColors.black,
+                                      ),
                                     ),
-                                  ),
-                                  const SizedBox(height: 20),
-                                  Row(
-                                    children: [
-                                      const Text(
-                                        'ORDER ID: J-202512617405493000001',
-                                        style: TextStyle(
-                                          fontSize: 10,
-                                          fontWeight: FontWeight.w500,
+                                    Text(
+                                      orderController.formatDateTime(
+                                        order.createdAt,
+                                      ),
+                                      style: const TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                    if (order.orderType.toLowerCase() ==
+                                            'delivery' &&
+                                        order.courier != null)
+                                      Padding(
+                                        padding: const EdgeInsets.only(top: 4),
+                                        child: Text(
+                                          'Kurir: ${order.courier}',
+                                          style: TextStyle(
+                                            fontSize: 12,
+                                            color: Colors.grey[600],
+                                          ),
                                         ),
                                       ),
-                                      const SizedBox(width: 4),
-                                      InkWell(
-                                        onTap: () {
-                                          Clipboard.setData(
-                                            ClipboardData(
-                                              text: 'J-202512617405493000001',
-                                            ),
-                                          );
-                                          ScaffoldMessenger.of(
-                                            context,
-                                          ).showSnackBar(
-                                            SnackBar(
-                                              content: Text(
-                                                'Order ID copied to clipboard',
-                                              ),
-                                              duration: Duration(seconds: 1),
-                                            ),
-                                          );
-                                        },
-                                        child: Icon(Icons.copy, size: 10),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                            const SizedBox(width: 16),
-                            Container(
-                              width: 65,
-                              height: 65,
-                              decoration: const BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Color(0xFFE65952),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(12),
-                                child: Image.asset(
-                                  'assets/image/image_awaiting_payment.png',
-                                  fit: BoxFit.contain,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 8),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'Tanggal: 30 Apr 2025 | 09:17',
-                              style: TextStyle(
-                                fontWeight: FontWeight.w500,
-                                fontSize: 10,
-                                color: Colors.black,
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                showModalBottomTNCVoucher(
-                                  context: context,
-                                  title: "Syarat dan Ketentuan Delivery",
-                                  terms: [
-                                    'Harap pastikan alamat dan nomor telepon yang dimasukkan sudah benar dan dapat dihubungi oleh driver.',
-                                    'Customer harus mengambil produk yang dikembalikan oleh driver ke outlet jika tidak ada respons dari pembeli saat proses pengantaran. Outlet tidak berkewajiban mengantarkan kembali produk yang dikembalikan oleh driver.',
-                                    'Pesanan yang tidak diambil oleh customer apabila driver mengembalikan produk akan dianggap terjual dan tidak dapat di-refund atau digantikan.',
-                                    'Tunjukkan kode pick up kepada staf/barista saat mengambil pesanan Anda di outlet.',
                                   ],
-                                );
-                              },
-                              child: Text(
-                                'Syarat Dan Ketentuan',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 12,
-                                  color: Color(0xFFE25C4B),
-                                  decoration: TextDecoration.underline,
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 16),
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'Detail Take Away',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
+                            ],
                           ),
-                        ),
-                        const SizedBox(height: 16),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Column(
-                              children: [
-                                Container(
-                                  width: 36,
-                                  height: 36,
-                                  decoration: const BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: Color(0xFFE65952),
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(5),
-                                    child: Image.asset(
-                                      'assets/image/image_outlet_delivery.png',
-                                      fit: BoxFit.contain,
-                                    ),
-                                  ),
-                                ),
-                                Container(
-                                  width: 1,
-                                  height: 60,
-                                  color: Colors.grey[300],
-                                ),
-                                Container(
-                                  width: 36,
-                                  height: 36,
-                                  decoration: const BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: Color(0xFFE65952),
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(5),
-                                    child: Image.asset(
-                                      'assets/image/image_time.png',
-                                      fit: BoxFit.contain,
-                                    ),
-                                  ),
-                                ),
-                              ],
+                        ],
+                      ),
+                    ),
+
+                    const SizedBox(height: 16),
+                    Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 16),
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'Daftar Pesanan',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
                             ),
-                            const SizedBox(width: 16),
-                            Expanded(
-                              child: Column(
+                          ),
+                          const SizedBox(height: 16),
+
+                          ...order.items.map((item) {
+                            return Padding(
+                              padding: const EdgeInsets.only(bottom: 16),
+                              child: Row(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
-                                    'Lokasi Outlet',
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      color: BaseColors.black,
-                                      fontWeight: FontWeight.bold,
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(8),
+                                    child: Image.network(
+                                      item.product.imageUrlText,
+                                      width: 80,
+                                      height: 80,
+                                      fit: BoxFit.cover,
                                     ),
                                   ),
-                                  const Text(
-                                    'BARATA',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
+                                  const SizedBox(width: 16),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          '${item.quantity}x ${item.product?.name ?? 'Unknown Item'}',
+                                          style: const TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                        if (item.note?.isNotEmpty == true) ...[
+                                          const SizedBox(height: 4),
+                                          Text(
+                                            'Note: ${item.note}',
+                                            style: TextStyle(
+                                              fontSize: 14,
+                                              color: Colors.grey[600],
+                                            ),
+                                          ),
+                                        ],
+                                      ],
                                     ),
                                   ),
-                                  Text(
-                                    'Jl. Barata Jaya 19 No 52B Surabaya',
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      color: BaseColors.black,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 40),
-                                  Text(
-                                    'Waktu Pick Up',
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.bold,
-                                      color: BaseColors.black,
-                                    ),
-                                  ),
-                                  Row(
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.end,
                                     children: [
-                                      const Text(
-                                        '30 Apr 2025 | 09.25',
-                                        style: TextStyle(
+                                      Text(
+                                        orderController.formatPrice(
+                                          item.productId * item.quantity,
+                                        ),
+                                        style: const TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.bold,
                                           color: Colors.black,
@@ -260,311 +419,163 @@ class OrderStatusPage extends StatelessWidget {
                                   ),
                                 ],
                               ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-
-                  Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 16),
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'Daftar Pesanan',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
-                          ),
-                        ),
-                        const SizedBox(height: 16),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Image.asset(
-                              'assets/image/image_menu.png',
-                              width: 80,
-                              height: 80,
-                            ),
-                            const SizedBox(width: 16),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    '1x Buy 1 Get 1 Free Minuman',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 4),
-                                  Text(
-                                    'Item 1: 1 Kopi Susu Sahabat Large',
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      color: Colors.grey[600],
-                                    ),
-                                  ),
-                                  Text(
-                                    'Item 2: 1 Kopi Susu Sahabat Large',
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      color: Colors.grey[600],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 16),
-                        Column(
-                          children: [
-                            Text(
-                              'Rp25.000',
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                              ),
-                            ),
-                            Text(
-                              'Rp48.000',
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: Colors.red,
-                                decoration: TextDecoration.lineThrough,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 16),
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'Ringkasan Pembayaran',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
-                          ),
-                        ),
-                        const SizedBox(height: 16),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'Subtotal',
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: Colors.black,
-                              ),
-                            ),
-                            Text(
-                              'Rp25.000',
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500,
-                                color: Colors.black,
-                              ),
-                            ),
-                          ],
-                        ),
-
-                        const SizedBox(height: 16),
-                        Divider(color: Colors.grey[300]),
-                        const SizedBox(height: 16),
-
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'Total Pembayaran',
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                              ),
-                            ),
-                            Text(
-                              'Rp41.500',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 12),
-                      ],
-                    ),
-                  ),
-
-                  const SizedBox(height: 12),
-                  Container(
-                    margin: const EdgeInsets.all(16),
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'Metode Pembayaran',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        const SizedBox(height: 16),
-                        Row(
-                          children: [
-                            SizedBox(
-                              width: 30,
-                              height: 30,
-                              child: Image.asset(
-                                'assets/logo/logo_ovo.png',
-                                fit: BoxFit.contain,
-                              ),
-                            ),
-                            const SizedBox(width: 12),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: const [
-                                  Text(
-                                    'OVO',
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                  Text(
-                                    '+6282231166895',
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      color: Colors.grey,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            const Text(
-                              'Rp31.772',
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.normal,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const Padding(
-                          padding: EdgeInsets.symmetric(vertical: 8),
-                          child: Divider(height: 1, color: BaseColors.border),
-                        ),
-                        Row(
-                          children: [
-                            SizedBox(
-                              width: 30,
-                              height: 30,
-                              child: Image.asset(
-                                'assets/image/image_jiwapoint_white.png',
-                                fit: BoxFit.contain,
-                              ),
-                            ),
-                            const SizedBox(width: 12),
-                            const Expanded(
-                              child: Text(
-                                'Jiwa Point',
-                                style: TextStyle(fontSize: 14),
-                              ),
-                            ),
-                            const Text(
-                              '9.728',
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.normal,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 200),
-                ],
-              ),
-            ),
-          ),
-          Positioned(
-            left: 0,
-            right: 0,
-            bottom: 0,
-            child: ButtonStatusPayment(
-              timeoutSeconds: 270, 
-              onCancelPayment: () {
-                showDialog(
-                  context: context,
-                  builder:
-                      (context) => AlertDialog(
-                        title: const Text('Konfirmasi'),
-                        content: const Text(
-                          'Apakah Anda yakin ingin membatalkan pembayaran?',
-                        ),
-                        actions: [
-                          TextButton(
-                            onPressed: () => Navigator.pop(context),
-                            child: const Text('Tidak'),
-                          ),
-                          TextButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            child: const Text('Ya'),
-                          ),
+                            );
+                          }).toList(),
                         ],
                       ),
-                );
-              },
-              onContinuePayment: () {
-                // Handle continue payment
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Melanjutkan ke pembayaran...'),
-                    duration: Duration(seconds: 2),
-                  ),
-                );
-                // Navigate to payment gateway or next step
-              },
+                    ),
+
+                    const SizedBox(height: 16),
+
+                    Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 16),
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'Ringkasan Pembayaran',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                            ),
+                          ),
+                          const SizedBox(height: 16),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Text(
+                                'Subtotal',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.black,
+                                ),
+                              ),
+                              Text(
+                                orderController.formatPrice(
+                                  order.subtotalPrice,
+                                ),
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ],
+                          ),
+
+                          if (order.deliveryFee != null &&
+                              order.deliveryFee! > 0) ...[
+                            const SizedBox(height: 8),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const Text(
+                                  'Ongkos Kirim',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                Text(
+                                  orderController.formatPrice(
+                                    order.deliveryFee!,
+                                  ),
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+
+                          const SizedBox(height: 16),
+                          Divider(color: Colors.grey[300]),
+                          const SizedBox(height: 16),
+
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Text(
+                                'Total Pembayaran',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                ),
+                              ),
+                              Text(
+                                orderController.formatPrice(order.totalPrice),
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 12),
+                        ],
+                      ),
+                    ),
+
+                    const SizedBox(height: 12),
+                    const SizedBox(height: 200),
+                  ],
+                ),
+              ),
             ),
-          ),
-        ],
-      ),
+            if (order.orderStatus.toLowerCase().contains('pending'))
+              Positioned(
+                left: 0,
+                right: 0,
+                bottom: 0,
+                child: ButtonStatusPayment(
+                  timeoutSeconds: 270,
+                  onCancelPayment: () {
+                    showDialog(
+                      context: context,
+                      builder:
+                          (context) => AlertDialog(
+                            title: const Text('Konfirmasi'),
+                            content: const Text(
+                              'Apakah Anda yakin ingin membatalkan pembayaran?',
+                            ),
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.pop(context),
+                                child: const Text('Tidak'),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                child: const Text('Ya'),
+                              ),
+                            ],
+                          ),
+                    );
+                  },
+                  onContinuePayment: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Melanjutkan ke pembayaran...'),
+                        duration: Duration(seconds: 2),
+                      ),
+                    );
+                  },
+                ),
+              ),
+          ],
+        );
+      }),
     );
   }
 }

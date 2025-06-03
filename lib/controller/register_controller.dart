@@ -171,10 +171,6 @@ class RegisterController extends GetxController {
       return false;
     }
 
-    // if (email.value.isEmpty) {
-    //   Get.snackbar('Error', 'lid');
-    //   return false;
-    // }
 
     return true;
   }

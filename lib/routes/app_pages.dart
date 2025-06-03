@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:jiwaapp_task7/main.dart';
 import 'package:jiwaapp_task7/pages/address_page.dart/delivery_page.dart';
 import 'package:jiwaapp_task7/pages/auth_page/login_page.dart';
 import 'package:jiwaapp_task7/pages/auth_page/pin_verification_login_page.dart';
@@ -18,5 +19,7 @@ class AppPages {
     GetPage(name: AppRoutes.deliverypage, page: () => DeliveryPage()),
     GetPage(name: AppRoutes.profilepage, page: () => ProfilePage()),
     GetPage(name: AppRoutes.menupage, page: () => MenuPage()),
+        GetPage(name: AppRoutes.splash, page: () => SplashScreen()),
+
   ];
 }

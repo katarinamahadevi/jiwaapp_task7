@@ -5,6 +5,8 @@ class AppRoutes {
   static const detailmenupage = '/detailmenupage';
   static const deliverypage = '/deliverypage';
   static const profilepage = '/profile';
-    static const menupage = '/menu';
+  static const menupage = '/menu';
+  static const splash = '/splash';
+
 
 }
