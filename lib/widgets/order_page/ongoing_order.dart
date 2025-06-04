@@ -1,14 +1,56 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jiwaapp_task7/controller/order_controller.dart';
+import 'package:jiwaapp_task7/model/order_model.dart';
 import 'package:jiwaapp_task7/pages/order_status_page.dart';
 import 'package:jiwaapp_task7/theme/color.dart';
 
-class OngoingOrder extends StatelessWidget {
+class OngoingOrder extends StatefulWidget {
+  @override
+  State<OngoingOrder> createState() => _OngoingOrderState();
+}
+
+class _OngoingOrderState extends State<OngoingOrder> {
+  late ScrollController _scrollController;
+  late OrderController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController = ScrollController();
+
+    // Get the controller instance
+    if (Get.isRegistered<OrderController>()) {
+      controller = Get.find<OrderController>();
+    } else {
+      controller = Get.put(OrderController());
+    }
+
+    // Add scroll listener for pagination
+    _scrollController.addListener(_onScroll);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.removeListener(_onScroll);
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _onScroll() {
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent * 0.8) {
+      if (controller.hasMoreData && !controller.isLoadingOrders) {
+        print('Loading more ongoing orders...');
+        controller.fetchOngoingOrders(refresh: false);
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return GetBuilder<OrderController>(
-      init: OrderController(),
+      init: controller,
       builder: (controller) {
         return Obx(() {
           if (controller.isLoadingOrders && controller.ongoingOrders.isEmpty) {
@@ -20,13 +62,22 @@ class OngoingOrder extends StatelessWidget {
             );
           }
 
-          if (controller.ongoingOrders.isEmpty) {
-            return const Center(
-              child: Padding(
-                padding: EdgeInsets.all(20.0),
-                child: Text(
-                  'No ongoing orders',
-                  style: TextStyle(fontSize: 16, color: Colors.grey),
+          if (controller.ongoingOrders.isEmpty && !controller.isLoadingOrders) {
+            return RefreshIndicator(
+              onRefresh: () => controller.fetchOngoingOrders(refresh: true),
+              child: SingleChildScrollView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                child: Container(
+                  height: MediaQuery.of(context).size.height * 0.6,
+                  child: const Center(
+                    child: Padding(
+                      padding: EdgeInsets.all(20.0),
+                      child: Text(
+                        'No ongoing orders',
+                        style: TextStyle(fontSize: 16, color: Colors.grey),
+                      ),
+                    ),
+                  ),
                 ),
               ),
             );
@@ -34,23 +85,33 @@ class OngoingOrder extends StatelessWidget {
 
           return RefreshIndicator(
             onRefresh: () => controller.fetchOngoingOrders(refresh: true),
-            child: Column(
-              children: [
-                ...controller.ongoingOrders.map((order) {
-                  return Column(
-                    children: [
-                      OngoingOrderCard(order: order, controller: controller),
-                      const SizedBox(height: 16),
-                    ],
+            child: ListView.builder(
+              controller: _scrollController,
+              physics: const AlwaysScrollableScrollPhysics(),
+              padding: const EdgeInsets.only(
+                bottom: 100,
+              ), // Space for bottom nav
+              itemCount:
+                  controller.ongoingOrders.length +
+                  (controller.hasMoreData ? 1 : 0),
+              itemBuilder: (context, index) {
+                if (index == controller.ongoingOrders.length) {
+                  return Container(
+                    padding: const EdgeInsets.all(16.0),
+                    alignment: Alignment.center,
+                    child:
+                        controller.isLoadingOrders
+                            ? const CircularProgressIndicator()
+                            : const SizedBox.shrink(),
                   );
-                }).toList(),
-                if (controller.isLoadingOrders)
-                  const Padding(
-                    padding: EdgeInsets.all(16.0),
-                    child: CircularProgressIndicator(),
-                  ),
-                const SizedBox(height: 80),
-              ],
+                }
+
+                final OrderModel order = controller.ongoingOrders[index];
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 16.0),
+                  child: OngoingOrderCard(order: order, controller: controller),
+                );
+              },
             ),
           );
         });
@@ -60,7 +121,7 @@ class OngoingOrder extends StatelessWidget {
 }
 
 class OngoingOrderCard extends StatelessWidget {
-  final dynamic order;
+  final OrderModel order;
   final OrderController controller;
 
   const OngoingOrderCard({
@@ -145,7 +206,7 @@ class OngoingOrderCard extends StatelessWidget {
                   ],
                 ),
                 Text(
-                  controller.formatPrice(order.totalPrice),
+                  _formatOrderPrice(order.subtotalPrice),
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 14,
@@ -177,7 +238,10 @@ class OngoingOrderCard extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(width: 4),
-                      const Icon(Icons.copy, size: 14),
+                      GestureDetector(
+                        onTap: () => _copyOrderCode(order.orderCode),
+                        child: const Icon(Icons.copy, size: 14),
+                      ),
                     ],
                   ),
                 ),
@@ -224,7 +288,7 @@ class OngoingOrderCard extends StatelessWidget {
                   const SizedBox(width: 8),
                   const Expanded(
                     child: Text(
-                      'Alamat pengiriman tersedia', // You might want to fetch actual address
+                      'Alamat pengiriman tersedia',
                       style: TextStyle(fontSize: 14, color: Colors.black87),
                       overflow: TextOverflow.ellipsis,
                       maxLines: 2,
@@ -240,17 +304,7 @@ class OngoingOrderCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => OrderStatusPage(),
-                        settings: RouteSettings(
-                          arguments: {'orderId': order.id},
-                        ),
-                      ),
-                    );
-                  },
+                  onPressed: () => _navigateToOrderStatus(context, order.id),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: BaseColors.primary,
                     foregroundColor: Colors.white,
@@ -273,17 +327,7 @@ class OngoingOrderCard extends StatelessWidget {
                   ),
                 ),
                 ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => OrderStatusPage(),
-                        settings: RouteSettings(
-                          arguments: {'orderId': order.id},
-                        ),
-                      ),
-                    );
-                  },
+                  onPressed: () => _navigateToOrderStatus(context, order.id),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: BaseColors.primary,
                     foregroundColor: Colors.white,
@@ -306,6 +350,32 @@ class OngoingOrderCard extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  String _formatOrderPrice(int price) {
+    return 'Rp${price.toString().replaceAllMapped(RegExp(r'(\d)(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]}.')}';
+  }
+
+  void _copyOrderCode(String? orderCode) {
+    if (orderCode != null) {
+      // Implement copy to clipboard functionality
+      Get.snackbar(
+        'Copied',
+        'Order code copied to clipboard',
+        snackPosition: SnackPosition.BOTTOM,
+        duration: const Duration(seconds: 2),
+      );
+    }
+  }
+
+  void _navigateToOrderStatus(BuildContext context, int orderId) {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => OrderStatusPage(),
+        settings: RouteSettings(arguments: {'orderId': orderId}),
       ),
     );
   }

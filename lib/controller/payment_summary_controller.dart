@@ -9,6 +9,7 @@ class PaymentSummaryController extends GetxController {
   var isLoading = false.obs;
   var errorMessage = ''.obs;
 
+  /// Fetch summary untuk cart
   Future<void> fetchPaymentSummary() async {
     try {
       isLoading.value = true;
@@ -22,4 +23,18 @@ class PaymentSummaryController extends GetxController {
       isLoading.value = false;
     }
   }
+
+  // Future<void> fetchPaymentSummaryByOrderId(int orderId) async {
+  //   try {
+  //     isLoading.value = true;
+  //     errorMessage.value = '';
+
+  //     final data = await _service.fetchPaymentSummaryByOrderId(orderId);
+  //     paymentSummary.value = PaymentSummaryModel.fromJson(data['summary']);
+  //   } catch (e) {
+  //     errorMessage.value = e.toString();
+  //   } finally {
+  //     isLoading.value = false;
+  //   }
+  // }
 }

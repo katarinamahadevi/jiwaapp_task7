@@ -41,7 +41,7 @@ class _OrderStatusPageState extends State<OrderStatusPage> {
       case 'pending':
       case 'pending payment':
         return 'Menunggu Pembayaran';
-      case 'paid':
+      case 'completed':
         return 'Sudah Dibayar';
       case 'processing':
         return 'Sedang Diproses';
@@ -61,7 +61,7 @@ class _OrderStatusPageState extends State<OrderStatusPage> {
       case 'pending':
       case 'pending payment':
         return 'Silahkan buka aplikasi E-Wallet untuk menyelesaikan pembayaran kamu';
-      case 'paid':
+      case 'completed':
         return 'Pembayaran berhasil, pesanan sedang diproses';
       case 'processing':
         return 'Pesanan sedang dalam proses pembuatan';
@@ -81,16 +81,16 @@ class _OrderStatusPageState extends State<OrderStatusPage> {
       case 'pending':
       case 'pending payment':
         return 'assets/image/image_awaiting_payment.png';
-      case 'paid':
-        return 'assets/image/image_paid.png';
-      case 'processing':
-        return 'assets/image/image_processing.png';
-      case 'ready':
-        return 'assets/image/image_ready.png';
       case 'completed':
-        return 'assets/image/image_completed.png';
+        return 'assets/image/image_awaiting_payment.png';
+      case 'processing':
+        return 'assets/image/image_awaiting_payment.png';
+      case 'ready':
+        return 'assets/image/image_awaiting_payment.png';
+      case 'completed':
+        return 'assets/image/image_awaiting_payment.png';
       case 'cancelled':
-        return 'assets/image/image_cancelled.png';
+        return 'assets/image/image_awaiting_payment.png';
       default:
         return 'assets/image/image_awaiting_payment.png';
     }
@@ -556,20 +556,19 @@ class _OrderStatusPageState extends State<OrderStatusPage> {
                               TextButton(
                                 onPressed: () {
                                   Navigator.pop(context);
+                                  orderController.cancelPayment(order.id);
                                 },
-                                child: const Text('Ya'),
+                                child: const Text(
+                                  'Ya',
+                                  style: TextStyle(color: Colors.red),
+                                ),
                               ),
                             ],
                           ),
                     );
                   },
                   onContinuePayment: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Melanjutkan ke pembayaran...'),
-                        duration: Duration(seconds: 2),
-                      ),
-                    );
+                    orderController.processPayment(order.id);
                   },
                 ),
               ),

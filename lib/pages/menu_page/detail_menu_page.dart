@@ -5,7 +5,7 @@ import 'package:jiwaapp_task7/controller/cart_controller.dart';
 import 'package:jiwaapp_task7/model/menu_model.dart';
 import 'package:jiwaapp_task7/pages/menu_page/menu_page.dart';
 import 'package:jiwaapp_task7/theme/color.dart';
-import 'package:jiwaapp_task7/widgets/item_option.dart';
+import 'package:jiwaapp_task7/widgets/menu_page/item_option.dart';
 
 class DetailMenuPage extends StatelessWidget {
   final MenuModel menu;

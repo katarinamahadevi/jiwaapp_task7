@@ -14,4 +14,15 @@ class PaymentSummaryService {
       );
     }
   }
+  
+  Future<Map<String, dynamic>> fetchPaymentSummaryByOrderId(int orderId) async {
+    try {
+      final response = await _apiClient.dio.get('/auth/orders/$orderId/summary');
+      return response.data;
+    } on DioException catch (e) {
+      throw Exception(
+        e.response?.data['message'] ?? 'Failed to fetch payment summary for order',
+      );
+    }
+  }
 }

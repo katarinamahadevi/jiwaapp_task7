@@ -5,6 +5,7 @@ import 'package:jiwaapp_task7/model/order_model.dart';
 import 'package:jiwaapp_task7/pages/address_page.dart/delivery_page.dart';
 import 'package:jiwaapp_task7/pages/menu_page/menu_page.dart';
 import 'package:jiwaapp_task7/pages/order_status_page.dart';
+import 'package:jiwaapp_task7/pages/payment_webview_page.dart';
 import 'package:jiwaapp_task7/services/courier_service.dart';
 import 'package:jiwaapp_task7/services/order_service.dart';
 import 'package:jiwaapp_task7/services/cart_service.dart';
@@ -25,9 +26,13 @@ class OrderController extends GetxController {
 
   final _ongoingOrders = <OrderModel>[].obs;
   final _orderHistory = <OrderModel>[].obs;
-  final _isLoadingOrders = false.obs;
-  final _currentPage = 1.obs;
-  final _hasMoreData = true.obs;
+  
+  final _isLoadingOngoingOrders = false.obs;
+  final _isLoadingOrderHistory = false.obs;
+  final _ongoingCurrentPage = 1.obs;
+  final _historyCurrentPage = 1.obs;
+  final _ongoingHasMoreData = true.obs;
+  final _historyHasMoreData = true.obs;
 
   final CourierService _courierService = CourierService();
   final OrderService _orderService = OrderService();
@@ -35,7 +40,12 @@ class OrderController extends GetxController {
 
   bool get isLoadingCouriers => _isLoadingCouriers.value;
   bool get isProcessingOrder => _isProcessingOrder.value;
-  bool get isLoadingOrders => _isLoadingOrders.value;
+  
+  bool get isLoadingOngoingOrders => _isLoadingOngoingOrders.value;
+  bool get isLoadingOrderHistory => _isLoadingOrderHistory.value;
+  
+  bool get isLoadingOrders => _isLoadingOngoingOrders.value || _isLoadingOrderHistory.value;
+  
   List<CourierModel> get couriers => _couriers;
   CourierModel? get selectedCourier => _selectedCourier.value;
   bool get isTakeAwaySelected => _isTakeAwaySelected.value;
@@ -44,7 +54,12 @@ class OrderController extends GetxController {
   OrderModel? get currentOrder => _currentOrder.value;
   List<OrderModel> get ongoingOrders => _ongoingOrders;
   List<OrderModel> get orderHistory => _orderHistory;
-  bool get hasMoreData => _hasMoreData.value;
+  
+  bool get ongoingHasMoreData => _ongoingHasMoreData.value;
+  bool get historyHasMoreData => _historyHasMoreData.value;
+  
+  bool get hasMoreData => _historyHasMoreData.value;
+  
   OrderModel? get orderDetail => _orderDetail.value;
   bool get isLoadingOrderDetail => _isLoadingOrderDetail.value;
 
@@ -67,74 +82,86 @@ class OrderController extends GetxController {
     }
   }
 
-  //MENGAMBIL DATA ONGOING ORDER
   Future<void> fetchOngoingOrders({bool refresh = false}) async {
     if (refresh) {
-      _currentPage.value = 1;
-      _hasMoreData.value = true;
+      _ongoingCurrentPage.value = 1;
+      _ongoingHasMoreData.value = true;
       _ongoingOrders.clear();
     }
-
-    if (_isLoadingOrders.value || !_hasMoreData.value) return;
+    
+    if (_isLoadingOngoingOrders.value || !_ongoingHasMoreData.value) return;
 
     try {
-      _isLoadingOrders.value = true;
+      _isLoadingOngoingOrders.value = true;
+      print('Fetching ongoing orders - Page: ${_ongoingCurrentPage.value}, Refresh: $refresh');
 
-      final response = await _orderService.getOrders(page: _currentPage.value);
+      final response = await _orderService.getOrders(page: _ongoingCurrentPage.value);
 
       if (response.statusCode == 200 && response.data != null) {
         final data = response.data['orders'];
         if (data != null && data['data'] != null) {
           List<dynamic> ordersData = data['data'];
-          List<OrderModel> fetchedOrders =
-              ordersData
-                  .map((orderJson) => OrderModel.fromJson(orderJson))
-                  .where((order) => _isOngoingOrder(order.orderStatus))
-                  .toList();
+          List<OrderModel> fetchedOrders = ordersData
+              .map((orderJson) => OrderModel.fromJson(orderJson))
+              .where((order) => _isOngoingOrder(order.orderStatus))
+              .toList();
+
+          print('Fetched ${fetchedOrders.length} ongoing orders from page ${_ongoingCurrentPage.value}');
 
           if (refresh) {
             _ongoingOrders.assignAll(fetchedOrders);
           } else {
             _ongoingOrders.addAll(fetchedOrders);
           }
-          _hasMoreData.value = data['next_page_url'] != null;
-          if (_hasMoreData.value) {
-            _currentPage.value++;
+
+          _ongoingHasMoreData.value = data['next_page_url'] != null;
+          if (_ongoingHasMoreData.value) {
+            _ongoingCurrentPage.value++;
           }
+        } else {
+          _ongoingHasMoreData.value = false;
         }
+      } else {
+        _ongoingHasMoreData.value = false;
       }
     } catch (e) {
       print('Error fetching ongoing orders: $e');
       showSnackbar('Failed to load ongoing orders: $e', isError: true);
+      _ongoingHasMoreData.value = false;
     } finally {
-      _isLoadingOrders.value = false;
+      _isLoadingOngoingOrders.value = false;
     }
   }
 
-  // FETCH ORDER HISTORY
   Future<void> fetchOrderHistory({bool refresh = false}) async {
     if (refresh) {
-      _currentPage.value = 1;
-      _hasMoreData.value = true;
+      _historyCurrentPage.value = 1;
+      _historyHasMoreData.value = true;
       _orderHistory.clear();
     }
 
-    if (_isLoadingOrders.value || !_hasMoreData.value) return;
+    if (_isLoadingOrderHistory.value || !_historyHasMoreData.value) return;
 
     try {
-      _isLoadingOrders.value = true;
+      _isLoadingOrderHistory.value = true;
+      print('Fetching order history - Page: ${_historyCurrentPage.value}, Refresh: $refresh');
 
-      final response = await _orderService.getOrders(page: _currentPage.value);
+      final response = await _orderService.getOrders(page: _historyCurrentPage.value);
 
       if (response.statusCode == 200 && response.data != null) {
         final data = response.data['orders'];
         if (data != null && data['data'] != null) {
           List<dynamic> ordersData = data['data'];
-          List<OrderModel> fetchedOrders =
-              ordersData
-                  .map((orderJson) => OrderModel.fromJson(orderJson))
-                  .where((order) => !_isOngoingOrder(order.orderStatus))
-                  .toList();
+          List<OrderModel> fetchedOrders = ordersData
+              .map((orderJson) => OrderModel.fromJson(orderJson))
+              .where((order) => _isCompletedOrder(order.orderStatus))
+              .toList();
+
+          print('Fetched ${fetchedOrders.length} history orders from page ${_historyCurrentPage.value}');
+
+          for (var order in fetchedOrders) {
+            print('History Order: ${order.orderCode} - Status: ${order.orderStatus}');
+          }
 
           if (refresh) {
             _orderHistory.assignAll(fetchedOrders);
@@ -142,47 +169,56 @@ class OrderController extends GetxController {
             _orderHistory.addAll(fetchedOrders);
           }
 
-          // Check if there's more data
-          _hasMoreData.value = data['next_page_url'] != null;
-          if (_hasMoreData.value) {
-            _currentPage.value++;
+          _historyHasMoreData.value = data['next_page_url'] != null;
+          if (_historyHasMoreData.value) {
+            _historyCurrentPage.value++;
           }
+        } else {
+          _historyHasMoreData.value = false;
         }
+      } else {
+        _historyHasMoreData.value = false;
       }
     } catch (e) {
       print('Error fetching order history: $e');
       showSnackbar('Failed to load order history: $e', isError: true);
+      _historyHasMoreData.value = false;
     } finally {
-      _isLoadingOrders.value = false;
+      _isLoadingOrderHistory.value = false;
     }
   }
 
   bool _isOngoingOrder(String status) {
-    const ongoingStatuses = ['Pending'];
+    const ongoingStatuses = [
+      'Pending',
+      'Processing', 
+      'Confirmed',
+      'Preparing',
+      'Ready',
+      'On Delivery',
+    ];
     return ongoingStatuses.contains(status);
   }
 
+  bool _isCompletedOrder(String status) {
+    const completedStatuses = [
+      'Completed',
+      'Cancelled',
+      'Failed',
+    ];
+    return completedStatuses.contains(status);
+  }
+
   String formatPrice(int price) {
-    return 'Rp${totalPrice.toString().replaceAllMapped(RegExp(r'(\d)(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]}.')}';
+    return 'Rp${price.toString().replaceAllMapped(RegExp(r'(\d)(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]}.')}';
   }
 
   String formatDateTime(String dateTimeString) {
     try {
       final dateTime = DateTime.parse(dateTimeString);
       final months = [
-        '',
-        'Jan',
-        'Feb',
-        'Mar',
-        'Apr',
-        'May',
-        'Jun',
-        'Jul',
-        'Aug',
-        'Sep',
-        'Oct',
-        'Nov',
-        'Dec',
+        '', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+        'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
       ];
 
       final day = dateTime.day.toString().padLeft(2, '0');
@@ -197,14 +233,12 @@ class OrderController extends GetxController {
     }
   }
 
-  //ICON DELIVERY DAN TAKE AWAY
   String getDeliveryIconAsset(String orderType) {
     return orderType.toLowerCase() == 'delivery'
         ? 'assets/image/image_take_away.png'
         : 'assets/image/image_delivery.png';
   }
 
-  // BUAT TOGGLE DELIVERY DAN TAKEAWAY KESIMPEN DI API POST
   Future<void> toggleDeliveryOption(bool isTakeAway) async {
     try {
       _isTakeAwaySelected.value = isTakeAway;
@@ -223,7 +257,6 @@ class OrderController extends GetxController {
     }
   }
 
-  // TAKEAWAY TIDAK PERLU ADDRESS DAN KURIR
   bool _canCreateOrder() {
     if (_isTakeAwaySelected.value) {
       return _orderItems.isNotEmpty;
@@ -234,23 +267,13 @@ class OrderController extends GetxController {
     }
   }
 
-  // MEMBUAT PESANAN (PAKE API POST ORDER)
   Future<void> _createOrUpdateOrder() async {
     final orderType = _isTakeAwaySelected.value ? 'Take Away' : 'Delivery';
-    final courier =
-        _isTakeAwaySelected.value
-            ? 'none'
-            : (_selectedCourier.value?.name ?? 'none');
-    final deliveryFee =
-        _isTakeAwaySelected.value
-            ? 0.0
-            : (_selectedCourier.value?.fee.toDouble() ?? 0.0);
-
+    final courier = _isTakeAwaySelected.value ? 'none' : (_selectedCourier.value?.name ?? 'none');
+    final deliveryFee = _isTakeAwaySelected.value ? 0.0 : (_selectedCourier.value?.fee.toDouble() ?? 0.0);
     final addressId = _isTakeAwaySelected.value ? 0 : _selectedAddressId.value;
 
-    print(
-      'Creating order with type: $orderType, addressId: $addressId, courier: $courier, deliveryFee: $deliveryFee',
-    );
+    print('Creating order with type: $orderType, addressId: $addressId, courier: $courier, deliveryFee: $deliveryFee');
 
     final order = await _orderService.createOrder(
       addressId: addressId,
@@ -269,7 +292,6 @@ class OrderController extends GetxController {
     await fetchOngoingOrders(refresh: true);
   }
 
-  // UNTUK MILIH ALAMAT
   Future<void> setSelectedAddress(int addressId) async {
     print('Setting selected address: $addressId');
     _selectedAddressId.value = addressId;
@@ -282,15 +304,12 @@ class OrderController extends GetxController {
     if (!_isTakeAwaySelected.value && _canCreateOrder()) {
       print('Auto creating order with selected address...');
       await _createOrUpdateOrder();
-    } else if (!_isTakeAwaySelected.value &&
-        _selectedCourier.value == null &&
-        _couriers.isNotEmpty) {
+    } else if (!_isTakeAwaySelected.value && _selectedCourier.value == null && _couriers.isNotEmpty) {
       print('Auto selecting first courier...');
       selectCourier(_couriers.first);
     }
   }
 
-  // GET CART DI ORDER (DETAIL PESANAN)
   Future<void> loadOrderItemsFromCart() async {
     try {
       final response = await _cartService.getCartItems();
@@ -347,13 +366,12 @@ class OrderController extends GetxController {
   }
 
   double _parsePrice(String priceStr) {
-    String cleanPrice =
-        priceStr
-            .replaceAll('Rp', '')
-            .replaceAll('.', '')
-            .replaceAll(',', '')
-            .replaceAll(' ', '')
-            .trim();
+    String cleanPrice = priceStr
+        .replaceAll('Rp', '')
+        .replaceAll('.', '')
+        .replaceAll(',', '')
+        .replaceAll(' ', '')
+        .trim();
     return double.tryParse(cleanPrice) ?? 0.0;
   }
 
@@ -444,9 +462,7 @@ class OrderController extends GetxController {
       print('Couriers loaded: ${result.length}');
 
       _couriers.assignAll(result);
-      if (_selectedCourier.value == null &&
-          result.isNotEmpty &&
-          !_isTakeAwaySelected.value) {
+      if (_selectedCourier.value == null && result.isNotEmpty && !_isTakeAwaySelected.value) {
         selectCourier(result.first);
         print('Default courier selected: ${result.first.name}');
       }
@@ -497,5 +513,73 @@ class OrderController extends GetxController {
       backgroundColor: isError ? Colors.red : Colors.green,
       colorText: Colors.white,
     );
+  }
+
+  Future<void> processPayment(int orderId) async {
+    try {
+      _isProcessingOrder.value = true;
+      showSnackbar('Memproses pembayaran...');
+
+      final response = await _orderService.generatePayment(orderId);
+
+      if (response.statusCode == 200 && response.data != null) {
+        final paymentData = response.data;
+        final paymentUrl = response.data['url'];
+
+        if (paymentUrl != null) {
+          final result = await Get.to(
+            () => PaymentWebViewPage(paymentUrl: paymentUrl, orderId: orderId),
+          );
+
+          if (result != null && result is Map<String, dynamic>) {
+            final status = result['status'];
+
+            switch (status) {
+              case 'success':
+                showSnackbar('Pembayaran berhasil!');
+                await fetchOrderDetail(orderId);
+                break;
+              case 'failed':
+                showSnackbar('Pembayaran gagal. Silakan coba lagi.', isError: true);
+                break;
+              case 'cancelled':
+                showSnackbar('Pembayaran dibatalkan.', isError: true);
+                break;
+            }
+          }
+        } else {
+          throw Exception('Payment URL not found in response');
+        }
+      } else {
+        throw Exception('Failed to generate payment');
+      }
+    } catch (e) {
+      print('Error processing payment: $e');
+      showSnackbar('Gagal memproses pembayaran: $e', isError: true);
+    } finally {
+      _isProcessingOrder.value = false;
+    }
+  }
+
+  Future<void> cancelPayment(int orderId) async {
+    try {
+      _isProcessingOrder.value = true;
+      showSnackbar('Membatalkan pembayaran...');
+
+      final response = await _orderService.cancelPayment(orderId);
+
+      if (response.statusCode == 200) {
+        showSnackbar('Pembayaran berhasil dibatalkan');
+        await fetchOrderDetail(orderId);
+        Get.back();
+      } else {
+        throw Exception('Failed to cancel payment');
+      }
+    } catch (e) {
+      print('Error cancelling payment: $e');
+      showSnackbar('Gagal membatalkan pembayaran: $e', isError: true);
+    } finally {
+      _isProcessingOrder.value = false;
+    }
   }
 }

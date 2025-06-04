@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Jiwa Coffee App',
       initialBinding: AppBindings(),
-      home: SplashScreen(), 
+      home: SplashScreen(),
       getPages: AppPages.pages,
     );
   }
@@ -42,11 +42,11 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Future<void> _checkLoginStatus() async {
-    await Future.delayed(Duration(seconds: 2)); 
+    await Future.delayed(Duration(seconds: 2));
 
     try {
       final token = await _storageService.getToken();
-      
+
       if (token != null && token.isNotEmpty) {
         try {
           await _authService.getCurrentUser();

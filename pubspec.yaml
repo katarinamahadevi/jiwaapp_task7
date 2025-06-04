@@ -29,6 +29,7 @@ dependencies:
   adaptive_theme: ^3.7.0
   pretty_dio_logger: ^1.4.0
   shared_preferences: ^2.5.3
+  webview_flutter: ^4.13.0
 
 dev_dependencies:
   flutter_test:

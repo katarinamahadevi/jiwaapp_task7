@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:jiwaapp_task7/controller/notification_controller.dart';
+import 'package:jiwaapp_task7/services/api_client.dart';
+import 'package:jiwaapp_task7/services/notification_service.dart';
 import 'package:jiwaapp_task7/theme/color.dart';
 import 'package:jiwaapp_task7/widgets/appbar_secondary.dart';
 import 'package:jiwaapp_task7/widgets/notification_page/notification_item.dart';
@@ -15,61 +19,16 @@ class NotificationPage extends StatefulWidget {
 class _NotificationPageState extends State<NotificationPage>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
-
-  void showTopNotification(BuildContext context) {
-    final overlay = Overlay.of(context);
-    final overlayEntry = OverlayEntry(
-      builder:
-          (context) => Positioned(
-            top: MediaQuery.of(context).padding.top + 16,
-            left: 16,
-            right: 16,
-            child: Material(
-              color: Colors.transparent,
-              child: Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 12,
-                ),
-                decoration: BoxDecoration(
-                  color: Color(0xFF4CAF50),
-                  borderRadius: BorderRadius.circular(30),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black26,
-                      blurRadius: 6,
-                      offset: Offset(0, 3),
-                    ),
-                  ],
-                ),
-                child: Row(
-                  children: const [
-                    Icon(Icons.check_circle, color: Colors.white),
-                    SizedBox(width: 12),
-                    Expanded(
-                      child: Text(
-                        'Berhasil membaca semua notifikasi',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-    );
-
-    overlay.insert(overlayEntry);
-
-    Future.delayed(Duration(seconds: 2), () {
-      overlayEntry.remove();
-    });
-  }
+  late NotificationController _controller;
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
+
+    final apiClient = ApiClient();
+    final notificationService = NotificationService(apiClient);
+    _controller = Get.put(NotificationController(notificationService));
   }
 
   @override
@@ -87,7 +46,10 @@ class _NotificationPageState extends State<NotificationPage>
         iconColor: BaseColors.primary,
         rightIcon: Icons.checklist,
         onRightIconPressed: () {
-          showTopNotification(context);
+          // contoh fungsi, bisa kamu ganti
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Berhasil membaca semua notifikasi')),
+          );
         },
       ),
       body: Column(
@@ -100,56 +62,54 @@ class _NotificationPageState extends State<NotificationPage>
             ),
             child: TabbarPrimary(
               controller: _tabController,
-              tabs: const [Tab(text: 'Info (20)'), Tab(text: 'Promo')],
+              tabs: const [Tab(text: 'Info'), Tab(text: 'Promo')],
             ),
           ),
           Expanded(
             child: TabBarView(
               controller: _tabController,
-              children: [_buildInfoTabView(), const PromoEmptyState()],
+              children: [
+                Obx(() {
+                  if (_controller.isLoading.value) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+                  if (_controller.errorMessage.isNotEmpty) {
+                    return Center(child: Text(_controller.errorMessage.value));
+                  }
+                  if (_controller.notifications.isEmpty) {
+                    return const Center(child: Text('Belum ada notifikasi'));
+                  }
+                  return ListView.separated(
+                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    itemCount: _controller.notifications.length,
+                    separatorBuilder:
+                        (context, index) => const SizedBox(height: 12),
+                    itemBuilder: (context, index) {
+                      final item = _controller.notifications[index];
+
+                      // sesuaikan field dengan parameter NotificationItem
+                      final dateTime = '${item.date} | ${item.time}';
+                      final orderId = 'ORDER ID: ${item.orderCode}';
+                      final title = item.type.capitalizeFirst ?? item.type;
+                      final heading = item.title;
+                      final description = item.message;
+
+                      return NotificationItem(
+                        title: title,
+                        dateTime: dateTime,
+                        orderId: orderId,
+                        heading: heading,
+                        description: description,
+                      );
+                    },
+                  );
+                }),
+                const PromoEmptyState(),
+              ],
             ),
           ),
         ],
       ),
-    );
-  }
-
-  Widget _buildInfoTabView() {
-    return ListView(
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      children: const [
-        NotificationItem(
-          title: 'Transaction',
-          dateTime: '26 Feb 2025 | 13:18',
-          orderId: 'ORDER ID: J+202512617405493000001',
-          heading: 'Mendapat XP dari Transaksi',
-          description: 'Anda mendapatkan 16 XP dari transaksi anda',
-        ),
-        SizedBox(height: 12),
-        NotificationItem(
-          title: 'Transaction',
-          dateTime: '26 Feb 2025 | 13:18',
-          orderId: 'ORDER ID: J+202512617405493000001',
-          heading: 'Mendapat XP dari Transaksi',
-          description: 'Anda mendapatkan 16 XP dari transaksi anda',
-        ),
-        SizedBox(height: 12),
-        NotificationItem(
-          title: 'Transaction',
-          dateTime: '26 Feb 2025 | 13:18',
-          orderId: 'ORDER ID: J+202512617405493000001',
-          heading: 'Mendapat XP dari Transaksi',
-          description: 'Anda mendapatkan 16 XP dari transaksi anda',
-        ),
-        SizedBox(height: 12),
-        NotificationItem(
-          title: 'Transaction',
-          dateTime: '26 Feb 2025 | 13:18',
-          orderId: 'ORDER ID: J+202512617405493000001',
-          heading: 'Mendapat XP dari Transaksi',
-          description: 'Anda mendapatkan 16 XP dari transaksi anda',
-        ),
-      ],
     );
   }
 }

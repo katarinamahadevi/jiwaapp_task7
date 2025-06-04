@@ -1,124 +1,151 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:jiwaapp_task7/controller/order_controller.dart';
+import 'package:jiwaapp_task7/model/order_model.dart';
 import 'package:jiwaapp_task7/pages/order_detail_page.dart';
 import 'package:jiwaapp_task7/theme/color.dart';
 import 'package:jiwaapp_task7/widgets/modal_bottom_order_repeat.dart';
+import 'package:flutter/services.dart';
 
 //ORDER YANG SUDAH MELAKUKAN PEMBAYARAN/BATAL/POKOKNYA HISTORI TRANSAKSI
 
-class OrderHistoryContent extends StatelessWidget {
+class OrderHistoryContent extends StatefulWidget {
+  @override
+  State<OrderHistoryContent> createState() => _OrderHistoryContentState();
+}
+
+class _OrderHistoryContentState extends State<OrderHistoryContent> {
+  late ScrollController _scrollController;
+  late OrderController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController = ScrollController();
+
+    if (Get.isRegistered<OrderController>()) {
+      controller = Get.find<OrderController>();
+    } else {
+      controller = Get.put(OrderController());
+    }
+
+    _scrollController.addListener(_onScroll);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.removeListener(_onScroll);
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _onScroll() {
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent * 0.8) {
+      if (controller.hasMoreData && !controller.isLoadingOrders) {
+        print('Loading more order history...');
+        controller.fetchOrderHistory(refresh: false);
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        SizedBox(height: 16),
-        OrderHistoryCard(
-          orderStatus: 'Order Completed',
-          deliveryMethod: 'Delivery',
-          deliveryIconAsset: 'assets/image/image_take_away.png',
-          price: 'Rp41.500',
-          orderId: 'J+202512617405493000001',
-          dateTime: '26 Feb 2025 | 12:55',
-          promo: 'Buy 1 Get 1 Free Minuman',
-          address:
-              'Ordo apps - Taman Jemursari Selatan 1, Jemur Wonosari, Surabaya, Ja...',
-          itemCount: '1 Item',
-        ),
-        SizedBox(height: 16),
-        OrderHistoryCard(
-          orderStatus: 'Order Completed',
-          deliveryMethod: 'Take Away',
-          deliveryIconAsset: 'assets/image/image_delivery.png',
-          price: 'Rp65.000',
-          orderId: 'J+202511417395185983261',
-          dateTime: '14 Feb 2025 | 14:36',
-          promo: 'Buy 1 Get 1 Free Minuman, Geber Beef Santuy',
-          address: '',
-          itemCount: '3 Item',
-        ),
-        SizedBox(height: 16),
-        OrderHistoryCard(
-          orderStatus: 'Order Completed',
-          deliveryMethod: 'Take Away',
-          deliveryIconAsset: 'assets/image/image_delivery.png',
-          price: 'Rp65.000',
-          orderId: 'J+202511417395185983261',
-          dateTime: '14 Feb 2025 | 14:36',
-          promo: 'Buy 1 Get 1 Free Minuman, Geber Beef Santuy',
-          address: '',
-          itemCount: '3 Item',
-        ),
-        SizedBox(height: 16),
-        OrderHistoryCard(
-          orderStatus: 'Order Completed',
-          deliveryMethod: 'Take Away',
-          deliveryIconAsset: 'assets/image/image_delivery.png',
-          price: 'Rp65.000',
-          orderId: 'J+202511417395185983261',
-          dateTime: '14 Feb 2025 | 14:36',
-          promo: 'Buy 1 Get 1 Free Minuman, Geber Beef Santuy',
-          address: '',
-          itemCount: '3 Item',
-        ),
-        SizedBox(height: 16),
-        OrderHistoryCard(
-          orderStatus: 'Order Completed',
-          deliveryMethod: 'Take Away',
-          deliveryIconAsset: 'assets/image/image_delivery.png',
-          price: 'Rp65.000',
-          orderId: 'J+202511417395185983261',
-          dateTime: '14 Feb 2025 | 14:36',
-          promo: 'Buy 1 Get 1 Free Minuman, Geber Beef Santuy',
-          address: '',
-          itemCount: '3 Item',
-        ),
-        SizedBox(height: 16),
-        OrderHistoryCard(
-          orderStatus: 'Order Completed',
-          deliveryMethod: 'Take Away',
-          deliveryIconAsset: 'assets/image/image_delivery.png',
-          price: 'Rp65.000',
-          orderId: 'J+202511417395185983261',
-          dateTime: '14 Feb 2025 | 14:36',
-          promo: 'Buy 1 Get 1 Free Minuman, Geber Beef Santuy',
-          address: '',
-          itemCount: '3 Item',
-        ),
-        SizedBox(height: 80),
-      ],
+    return GetBuilder<OrderController>(
+      init: controller,
+      builder: (controller) {
+        return Obx(() {
+          if (controller.isLoadingOrders && controller.orderHistory.isEmpty) {
+            return const Center(
+              child: Padding(
+                padding: EdgeInsets.all(20.0),
+                child: CircularProgressIndicator(),
+              ),
+            );
+          }
+
+          if (controller.orderHistory.isEmpty && !controller.isLoadingOrders) {
+            return RefreshIndicator(
+              onRefresh: () => controller.fetchOrderHistory(refresh: true),
+              child: SingleChildScrollView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                child: Container(
+                  height: MediaQuery.of(context).size.height * 0.6,
+                  child: const Center(
+                    child: Padding(
+                      padding: EdgeInsets.all(20.0),
+                      child: Text(
+                        'No order history',
+                        style: TextStyle(fontSize: 16, color: Colors.grey),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            );
+          }
+
+          return RefreshIndicator(
+            onRefresh: () => controller.fetchOrderHistory(refresh: true),
+            child: SizedBox(
+              height: MediaQuery.of(context).size.height * 0.8,
+              child: ListView.builder(
+                controller: _scrollController,
+                physics: const AlwaysScrollableScrollPhysics(),
+                padding: const EdgeInsets.only(top: 16, bottom: 100),
+                itemCount:
+                    controller.orderHistory.length +
+                    (controller.hasMoreData ? 1 : 0),
+
+                itemBuilder: (context, index) {
+                  if (index == controller.orderHistory.length) {
+                    return Container(
+                      padding: const EdgeInsets.all(16.0),
+                      alignment: Alignment.center,
+                      child:
+                          controller.isLoadingOrders
+                              ? const CircularProgressIndicator()
+                              : const SizedBox.shrink(),
+                    );
+                  }
+
+                  final OrderModel order = controller.orderHistory[index];
+                  print('Rendering Order: ${order.orderCode}');
+
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 16.0),
+                    child: OrderHistoryCard(
+                      order: order,
+                      controller: controller,
+                    ),
+                  );
+                },
+              ),
+            ),
+          );
+        });
+      },
     );
   }
 }
 
 class OrderHistoryCard extends StatelessWidget {
-  final String orderStatus;
-  final String deliveryMethod;
-  final String deliveryIconAsset;
-  final String price;
-  final String orderId;
-  final String dateTime;
-  final String promo;
-  final String address;
-  final String itemCount;
+  final OrderModel order;
+  final OrderController controller;
 
   const OrderHistoryCard({
-    required this.orderStatus,
-    required this.deliveryMethod,
-    required this.deliveryIconAsset,
-    required this.price,
-    required this.orderId,
-    required this.dateTime,
-    required this.promo,
-    required this.address,
-    required this.itemCount,
-  });
+    Key? key,
+    required this.order,
+    required this.controller,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      constraints: BoxConstraints(maxWidth: 600),
+      constraints: const BoxConstraints(maxWidth: 600),
       decoration: BoxDecoration(
-        border: Border.all(color: Color(0xFFDDE1E4)),
+        border: Border.all(color: const Color(0xFFDDE1E4)),
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
@@ -126,7 +153,7 @@ class OrderHistoryCard extends StatelessWidget {
             color: Colors.black.withOpacity(0.05),
             spreadRadius: 1,
             blurRadius: 10,
-            offset: Offset(0, 1),
+            offset: const Offset(0, 1),
           ),
         ],
       ),
@@ -136,8 +163,8 @@ class OrderHistoryCard extends StatelessWidget {
         children: [
           Container(
             width: double.infinity,
-            padding: EdgeInsets.symmetric(vertical: 10, horizontal: 16),
-            decoration: BoxDecoration(
+            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+            decoration: const BoxDecoration(
               color: Color(0xFF46234C),
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(12),
@@ -145,8 +172,8 @@ class OrderHistoryCard extends StatelessWidget {
               ),
             ),
             child: Text(
-              orderStatus,
-              style: TextStyle(
+              _getDisplayStatus(order.orderStatus),
+              style: const TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
                 fontSize: 18,
@@ -154,7 +181,7 @@ class OrderHistoryCard extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -170,15 +197,15 @@ class OrderHistoryCard extends StatelessWidget {
                       child: Padding(
                         padding: const EdgeInsets.all(5),
                         child: Image.asset(
-                          deliveryIconAsset,
+                          controller.getDeliveryIconAsset(order.orderType),
                           fit: BoxFit.contain,
                         ),
                       ),
                     ),
-                    SizedBox(width: 12),
+                    const SizedBox(width: 12),
                     Text(
-                      deliveryMethod,
-                      style: TextStyle(
+                      order.orderType,
+                      style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 14,
                       ),
@@ -186,70 +213,65 @@ class OrderHistoryCard extends StatelessWidget {
                   ],
                 ),
                 Text(
-                  price,
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                  _formatOrderPrice(order.totalPrice),
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14,
+                  ),
                 ),
               ],
             ),
           ),
 
-          Divider(),
+          const Divider(),
 
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Expanded(
                   child: Row(
                     children: [
-                      Text(
+                      const Text(
                         'Order ID: ',
                         style: TextStyle(color: Colors.black, fontSize: 12),
                       ),
                       Expanded(
                         child: Text(
-                          orderId,
-                          style: TextStyle(fontSize: 12),
+                          order.orderCode ?? 'N/A',
+                          style: const TextStyle(fontSize: 12),
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
-                      SizedBox(width: 4),
-                      Icon(Icons.copy, size: 14),
+                      const SizedBox(width: 4),
+                      GestureDetector(
+                        onTap: () => _copyOrderCode(order.orderCode),
+                        child: const Icon(Icons.copy, size: 14),
+                      ),
                     ],
                   ),
                 ),
-                Text(dateTime, style: TextStyle(fontSize: 12)),
+                Text(
+                  controller.formatDateTime(order.createdAt),
+                  style: const TextStyle(fontSize: 12),
+                ),
               ],
             ),
           ),
 
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  itemCount,
-                  style: TextStyle(color: Colors.grey, fontSize: 12),
-                ),
-              ],
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Text(
+              '${order.itemCount} Item${order.itemCount > 1 ? 's' : ''}',
+              style: const TextStyle(color: Colors.grey, fontSize: 12),
             ),
           ),
 
-          if (promo.isNotEmpty)
+          if (order.orderType.toLowerCase() == 'delivery' &&
+              order.addressId != null)
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-              child: Text(
-                promo,
-                style: TextStyle(color: Colors.grey, fontSize: 10),
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
-
-          if (address.isNotEmpty)
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -260,15 +282,15 @@ class OrderHistoryCard extends StatelessWidget {
                       color: BaseColors.primary,
                       shape: BoxShape.circle,
                     ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(4.0),
+                    child: const Padding(
+                      padding: EdgeInsets.all(4.0),
                       child: Icon(Icons.flag, size: 14, color: Colors.white),
                     ),
                   ),
-                  SizedBox(width: 8),
-                  Expanded(
+                  const SizedBox(width: 8),
+                  const Expanded(
                     child: Text(
-                      address,
+                      'Alamat pengiriman tersedia',
                       style: TextStyle(fontSize: 14, color: Colors.black87),
                       overflow: TextOverflow.ellipsis,
                       maxLines: 2,
@@ -279,7 +301,7 @@ class OrderHistoryCard extends StatelessWidget {
             ),
 
           Padding(
-            padding: EdgeInsets.all(16),
+            padding: const EdgeInsets.all(16),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -294,9 +316,12 @@ class OrderHistoryCard extends StatelessWidget {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15),
                     ),
-                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 6,
+                    ),
                   ),
-                  child: Text(
+                  child: const Text(
                     'Pesan Ulang',
                     textAlign: TextAlign.center,
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 10),
@@ -318,9 +343,12 @@ class OrderHistoryCard extends StatelessWidget {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15),
                     ),
-                    padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 6,
+                    ),
                   ),
-                  child: Text(
+                  child: const Text(
                     'Detail Pesanan',
                     textAlign: TextAlign.center,
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 10),
@@ -332,5 +360,36 @@ class OrderHistoryCard extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  String _getDisplayStatus(String status) {
+    switch (status.toLowerCase()) {
+      case 'completed':
+        return 'Order Completed';
+      case 'cancelled':
+        return 'Order Cancelled';
+      case 'delivered':
+        return 'Order Delivered';
+      case 'failed':
+        return 'Order Failed';
+      default:
+        return status;
+    }
+  }
+
+  String _formatOrderPrice(int price) {
+    return 'Rp${price.toString().replaceAllMapped(RegExp(r'(\d)(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]}.')}';
+  }
+
+  void _copyOrderCode(String? orderCode) {
+    if (orderCode != null) {
+      Clipboard.setData(ClipboardData(text: orderCode));
+      Get.snackbar(
+        'Copied',
+        'Order code copied to clipboard',
+        snackPosition: SnackPosition.BOTTOM,
+        duration: const Duration(seconds: 2),
+      );
+    }
   }
 }

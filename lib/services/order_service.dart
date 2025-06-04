@@ -79,21 +79,61 @@ class OrderService {
   }
 
   Future<OrderModel> getOrderById(int orderId) async {
-  try {
-    final token = await _storageService.getToken();
-    final response = await _apiClient.dio.get(
-      '/auth/order/$orderId',
-      options: Options(headers: {'Authorization': 'Bearer $token'}),
-    );
-    
-    if (response.statusCode == 200 && response.data != null) {
-      final orderData = response.data['order'] ?? response.data;
-      return OrderModel.fromJson(orderData);
-    } else {
-      throw Exception('Failed to get order details: ${response.statusMessage}');
+    try {
+      final token = await _storageService.getToken();
+      final response = await _apiClient.dio.get(
+        '/auth/order/$orderId',
+        options: Options(headers: {'Authorization': 'Bearer $token'}),
+      );
+
+      if (response.statusCode == 200 && response.data != null) {
+        final orderData = response.data['order'] ?? response.data;
+        return OrderModel.fromJson(orderData);
+      } else {
+        throw Exception(
+          'Failed to get order details: ${response.statusMessage}',
+        );
+      }
+    } catch (e) {
+      throw Exception('Error fetching order details: $e');
     }
-  } catch (e) {
-    throw Exception('Error fetching order details: $e');
   }
-}
+
+  Future<Response> generatePayment(int orderId) async {
+    try {
+      final token = await _storageService.getToken();
+      final response = await _apiClient.dio.post(
+        '/auth/payment/generate',
+        data: {'order_id': orderId},
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $token',
+            'Content-Type': 'application/json',
+          },
+        ),
+      );
+      return response;
+    } catch (e) {
+      throw Exception('Failed to generate payment: $e');
+    }
+  }
+
+  Future<Response> cancelPayment(int orderId) async {
+    try {
+      final token = await _storageService.getToken();
+      final response = await _apiClient.dio.post(
+        '/auth/payment/cancel',
+        data: {'order_id': orderId},
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $token',
+            'Content-Type': 'application/json',
+          },
+        ),
+      );
+      return response;
+    } catch (e) {
+      throw Exception('Failed to cancel payment: $e');
+    }
+  }
 }

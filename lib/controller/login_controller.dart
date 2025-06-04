@@ -35,6 +35,7 @@ class LoginController extends GetxController {
     super.onClose();
   }
 
+//NYIMPEN TOKEN DI LOKAL
   Future<void> checkAutoLogin() async {
     try {
       final token = await _storageService.getToken();

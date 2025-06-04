@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:jiwaapp_task7/theme/color.dart';
+
+import '../pages/home_page.dart';
 
 //APPBAR HANYA ICON BACK DAN TITLE PAGE
 
@@ -35,7 +38,12 @@ class AppbarPrimary extends StatelessWidget implements PreferredSizeWidget {
         onPressed:
             onBackPressed ??
             () {
-              Navigator.of(context).pop();
+              if (Navigator.of(context).canPop()) {
+                Navigator.of(context).pop();
+              } else {
+                print("Tidak ada halaman sebelumnya");
+                Get.offAll(() => HomePage());
+              }
             },
       ),
       title: Text(

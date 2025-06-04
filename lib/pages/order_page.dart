@@ -28,22 +28,21 @@ class _OrderPageState extends State<OrderPage>
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
 
-
     if (Get.isRegistered<OrderController>()) {
       orderController = Get.find<OrderController>();
     } else {
       orderController = Get.put(OrderController());
     }
 
-
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _refreshData();
     });
 
-
     _tabController.addListener(() {
       if (_tabController.indexIsChanging) {
-        _refreshData();
+        Future.delayed(Duration(milliseconds: 100), () {
+          _refreshData();
+        });
       }
     });
   }
@@ -177,7 +176,7 @@ class _OrderPageState extends State<OrderPage>
           body: TabBarView(
             controller: _tabController,
             children: [
-              SingleChildScrollView(
+              Padding(
                 padding: EdgeInsets.symmetric(horizontal: 16.0),
                 child: OngoingOrder(),
               ),
@@ -192,7 +191,6 @@ class _OrderPageState extends State<OrderPage>
             onItemTapped: _onItemTapped,
           ),
         ),
-
         Positioned(
           bottom: 80,
           left: 0,
