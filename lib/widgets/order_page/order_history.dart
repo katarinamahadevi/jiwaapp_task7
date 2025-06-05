@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jiwaapp_task7/controller/order_controller.dart';
 import 'package:jiwaapp_task7/model/order_model.dart';
-import 'package:jiwaapp_task7/pages/order_detail_page.dart';
+import 'package:jiwaapp_task7/pages/order_page/order_detail_page.dart';
 import 'package:jiwaapp_task7/theme/color.dart';
-import 'package:jiwaapp_task7/widgets/modal_bottom_order_repeat.dart';
+import 'package:jiwaapp_task7/widgets/order_page/modal_bottom_order_repeat.dart';
 import 'package:flutter/services.dart';
 
 //ORDER YANG SUDAH MELAKUKAN PEMBAYARAN/BATAL/POKOKNYA HISTORI TRANSAKSI
@@ -213,7 +213,7 @@ class OrderHistoryCard extends StatelessWidget {
                   ],
                 ),
                 Text(
-                  _formatOrderPrice(order.totalPrice),
+                  _formatOrderPrice(order.subtotalPrice),
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 14,
@@ -332,7 +332,8 @@ class OrderHistoryCard extends StatelessWidget {
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const OrderDetailPage(),
+                        builder:
+                            (context) => OrderDetailPage(orderId: order.id),
                       ),
                     );
                   },

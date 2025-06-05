@@ -2,97 +2,80 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:jiwaapp_task7/controller/order_controller.dart';
+import 'package:jiwaapp_task7/model/address_model.dart';
 import 'package:jiwaapp_task7/theme/color.dart';
 import 'package:jiwaapp_task7/widgets/appbar_primary.dart';
-import 'package:jiwaapp_task7/widgets/button_status_payment.dart';
+import 'package:jiwaapp_task7/widgets/order_page/modal_bottom_order_repeat.dart';
 import 'package:jiwaapp_task7/widgets/modal_bottom_tnc_voucher.dart';
 
-class OrderStatusPage extends StatefulWidget {
-  const OrderStatusPage({super.key});
+class OrderDetailPage extends StatefulWidget {
+  final int orderId;
+
+  const OrderDetailPage({Key? key, required this.orderId}) : super(key: key);
 
   @override
-  State<OrderStatusPage> createState() => _OrderStatusPageState();
+  _OrderDetailPageState createState() => _OrderDetailPageState();
 }
 
-class _OrderStatusPageState extends State<OrderStatusPage> {
-  late OrderController orderController;
-  int? orderId;
+class _OrderDetailPageState extends State<OrderDetailPage> {
+  final OrderController orderController = Get.find<OrderController>();
+  final Rx<AddressModel?> _selectedAddress = Rx<AddressModel?>(null);
 
   @override
   void initState() {
     super.initState();
-    orderController = Get.find<OrderController>();
-
-    final arguments = Get.arguments as Map<String, dynamic>?;
-    orderId = arguments?['orderId'];
-
-    if (orderId != null) {
-      orderController.fetchOrderDetail(orderId!);
-    }
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      orderController.fetchOrderDetail(widget.orderId);
+    });
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
-  String _getOrderStatusText(String status) {
+  String _getOrderStatusMessage(String status) {
     switch (status.toLowerCase()) {
+      case 'completed':
+        return 'Terima kasih #temansejiwa!';
+      case 'cancelled':
+        return 'Pesanan Dibatalkan';
+      case 'failed':
+        return 'Pembayaran Gagal';
       case 'pending':
-      case 'pending payment':
         return 'Menunggu Pembayaran';
-      case 'completed':
-        return 'Sudah Dibayar';
       case 'processing':
-        return 'Sedang Diproses';
+        return 'Pesanan Sedang Diproses';
+      case 'confirmed':
+        return 'Pesanan Dikonfirmasi';
+      case 'preparing':
+        return 'Pesanan Sedang Disiapkan';
       case 'ready':
-        return 'Siap Diambil';
-      case 'completed':
-        return 'Selesai';
-      case 'cancelled':
-        return 'Dibatalkan';
+        return 'Pesanan Siap';
+      case 'on delivery':
+        return 'Pesanan Dalam Perjalanan';
       default:
-        return status;
+        return 'Status Pesanan';
     }
   }
 
-  String _getStatusDescription(String status) {
+  String _getOrderStatusSubMessage(String status) {
     switch (status.toLowerCase()) {
-      case 'pending':
-      case 'pending payment':
-        return 'Silahkan buka aplikasi E-Wallet untuk menyelesaikan pembayaran kamu';
       case 'completed':
-        return 'Pembayaran berhasil, pesanan sedang diproses';
-      case 'processing':
-        return 'Pesanan sedang dalam proses pembuatan';
-      case 'ready':
-        return 'Pesanan sudah siap untuk diambil atau diantar';
-      case 'completed':
-        return 'Pesanan telah selesai';
+        return 'Selamat menikmati dan terus gunakan JIWA+ ya!';
       case 'cancelled':
-        return 'Pesanan telah dibatalkan';
-      default:
-        return 'Status pesanan';
-    }
-  }
-
-  String _getStatusIcon(String status) {
-    switch (status.toLowerCase()) {
+        return 'Pesanan Anda telah dibatalkan';
+      case 'failed':
+        return 'Silakan coba lagi atau hubungi customer service';
       case 'pending':
-      case 'pending payment':
-        return 'assets/image/image_awaiting_payment.png';
-      case 'completed':
-        return 'assets/image/image_awaiting_payment.png';
+        return 'Silakan lakukan pembayaran untuk melanjutkan pesanan';
       case 'processing':
-        return 'assets/image/image_awaiting_payment.png';
+        return 'Pesanan Anda sedang diverifikasi';
+      case 'confirmed':
+        return 'Pesanan Anda telah dikonfirmasi dan akan segera disiapkan';
+      case 'preparing':
+        return 'Chef sedang menyiapkan pesanan Anda dengan penuh cinta';
       case 'ready':
-        return 'assets/image/image_awaiting_payment.png';
-      case 'completed':
-        return 'assets/image/image_awaiting_payment.png';
-      case 'cancelled':
-        return 'assets/image/image_awaiting_payment.png';
+        return 'Pesanan Anda sudah siap untuk diambil/diantar';
+      case 'on delivery':
+        return 'Driver sedang dalam perjalanan menuju lokasi Anda';
       default:
-        return 'assets/image/image_awaiting_payment.png';
+        return 'Pesanan Anda sedang diproses';
     }
   }
 
@@ -103,19 +86,41 @@ class _OrderStatusPageState extends State<OrderStatusPage> {
       appBar: AppbarPrimary(title: 'Detail Status Pesanan'),
       body: Obx(() {
         if (orderController.isLoadingOrderDetail) {
-          return const Center(child: CircularProgressIndicator());
+          return Center(
+            child: CircularProgressIndicator(color: Color(0xFFE25C4B)),
+          );
         }
 
         final order = orderController.orderDetail;
         if (order == null) {
-          return const Center(child: Text('Order tidak ditemukan'));
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.error_outline, size: 64, color: Colors.grey[400]),
+                SizedBox(height: 16),
+                Text(
+                  'Detail pesanan tidak ditemukan',
+                  style: TextStyle(fontSize: 16, color: Colors.grey[600]),
+                ),
+                SizedBox(height: 16),
+                ElevatedButton(
+                  onPressed: () => Get.back(),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Color(0xFFE25C4B),
+                  ),
+                  child: Text('Kembali', style: TextStyle(color: Colors.white)),
+                ),
+              ],
+            ),
+          );
         }
 
         return Stack(
           children: [
             SingleChildScrollView(
               child: Padding(
-                padding: const EdgeInsets.only(bottom: 0),
+                padding: const EdgeInsets.only(bottom: 80),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -137,8 +142,8 @@ class _OrderStatusPageState extends State<OrderStatusPage> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      _getOrderStatusText(order.orderStatus),
-                                      style: const TextStyle(
+                                      _getOrderStatusMessage(order.orderStatus),
+                                      style: TextStyle(
                                         fontSize: 18,
                                         fontWeight: FontWeight.bold,
                                         color: Colors.black,
@@ -146,7 +151,9 @@ class _OrderStatusPageState extends State<OrderStatusPage> {
                                     ),
                                     const SizedBox(height: 4),
                                     Text(
-                                      _getStatusDescription(order.orderStatus),
+                                      _getOrderStatusSubMessage(
+                                        order.orderStatus,
+                                      ),
                                       style: TextStyle(
                                         fontSize: 14,
                                         color: Colors.grey[600],
@@ -157,7 +164,7 @@ class _OrderStatusPageState extends State<OrderStatusPage> {
                                       children: [
                                         Text(
                                           'ORDER ID: ${order.orderCode ?? 'N/A'}',
-                                          style: const TextStyle(
+                                          style: TextStyle(
                                             fontSize: 10,
                                             fontWeight: FontWeight.w500,
                                           ),
@@ -173,7 +180,7 @@ class _OrderStatusPageState extends State<OrderStatusPage> {
                                             ScaffoldMessenger.of(
                                               context,
                                             ).showSnackBar(
-                                              const SnackBar(
+                                              SnackBar(
                                                 content: Text(
                                                   'Order ID copied to clipboard',
                                                 ),
@@ -181,10 +188,7 @@ class _OrderStatusPageState extends State<OrderStatusPage> {
                                               ),
                                             );
                                           },
-                                          child: const Icon(
-                                            Icons.copy,
-                                            size: 10,
-                                          ),
+                                          child: Icon(Icons.copy, size: 10),
                                         ),
                                       ],
                                     ),
@@ -202,7 +206,7 @@ class _OrderStatusPageState extends State<OrderStatusPage> {
                                 child: Padding(
                                   padding: const EdgeInsets.all(12),
                                   child: Image.asset(
-                                    _getStatusIcon(order.orderStatus),
+                                    'assets/image/image_order.png',
                                     fit: BoxFit.contain,
                                   ),
                                 ),
@@ -215,7 +219,7 @@ class _OrderStatusPageState extends State<OrderStatusPage> {
                             children: [
                               Text(
                                 'Tanggal: ${orderController.formatDateTime(order.createdAt)}',
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontWeight: FontWeight.w500,
                                   fontSize: 10,
                                   color: Colors.black,
@@ -227,15 +231,23 @@ class _OrderStatusPageState extends State<OrderStatusPage> {
                                     context: context,
                                     title:
                                         "Syarat dan Ketentuan ${order.orderType}",
-                                    terms: [
-                                      'Harap pastikan alamat dan nomor telepon yang dimasukkan sudah benar dan dapat dihubungi oleh driver.',
-                                      'Customer harus mengambil produk yang dikembalikan oleh driver ke outlet jika tidak ada respons dari pembeli saat proses pengantaran. Outlet tidak berkewajiban mengantarkan kembali produk yang dikembalikan oleh driver.',
-                                      'Pesanan yang tidak diambil oleh customer apabila driver mengembalikan produk akan dianggap terjual dan tidak dapat di-refund atau digantikan.',
-                                      'Tunjukkan kode pick up kepada staf/barista saat mengambil pesanan Anda di outlet.',
-                                    ],
+                                    terms:
+                                        order.orderType.toLowerCase() ==
+                                                'delivery'
+                                            ? [
+                                              'Harap pastikan alamat dan nomor telepon yang dimasukkan sudah benar dan dapat dihubungi oleh driver.',
+                                              'Customer harus mengambil produk yang dikembalikan oleh driver ke outlet jika tidak ada respons dari pembeli saat proses pengantaran.',
+                                              'Outlet tidak berkewajiban mengantarkan kembali produk yang dikembalikan oleh driver.',
+                                              'Pesanan yang tidak diambil oleh customer apabila driver mengembalikan produk akan dianggap terjual dan tidak dapat di-refund atau digantikan.',
+                                            ]
+                                            : [
+                                              'Tunjukkan kode pick up kepada staf/barista saat mengambil pesanan Anda di outlet.',
+                                              'Pesanan dapat diambil sesuai dengan waktu yang telah ditentukan.',
+                                              'Jika pesanan tidak diambil dalam waktu yang ditentukan, outlet berhak untuk membatalkan pesanan.',
+                                            ],
                                   );
                                 },
-                                child: const Text(
+                                child: Text(
                                   'Syarat Dan Ketentuan',
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
@@ -250,8 +262,77 @@ class _OrderStatusPageState extends State<OrderStatusPage> {
                         ],
                       ),
                     ),
+                    if (order.orderType.toLowerCase() == 'delivery' &&
+                        order.courier != null &&
+                        order.courier != 'none')
+                      Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 16),
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              'Informasi Kurir',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
+                            ),
+                            const SizedBox(height: 12),
+                            Container(
+                              padding: const EdgeInsets.all(16),
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.grey.shade300),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Row(
+                                children: [
+                                  Container(
+                                    width: 40,
+                                    height: 40,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: Color(0xFF0BA90A),
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(3),
+                                      child:
+                                          order.courier?.toLowerCase() ==
+                                                  'gosend'
+                                              ? Image.asset(
+                                                'assets/logo/logo_gosend.jpeg',
+                                                fit: BoxFit.contain,
+                                              )
+                                              : Icon(
+                                                Icons.delivery_dining,
+                                                color: Colors.white,
+                                                size: 24,
+                                              ),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 12),
+                                  Expanded(
+                                    child: Text(
+                                      order.courier ?? 'Kurir',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
 
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 24),
                     Container(
                       margin: const EdgeInsets.symmetric(horizontal: 16),
                       padding: const EdgeInsets.all(16),
@@ -264,7 +345,7 @@ class _OrderStatusPageState extends State<OrderStatusPage> {
                         children: [
                           Text(
                             'Detail ${order.orderType}',
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
                               color: Colors.black,
@@ -284,9 +365,9 @@ class _OrderStatusPageState extends State<OrderStatusPage> {
                                 child: Padding(
                                   padding: const EdgeInsets.all(5),
                                   child: Image.asset(
-                                    order.orderType.toLowerCase() == 'take away'
-                                        ? 'assets/image/image_time.png'
-                                        : 'assets/image/image_delivery.png',
+                                    order.orderType.toLowerCase() == 'delivery'
+                                        ? 'assets/image/image_location.png'
+                                        : 'assets/image/image_take_away.png',
                                     fit: BoxFit.contain,
                                   ),
                                 ),
@@ -298,37 +379,62 @@ class _OrderStatusPageState extends State<OrderStatusPage> {
                                   children: [
                                     Text(
                                       order.orderType.toLowerCase() ==
-                                              'take away'
-                                          ? 'Waktu Pick Up'
-                                          : 'Estimasi Pengiriman',
+                                              'delivery'
+                                          ? 'Alamat Pengiriman'
+                                          : 'Lokasi Pickup',
                                       style: TextStyle(
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.bold,
+                                        fontSize: 14,
                                         color: BaseColors.black,
                                       ),
                                     ),
-                                    Text(
-                                      orderController.formatDateTime(
-                                        order.createdAt,
-                                      ),
-                                      style: const TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.black,
-                                      ),
-                                    ),
+                                    const SizedBox(height: 4),
                                     if (order.orderType.toLowerCase() ==
-                                            'delivery' &&
-                                        order.courier != null)
-                                      Padding(
-                                        padding: const EdgeInsets.only(top: 4),
-                                        child: Text(
-                                          'Kurir: ${order.courier}',
-                                          style: TextStyle(
-                                            fontSize: 12,
-                                            color: Colors.grey[600],
+                                        'delivery')
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            _selectedAddress.value?.address ??
+                                                'Alamat belum dipilih',
+                                            style: TextStyle(
+                                              fontSize: 14,
+                                              color: Colors.grey[600],
+                                            ),
                                           ),
-                                        ),
+
+                                          const SizedBox(height: 4),
+                                          Text(
+                                            'Alamat pengiriman akan ditampilkan sesuai data yang tersimpan',
+                                            style: TextStyle(
+                                              fontSize: 14,
+                                              color: Colors.grey[600],
+                                            ),
+                                          ),
+                                        ],
+                                      )
+                                    else
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            'JIWA Coffee Outlet',
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.normal,
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                          const SizedBox(height: 4),
+                                          Text(
+                                            'Silakan ambil pesanan Anda di outlet terdekat',
+                                            style: TextStyle(
+                                              fontSize: 14,
+                                              color: Colors.grey[600],
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                   ],
                                 ),
@@ -359,21 +465,16 @@ class _OrderStatusPageState extends State<OrderStatusPage> {
                             ),
                           ),
                           const SizedBox(height: 16),
-
-                          ...order.items.map((item) {
-                            return Padding(
-                              padding: const EdgeInsets.only(bottom: 16),
+                          ...order.items.map(
+                            (item) => Container(
+                              margin: const EdgeInsets.only(bottom: 16),
                               child: Row(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  ClipRRect(
-                                    borderRadius: BorderRadius.circular(8),
-                                    child: Image.network(
-                                      item.product.imageUrlText,
-                                      width: 80,
-                                      height: 80,
-                                      fit: BoxFit.cover,
-                                    ),
+                                  Image.asset(
+                                    'assets/image/image_menu.png',
+                                    width: 80,
+                                    height: 80,
                                   ),
                                   const SizedBox(width: 16),
                                   Expanded(
@@ -382,51 +483,48 @@ class _OrderStatusPageState extends State<OrderStatusPage> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          '${item.quantity}x ${item.product?.name ?? 'Unknown Item'}',
-                                          style: const TextStyle(
+                                          '${item.quantity}x ${item.product?.name ?? 'Item'}',
+                                          style: TextStyle(
                                             fontSize: 16,
                                             fontWeight: FontWeight.bold,
                                             color: Colors.black,
                                           ),
                                         ),
-                                        if (item.note?.isNotEmpty == true) ...[
+                                        if (item.note != null &&
+                                            item.note!.isNotEmpty) ...[
                                           const SizedBox(height: 4),
                                           Text(
-                                            'Note: ${item.note}',
+                                            'Catatan: ${item.note}',
                                             style: TextStyle(
                                               fontSize: 14,
                                               color: Colors.grey[600],
+                                              fontStyle: FontStyle.italic,
                                             ),
                                           ),
                                         ],
+                                        const SizedBox(height: 8),
+                                        Text(
+                                          orderController.formatPrice(
+                                            item.productId,
+                                          ),
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.black,
+                                          ),
+                                        ),
                                       ],
                                     ),
                                   ),
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    children: [
-                                      Text(
-                                        orderController.formatPrice(
-                                          item.productId * item.quantity,
-                                        ),
-                                        style: const TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.black,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
                                 ],
                               ),
-                            );
-                          }).toList(),
+                            ),
+                          ),
                         ],
                       ),
                     ),
 
                     const SizedBox(height: 16),
-
                     Container(
                       margin: const EdgeInsets.symmetric(horizontal: 16),
                       padding: const EdgeInsets.all(16),
@@ -449,7 +547,7 @@ class _OrderStatusPageState extends State<OrderStatusPage> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              const Text(
+                              Text(
                                 'Subtotal',
                                 style: TextStyle(
                                   fontSize: 14,
@@ -460,7 +558,7 @@ class _OrderStatusPageState extends State<OrderStatusPage> {
                                 orderController.formatPrice(
                                   order.subtotalPrice,
                                 ),
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w500,
                                   color: Colors.black,
@@ -468,15 +566,13 @@ class _OrderStatusPageState extends State<OrderStatusPage> {
                               ),
                             ],
                           ),
-
-                          if (order.deliveryFee != null &&
-                              order.deliveryFee! > 0) ...[
-                            const SizedBox(height: 8),
+                          if (order.orderType.toLowerCase() == 'delivery') ...[
+                            const SizedBox(height: 12),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                const Text(
-                                  'Ongkos Kirim',
+                                Text(
+                                  'Delivery Fee',
                                   style: TextStyle(
                                     fontSize: 14,
                                     color: Colors.black,
@@ -484,9 +580,9 @@ class _OrderStatusPageState extends State<OrderStatusPage> {
                                 ),
                                 Text(
                                   orderController.formatPrice(
-                                    order.deliveryFee!,
+                                    order.deliveryFee ?? 0,
                                   ),
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w500,
                                     color: Colors.black,
@@ -495,15 +591,13 @@ class _OrderStatusPageState extends State<OrderStatusPage> {
                               ],
                             ),
                           ],
-
                           const SizedBox(height: 16),
                           Divider(color: Colors.grey[300]),
                           const SizedBox(height: 16),
-
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              const Text(
+                              Text(
                                 'Total Pembayaran',
                                 style: TextStyle(
                                   fontSize: 14,
@@ -512,8 +606,10 @@ class _OrderStatusPageState extends State<OrderStatusPage> {
                                 ),
                               ),
                               Text(
-                                orderController.formatPrice(order.totalPrice),
-                                style: const TextStyle(
+                                orderController.formatPrice(
+                                  order.subtotalPrice,
+                                ),
+                                style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.black,
@@ -525,53 +621,65 @@ class _OrderStatusPageState extends State<OrderStatusPage> {
                         ],
                       ),
                     ),
-
-                    const SizedBox(height: 12),
-                    const SizedBox(height: 200),
+                    const SizedBox(height: 80),
                   ],
                 ),
               ),
             ),
-            if (order.orderStatus.toLowerCase().contains('pending'))
-              Positioned(
-                left: 0,
-                right: 0,
-                bottom: 0,
-                child: ButtonStatusPayment(
-                  timeoutSeconds: 270,
-                  onCancelPayment: () {
-                    showDialog(
-                      context: context,
-                      builder:
-                          (context) => AlertDialog(
-                            title: const Text('Konfirmasi'),
-                            content: const Text(
-                              'Apakah Anda yakin ingin membatalkan pembayaran?',
-                            ),
-                            actions: [
-                              TextButton(
-                                onPressed: () => Navigator.pop(context),
-                                child: const Text('Tidak'),
-                              ),
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                  orderController.cancelPayment(order.id);
-                                },
-                                child: const Text(
-                                  'Ya',
-                                  style: TextStyle(color: Colors.red),
-                                ),
-                              ),
-                            ],
+            Positioned(
+              left: 0,
+              right: 0,
+              bottom: 0,
+              child: Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(color: Colors.white),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: OutlinedButton(
+                        onPressed: () {},
+                        style: OutlinedButton.styleFrom(
+                          side: BorderSide(color: BaseColors.black),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30),
                           ),
-                    );
-                  },
-                  onContinuePayment: () {
-                    orderController.processPayment(order.id);
-                  },
+                          padding: EdgeInsets.symmetric(vertical: 15),
+                        ),
+                        child: const Text(
+                          'Bantuan',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          showModalBottomOrderRepeat(context);
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Color(0xFFE25C4B),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                          padding: EdgeInsets.symmetric(vertical: 15),
+                        ),
+                        child: const Text(
+                          'Pesan Ulang',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
+            ),
           ],
         );
       }),

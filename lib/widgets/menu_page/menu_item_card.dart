@@ -5,7 +5,7 @@ import 'package:jiwaapp_task7/controller/cart_controller.dart';
 import 'package:jiwaapp_task7/model/menu_model.dart';
 import 'package:jiwaapp_task7/pages/menu_page/detail_menu_page.dart';
 import 'package:jiwaapp_task7/theme/color.dart';
-import 'package:jiwaapp_task7/widgets/modal_bottom_view_cart.dart';
+import 'package:jiwaapp_task7/widgets/menu_page/modal_bottom_view_cart.dart';
 
 //CARD MENU
 
@@ -41,16 +41,13 @@ class MenuItemCard extends StatelessWidget {
         print('Product ID: ${menuItem.id}');
         print('Product Name: ${menuItem.name}');
 
-        // Check if product is already in cart using CartController
         bool isInCart = cartController.isProductInCart(menuItem.id);
         print('Product is in cart: $isInCart');
 
         if (isInCart) {
-          // If product is in cart, show modal bottom view cart
           print('Showing modal because product is in cart');
           showModalBottomViewCart(context);
         } else {
-          // If product is not in cart, navigate to detail page
           print('Navigating to detail page because product is not in cart');
           String? currentCategoryType =
               categoryType ?? controller.selectedCategory?.type;
@@ -115,17 +112,19 @@ class MenuItemCard extends StatelessWidget {
                                 color: Colors.black,
                               ),
                             ),
-                            Text(
-                              menuItem.originalPrice,
-                              style: const TextStyle(
-                                fontSize: 12,
-                                color: BaseColors.primary,
-                                decoration: TextDecoration.lineThrough,
+                            if (menuItem.originalPrice != menuItem.price &&
+                                menuItem.originalPrice.isNotEmpty)
+                              Text(
+                                menuItem.originalPrice,
+                                style: const TextStyle(
+                                  fontSize: 12,
+                                  color: BaseColors.primary,
+                                  decoration: TextDecoration.lineThrough,
+                                ),
                               ),
-                            ),
                           ],
                         ),
-                        // Show quantity badge if item is in cart, otherwise show add button
+
                         Obx(() {
                           bool isInCart = cartController.isProductInCart(
                             menuItem.id,

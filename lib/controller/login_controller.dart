@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:jiwaapp_task7/pages/profile_page.dart';
+import 'package:jiwaapp_task7/pages/profile_page/profile_page.dart';
 import 'package:jiwaapp_task7/pages/home_page.dart';
 import '../pages/auth_page/pin_verification_login_page.dart';
 import '../services/auth_service.dart';

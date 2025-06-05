@@ -6,7 +6,7 @@ import 'package:jiwaapp_task7/widgets/add_to_cart_page/delivery_section.dart';
 import 'package:jiwaapp_task7/widgets/add_to_cart_page/header_section.dart';
 import 'package:jiwaapp_task7/widgets/add_to_cart_page/order_list.dart';
 import 'package:jiwaapp_task7/widgets/add_to_cart_page/payment_summary.dart';
-import 'package:jiwaapp_task7/widgets/button_payment.dart';
+import 'package:jiwaapp_task7/widgets/add_to_cart_page/button_payment.dart';
 
 class AddToCartPage extends StatelessWidget {
   AddToCartPage({super.key});
@@ -256,11 +256,14 @@ class AddToCartPage extends StatelessWidget {
 
   Widget _buildBottomPaymentButton() {
     return ButtonPayment(
-      onPressed: () {
+      onPressed: () async {
         if (!controller.isProcessingOrder) {
-          controller.navigateToOrderStatusPage();
+          await controller.navigateToOrderStatusPage();
         }
       },
+      isLoading: controller.isProcessingOrder,
+      isEnabled:
+          !controller.isProcessingOrder && controller.orderItems.isNotEmpty,
     );
   }
 }

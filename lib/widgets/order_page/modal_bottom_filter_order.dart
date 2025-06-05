@@ -6,10 +6,9 @@ import 'package:jiwaapp_task7/widgets/modal_bottom_pickerdate.dart';
 void showModalBottomFilterOrder(BuildContext context) {
   final Map<String, bool> checkboxStates = {
     "Take Away": false,
-    "Dine In": false,
     "Delivery": false,
-    "Selesai": false,
-    "Dibatalkan": false,
+    "Completed": false,
+    "Cancelled": false,
   };
   final TextEditingController _startDateController = TextEditingController(
     text: "30/04/2024",
@@ -47,12 +46,11 @@ void showModalBottomFilterOrder(BuildContext context) {
                         _buildDragIndicator(),
                         _buildSectionTitle("Metode Pengiriman"),
                         _buildCheckbox("Take Away", checkboxStates, setState),
-                        _buildCheckbox("Dine In", checkboxStates, setState),
                         _buildCheckbox("Delivery", checkboxStates, setState),
                         const Divider(height: 30),
                         _buildSectionTitle("Status Pesanan"),
-                        _buildCheckbox("Selesai", checkboxStates, setState),
-                        _buildCheckbox("Dibatalkan", checkboxStates, setState),
+                        _buildCheckbox("Completed", checkboxStates, setState),
+                        _buildCheckbox("Cancelled", checkboxStates, setState),
                         const Divider(height: 30),
                         _buildSectionTitle("Periode Pesanan"),
                         const SizedBox(height: 8),

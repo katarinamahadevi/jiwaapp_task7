@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:jiwaapp_task7/pages/outlet_detail_page.dart';
+import 'package:jiwaapp_task7/pages/outlet_page/outlet_detail_page.dart';
 import 'package:jiwaapp_task7/theme/color.dart';
 import 'package:jiwaapp_task7/widgets/appbar_primary.dart';
 import 'package:jiwaapp_task7/widgets/searchbar.dart';

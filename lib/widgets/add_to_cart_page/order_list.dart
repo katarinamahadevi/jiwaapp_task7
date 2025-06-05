@@ -61,8 +61,6 @@ Widget buildOrderListSection() {
             ],
           ),
           const SizedBox(height: 16),
-
-          // List of Cart Items
           ...controller.cartItems.map((item) {
             final product = item['product'];
             final quantity = item['quantity'];
@@ -95,20 +93,6 @@ Widget buildOrderListSection() {
                             ),
                           ),
                           const SizedBox(height: 4),
-                          Text(
-                            'Item 1: ${product['name']}',
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.grey[600],
-                            ),
-                          ),
-                          Text(
-                            'Item 2: ${product['name']}',
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.grey[600],
-                            ),
-                          ),
                         ],
                       ),
                     ),
@@ -118,7 +102,6 @@ Widget buildOrderListSection() {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    // Harga
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -140,20 +123,17 @@ Widget buildOrderListSection() {
                         ),
                       ],
                     ),
-
-                    // Aksi
                     Row(
                       children: [
-                        IconButton(
-                          icon: Image.asset(
-                            'assets/image/image_update.png',
-                            width: 20,
-                            height: 20,
-                          ),
-                          onPressed: () {
-                            // TODO: Implement update item logic
-                          },
-                        ),
+                        // IconButton(
+                        //   icon: Image.asset(
+                        //     'assets/image/image_update.png',
+                        //     width: 20,
+                        //     height: 20,
+                        //   ),
+                        //   onPressed: () {
+                        //   },
+                        // ),
                         IconButton(
                           icon: Image.asset(
                             'assets/image/image_delete.png',

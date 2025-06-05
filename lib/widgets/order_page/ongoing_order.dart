@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jiwaapp_task7/controller/order_controller.dart';
 import 'package:jiwaapp_task7/model/order_model.dart';
-import 'package:jiwaapp_task7/pages/order_status_page.dart';
+import 'package:jiwaapp_task7/pages/order_page/order_status_page.dart';
 import 'package:jiwaapp_task7/theme/color.dart';
 
 class OngoingOrder extends StatefulWidget {
@@ -18,15 +18,11 @@ class _OngoingOrderState extends State<OngoingOrder> {
   void initState() {
     super.initState();
     _scrollController = ScrollController();
-
-    // Get the controller instance
     if (Get.isRegistered<OrderController>()) {
       controller = Get.find<OrderController>();
     } else {
       controller = Get.put(OrderController());
     }
-
-    // Add scroll listener for pagination
     _scrollController.addListener(_onScroll);
   }
 
@@ -90,7 +86,7 @@ class _OngoingOrderState extends State<OngoingOrder> {
               physics: const AlwaysScrollableScrollPhysics(),
               padding: const EdgeInsets.only(
                 bottom: 100,
-              ), // Space for bottom nav
+              ), 
               itemCount:
                   controller.ongoingOrders.length +
                   (controller.hasMoreData ? 1 : 0),
@@ -354,13 +350,12 @@ class OngoingOrderCard extends StatelessWidget {
     );
   }
 
-  String _formatOrderPrice(int price) {
-    return 'Rp${price.toString().replaceAllMapped(RegExp(r'(\d)(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]}.')}';
+  String _formatOrderPrice(int totalprice) {
+    return 'Rp${totalprice.toString().replaceAllMapped(RegExp(r'(\d)(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]}.')}';
   }
 
   void _copyOrderCode(String? orderCode) {
     if (orderCode != null) {
-      // Implement copy to clipboard functionality
       Get.snackbar(
         'Copied',
         'Order code copied to clipboard',

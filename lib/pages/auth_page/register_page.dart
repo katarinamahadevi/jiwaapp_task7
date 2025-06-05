@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jiwaapp_task7/controller/register_controller.dart';
 import 'package:jiwaapp_task7/theme/color.dart';
-import 'package:jiwaapp_task7/widgets/modal_bottom_country_register.dart';
-import 'package:jiwaapp_task7/widgets/modal_bottom_occupation.dart';
+import 'package:jiwaapp_task7/widgets/register_page/modal_bottom_country_register.dart';
+import 'package:jiwaapp_task7/widgets/register_page/modal_bottom_occupation.dart';
 import 'package:jiwaapp_task7/widgets/auth_page/modal_bottom_pin_register.dart';
 import 'package:jiwaapp_task7/widgets/modal_bottom_pickerdate.dart';
 

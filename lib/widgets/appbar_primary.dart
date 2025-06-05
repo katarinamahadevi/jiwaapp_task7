@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jiwaapp_task7/theme/color.dart';
-
 import '../pages/home_page.dart';
 
 //APPBAR HANYA ICON BACK DAN TITLE PAGE

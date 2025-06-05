@@ -1,16 +1,17 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import 'package:jiwaapp_task7/model/address_model.dart';
 import 'package:jiwaapp_task7/model/courier_model.dart';
 import 'package:jiwaapp_task7/model/order_model.dart';
 import 'package:jiwaapp_task7/pages/address_page.dart/delivery_page.dart';
 import 'package:jiwaapp_task7/pages/menu_page/menu_page.dart';
-import 'package:jiwaapp_task7/pages/order_status_page.dart';
-import 'package:jiwaapp_task7/pages/payment_webview_page.dart';
+import 'package:jiwaapp_task7/pages/order_page/order_status_page.dart';
+import 'package:jiwaapp_task7/pages/order_page/payment_webview_page.dart';
 import 'package:jiwaapp_task7/services/courier_service.dart';
 import 'package:jiwaapp_task7/services/order_service.dart';
 import 'package:jiwaapp_task7/services/cart_service.dart';
-import 'package:jiwaapp_task7/widgets/modal_bottom_courier_option.dart';
-import 'package:jiwaapp_task7/widgets/modal_bottom_payment_summary.dart';
+import 'package:jiwaapp_task7/widgets/add_to_cart_page/modal_bottom_courier_option.dart';
+import 'package:jiwaapp_task7/widgets/order_page/modal_bottom_payment_summary.dart';
 
 class OrderController extends GetxController {
   final _isTakeAwaySelected = true.obs;
@@ -19,6 +20,8 @@ class OrderController extends GetxController {
   final _isLoadingCouriers = false.obs;
   final _isProcessingOrder = false.obs;
   final _selectedAddressId = 0.obs;
+  final _selectedAddress = 0.obs;
+
   final _orderItems = <Map<String, dynamic>>[].obs;
   final _currentOrder = Rxn<OrderModel>();
   final _orderDetail = Rxn<OrderModel>();
@@ -26,7 +29,7 @@ class OrderController extends GetxController {
 
   final _ongoingOrders = <OrderModel>[].obs;
   final _orderHistory = <OrderModel>[].obs;
-  
+
   final _isLoadingOngoingOrders = false.obs;
   final _isLoadingOrderHistory = false.obs;
   final _ongoingCurrentPage = 1.obs;
@@ -40,31 +43,35 @@ class OrderController extends GetxController {
 
   bool get isLoadingCouriers => _isLoadingCouriers.value;
   bool get isProcessingOrder => _isProcessingOrder.value;
-  
+
   bool get isLoadingOngoingOrders => _isLoadingOngoingOrders.value;
   bool get isLoadingOrderHistory => _isLoadingOrderHistory.value;
-  
-  bool get isLoadingOrders => _isLoadingOngoingOrders.value || _isLoadingOrderHistory.value;
-  
+
+  bool get isLoadingOrders =>
+      _isLoadingOngoingOrders.value || _isLoadingOrderHistory.value;
+
   List<CourierModel> get couriers => _couriers;
   CourierModel? get selectedCourier => _selectedCourier.value;
   bool get isTakeAwaySelected => _isTakeAwaySelected.value;
   int get selectedAddressId => _selectedAddressId.value;
+  int get selectedAddress => _selectedAddress.value;
+
   List<Map<String, dynamic>> get orderItems => _orderItems;
   OrderModel? get currentOrder => _currentOrder.value;
   List<OrderModel> get ongoingOrders => _ongoingOrders;
   List<OrderModel> get orderHistory => _orderHistory;
-  
+
   bool get ongoingHasMoreData => _ongoingHasMoreData.value;
   bool get historyHasMoreData => _historyHasMoreData.value;
-  
+
   bool get hasMoreData => _historyHasMoreData.value;
-  
+
   OrderModel? get orderDetail => _orderDetail.value;
   bool get isLoadingOrderDetail => _isLoadingOrderDetail.value;
 
   final RxInt currentOrderId = 0.obs;
 
+  //MENGAMBIL DATA DETAIL ORDER BERDASARKAN ID
   Future<void> fetchOrderDetail(int orderId) async {
     try {
       _isLoadingOrderDetail.value = true;
@@ -82,31 +89,39 @@ class OrderController extends GetxController {
     }
   }
 
+  //MEMFILTER DATA ONGOING ORDER
   Future<void> fetchOngoingOrders({bool refresh = false}) async {
     if (refresh) {
       _ongoingCurrentPage.value = 1;
       _ongoingHasMoreData.value = true;
       _ongoingOrders.clear();
     }
-    
+
     if (_isLoadingOngoingOrders.value || !_ongoingHasMoreData.value) return;
 
     try {
       _isLoadingOngoingOrders.value = true;
-      print('Fetching ongoing orders - Page: ${_ongoingCurrentPage.value}, Refresh: $refresh');
+      print(
+        'Fetching ongoing orders - Page: ${_ongoingCurrentPage.value}, Refresh: $refresh',
+      );
 
-      final response = await _orderService.getOrders(page: _ongoingCurrentPage.value);
+      final response = await _orderService.getOrders(
+        page: _ongoingCurrentPage.value,
+      );
 
       if (response.statusCode == 200 && response.data != null) {
         final data = response.data['orders'];
         if (data != null && data['data'] != null) {
           List<dynamic> ordersData = data['data'];
-          List<OrderModel> fetchedOrders = ordersData
-              .map((orderJson) => OrderModel.fromJson(orderJson))
-              .where((order) => _isOngoingOrder(order.orderStatus))
-              .toList();
+          List<OrderModel> fetchedOrders =
+              ordersData
+                  .map((orderJson) => OrderModel.fromJson(orderJson))
+                  .where((order) => _isOngoingOrder(order.orderStatus))
+                  .toList();
 
-          print('Fetched ${fetchedOrders.length} ongoing orders from page ${_ongoingCurrentPage.value}');
+          print(
+            'Fetched ${fetchedOrders.length} ongoing orders from page ${_ongoingCurrentPage.value}',
+          );
 
           if (refresh) {
             _ongoingOrders.assignAll(fetchedOrders);
@@ -133,6 +148,7 @@ class OrderController extends GetxController {
     }
   }
 
+  //MEMFILTER DATA HISTORY ORDER
   Future<void> fetchOrderHistory({bool refresh = false}) async {
     if (refresh) {
       _historyCurrentPage.value = 1;
@@ -144,23 +160,32 @@ class OrderController extends GetxController {
 
     try {
       _isLoadingOrderHistory.value = true;
-      print('Fetching order history - Page: ${_historyCurrentPage.value}, Refresh: $refresh');
+      print(
+        'Fetching order history - Page: ${_historyCurrentPage.value}, Refresh: $refresh',
+      );
 
-      final response = await _orderService.getOrders(page: _historyCurrentPage.value);
+      final response = await _orderService.getOrders(
+        page: _historyCurrentPage.value,
+      );
 
       if (response.statusCode == 200 && response.data != null) {
         final data = response.data['orders'];
         if (data != null && data['data'] != null) {
           List<dynamic> ordersData = data['data'];
-          List<OrderModel> fetchedOrders = ordersData
-              .map((orderJson) => OrderModel.fromJson(orderJson))
-              .where((order) => _isCompletedOrder(order.orderStatus))
-              .toList();
+          List<OrderModel> fetchedOrders =
+              ordersData
+                  .map((orderJson) => OrderModel.fromJson(orderJson))
+                  .where((order) => _isCompletedOrder(order.orderStatus))
+                  .toList();
 
-          print('Fetched ${fetchedOrders.length} history orders from page ${_historyCurrentPage.value}');
+          print(
+            'Fetched ${fetchedOrders.length} history orders from page ${_historyCurrentPage.value}',
+          );
 
           for (var order in fetchedOrders) {
-            print('History Order: ${order.orderCode} - Status: ${order.orderStatus}');
+            print(
+              'History Order: ${order.orderCode} - Status: ${order.orderStatus}',
+            );
           }
 
           if (refresh) {
@@ -188,24 +213,15 @@ class OrderController extends GetxController {
     }
   }
 
+  //FILTER STATUS ONGOING ORDER
   bool _isOngoingOrder(String status) {
-    const ongoingStatuses = [
-      'Pending',
-      'Processing', 
-      'Confirmed',
-      'Preparing',
-      'Ready',
-      'On Delivery',
-    ];
+    const ongoingStatuses = ['Pending', 'Processing'];
     return ongoingStatuses.contains(status);
   }
 
+  //FILTER STATUS HISTORY ORDER
   bool _isCompletedOrder(String status) {
-    const completedStatuses = [
-      'Completed',
-      'Cancelled',
-      'Failed',
-    ];
+    const completedStatuses = ['Completed', 'Cancelled'];
     return completedStatuses.contains(status);
   }
 
@@ -213,12 +229,24 @@ class OrderController extends GetxController {
     return 'Rp${price.toString().replaceAllMapped(RegExp(r'(\d)(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]}.')}';
   }
 
+  //FORMAT DATE
   String formatDateTime(String dateTimeString) {
     try {
       final dateTime = DateTime.parse(dateTimeString);
       final months = [
-        '', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-        'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
+        '',
+        'Jan',
+        'Feb',
+        'Mar',
+        'Apr',
+        'May',
+        'Jun',
+        'Jul',
+        'Aug',
+        'Sep',
+        'Oct',
+        'Nov',
+        'Dec',
       ];
 
       final day = dateTime.day.toString().padLeft(2, '0');
@@ -233,12 +261,14 @@ class OrderController extends GetxController {
     }
   }
 
+  //PERUBAHAN TYPE DELIVERY ASSET
   String getDeliveryIconAsset(String orderType) {
     return orderType.toLowerCase() == 'delivery'
         ? 'assets/image/image_take_away.png'
         : 'assets/image/image_delivery.png';
   }
 
+  //BUAT NGEDETEKSI TYPE STATUS ORDER DI ADDTOCARTPAGE
   Future<void> toggleDeliveryOption(bool isTakeAway) async {
     try {
       _isTakeAwaySelected.value = isTakeAway;
@@ -269,11 +299,19 @@ class OrderController extends GetxController {
 
   Future<void> _createOrUpdateOrder() async {
     final orderType = _isTakeAwaySelected.value ? 'Take Away' : 'Delivery';
-    final courier = _isTakeAwaySelected.value ? 'none' : (_selectedCourier.value?.name ?? 'none');
-    final deliveryFee = _isTakeAwaySelected.value ? 0.0 : (_selectedCourier.value?.fee.toDouble() ?? 0.0);
+    final courier =
+        _isTakeAwaySelected.value
+            ? 'none'
+            : (_selectedCourier.value?.name ?? 'none');
+    final deliveryFee =
+        _isTakeAwaySelected.value
+            ? 0.0
+            : (_selectedCourier.value?.fee.toDouble() ?? 0.0);
     final addressId = _isTakeAwaySelected.value ? 0 : _selectedAddressId.value;
 
-    print('Creating order with type: $orderType, addressId: $addressId, courier: $courier, deliveryFee: $deliveryFee');
+    print(
+      'Creating order with type: $orderType, addressId: $addressId, courier: $courier, deliveryFee: $deliveryFee',
+    );
 
     final order = await _orderService.createOrder(
       addressId: addressId,
@@ -304,12 +342,15 @@ class OrderController extends GetxController {
     if (!_isTakeAwaySelected.value && _canCreateOrder()) {
       print('Auto creating order with selected address...');
       await _createOrUpdateOrder();
-    } else if (!_isTakeAwaySelected.value && _selectedCourier.value == null && _couriers.isNotEmpty) {
+    } else if (!_isTakeAwaySelected.value &&
+        _selectedCourier.value == null &&
+        _couriers.isNotEmpty) {
       print('Auto selecting first courier...');
       selectCourier(_couriers.first);
     }
   }
 
+  //MENGAMBIL DATA CART
   Future<void> loadOrderItemsFromCart() async {
     try {
       final response = await _cartService.getCartItems();
@@ -366,12 +407,13 @@ class OrderController extends GetxController {
   }
 
   double _parsePrice(String priceStr) {
-    String cleanPrice = priceStr
-        .replaceAll('Rp', '')
-        .replaceAll('.', '')
-        .replaceAll(',', '')
-        .replaceAll(' ', '')
-        .trim();
+    String cleanPrice =
+        priceStr
+            .replaceAll('Rp', '')
+            .replaceAll('.', '')
+            .replaceAll(',', '')
+            .replaceAll(' ', '')
+            .trim();
     return double.tryParse(cleanPrice) ?? 0.0;
   }
 
@@ -393,21 +435,31 @@ class OrderController extends GetxController {
     Get.to(() => MenuPage());
   }
 
-  void navigateToOrderStatusPage() {
-    if (_currentOrder.value != null) {
-      Get.to(
-        () => OrderStatusPage(),
-        arguments: {'orderId': _currentOrder.value!.id},
-      );
-    } else {
-      _createOrUpdateOrder().then((_) {
-        if (_currentOrder.value != null) {
-          Get.to(
-            () => OrderStatusPage(),
-            arguments: {'orderId': _currentOrder.value!.id},
-          );
-        }
-      });
+  Future<void> navigateToOrderStatusPage() async {
+    try {
+      _isProcessingOrder.value = true;
+
+      // Ensure we have an order created
+      if (_currentOrder.value == null) {
+        print('No current order found, creating new order...');
+        await _createOrUpdateOrder();
+      }
+
+      // Double check if order was created successfully
+      if (_currentOrder.value != null) {
+        final orderId = _currentOrder.value!.id;
+        print('Navigating to OrderStatusPage with orderId: $orderId');
+
+        // Navigate to OrderStatusPage with the order ID
+        Get.to(() => const OrderStatusPage(), arguments: {'orderId': orderId});
+      } else {
+        throw Exception('Failed to create order');
+      }
+    } catch (e) {
+      print('Error navigating to order status page: $e');
+      showSnackbar('Gagal membuat pesanan: $e', isError: true);
+    } finally {
+      _isProcessingOrder.value = false;
     }
   }
 
@@ -423,6 +475,15 @@ class OrderController extends GetxController {
   }
 
   double get deliveryFee {
+    if (_currentOrder.value != null &&
+        _currentOrder.value!.deliveryFee != null) {
+      return _currentOrder.value!.deliveryFee!.toDouble();
+    }
+
+    if (_orderDetail.value != null && _orderDetail.value!.deliveryFee != null) {
+      return _orderDetail.value!.deliveryFee!.toDouble();
+    }
+
     if (_isTakeAwaySelected.value) return 0.0;
     return selectedCourier?.fee.toDouble() ?? 0.0;
   }
@@ -431,26 +492,6 @@ class OrderController extends GetxController {
     return deliveryFee > 0
         ? 'Rp${deliveryFee.toStringAsFixed(0).replaceAllMapped(RegExp(r'(\d)(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]}.')}'
         : 'Gratis';
-  }
-
-  int get subtotalPrice {
-    int total = 0;
-    for (var item in _orderItems) {
-      total += (item['price'] as int) * (item['quantity'] as int);
-    }
-    return total;
-  }
-
-  int get totalPrice {
-    return subtotalPrice + deliveryFee.toInt();
-  }
-
-  String get subtotalPriceFormatted {
-    return 'Rp${subtotalPrice.toString().replaceAllMapped(RegExp(r'(\d)(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]}.')}';
-  }
-
-  String get totalPriceFormatted {
-    return 'Rp${totalPrice.toString().replaceAllMapped(RegExp(r'(\d)(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]}.')}';
   }
 
   Future<void> loadCouriers() async {
@@ -462,7 +503,9 @@ class OrderController extends GetxController {
       print('Couriers loaded: ${result.length}');
 
       _couriers.assignAll(result);
-      if (_selectedCourier.value == null && result.isNotEmpty && !_isTakeAwaySelected.value) {
+      if (_selectedCourier.value == null &&
+          result.isNotEmpty &&
+          !_isTakeAwaySelected.value) {
         selectCourier(result.first);
         print('Default courier selected: ${result.first.name}');
       }
@@ -515,6 +558,7 @@ class OrderController extends GetxController {
     );
   }
 
+  //PEMBAYARAN API
   Future<void> processPayment(int orderId) async {
     try {
       _isProcessingOrder.value = true;
@@ -540,7 +584,10 @@ class OrderController extends GetxController {
                 await fetchOrderDetail(orderId);
                 break;
               case 'failed':
-                showSnackbar('Pembayaran gagal. Silakan coba lagi.', isError: true);
+                showSnackbar(
+                  'Pembayaran gagal. Silakan coba lagi.',
+                  isError: true,
+                );
                 break;
               case 'cancelled':
                 showSnackbar('Pembayaran dibatalkan.', isError: true);
@@ -561,6 +608,7 @@ class OrderController extends GetxController {
     }
   }
 
+  //UNTUK BATALIN PAYMENT
   Future<void> cancelPayment(int orderId) async {
     try {
       _isProcessingOrder.value = true;

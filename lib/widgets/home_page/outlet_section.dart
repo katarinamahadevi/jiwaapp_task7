@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:jiwaapp_task7/pages/outlet_options_page.dart';
+import 'package:jiwaapp_task7/pages/outlet_page/outlet_options_page.dart';
 
 //OPSI OUTLET
 

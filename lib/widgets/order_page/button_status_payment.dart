@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:jiwaapp_task7/theme/color.dart';
-import 'package:jiwaapp_task7/widgets/modal_bottom_cancel_order.dart';
+import 'package:jiwaapp_task7/widgets/order_page/modal_bottom_cancel_order.dart';
 
 //BUTTON ORDER STATUS DETAIL
 
@@ -9,12 +9,21 @@ class ButtonStatusPayment extends StatefulWidget {
   final Function()? onCancelPayment;
   final Function()? onContinuePayment;
   final int timeoutSeconds;
+  final int orderId;
+final VoidCallback onCancelSuccess;
+final Function(String message, {bool isError}) showSnackbar;
+final Future<void> Function(int orderId) cancelPaymentFunction;
+  
 
   const ButtonStatusPayment({
     Key? key,
     this.onCancelPayment,
     this.onContinuePayment,
     this.timeoutSeconds = 300,
+      required this.orderId,
+  required this.onCancelSuccess,
+  required this.showSnackbar,
+  required this.cancelPaymentFunction,
   }) : super(key: key);
 
   @override
@@ -81,7 +90,13 @@ class _ButtonStatusPaymentState extends State<ButtonStatusPayment> {
           mainAxisSize: MainAxisSize.min,
           children: [
             ElevatedButton(
-              onPressed: () => showModalBottomCancelOrder(context),
+              onPressed: () => showModalBottomCancelOrder(
+    context,
+    orderId: widget.orderId,
+    onCancelSuccess: widget.onCancelSuccess,
+    showSnackbar: widget.showSnackbar,
+    cancelPaymentFunction: widget.cancelPaymentFunction,
+  ),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.white,
                 foregroundColor: Colors.black,

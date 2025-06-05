@@ -128,32 +128,4 @@ class _PaymentWebViewPageState extends State<PaymentWebViewPage> {
       ),
     );
   }
-
-  void _showCancelDialog() {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Batalkan Pembayaran?'),
-        content: const Text(
-          'Apakah Anda yakin ingin membatalkan proses pembayaran?',
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Tidak'),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-              Get.back(result: {'status': 'cancelled', 'orderId': widget.orderId});
-            },
-            child: const Text(
-              'Ya, Batalkan',
-              style: TextStyle(color: Colors.red),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 }

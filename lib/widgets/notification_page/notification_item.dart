@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:jiwaapp_task7/pages/order_detail_page.dart';
 
 class NotificationItem extends StatelessWidget {
   final String title;
@@ -21,10 +20,10 @@ class NotificationItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => OrderDetailPage()),
-        );
+        // Navigator.push(
+        //   context,
+        //   MaterialPageRoute(builder: (context) => OrderDetailPage()),
+        // );
       },
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),

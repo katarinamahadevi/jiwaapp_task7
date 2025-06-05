@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:jiwaapp_task7/pages/subscription_history_page.dart';
+import 'package:jiwaapp_task7/pages/subscription_page/subscription_history_page.dart';
 import 'package:jiwaapp_task7/theme/color.dart';
 import 'package:jiwaapp_task7/widgets/appbar_secondary.dart';
 import 'package:jiwaapp_task7/widgets/tabbar_primary.dart';

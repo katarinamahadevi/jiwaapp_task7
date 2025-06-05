@@ -1,7 +1,7 @@
  import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jiwaapp_task7/controller/menu_controller.dart';
-import 'package:jiwaapp_task7/pages/outlet_options_page.dart';
+import 'package:jiwaapp_task7/pages/outlet_page/outlet_options_page.dart';
 import 'package:jiwaapp_task7/theme/color.dart';
 
 //PILIH OUTLET

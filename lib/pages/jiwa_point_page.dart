@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:jiwaapp_task7/pages/order_detail_page.dart';
 import 'package:jiwaapp_task7/theme/color.dart';
-
 
 //HISTORI JIWA POINT
 
-class JiwaPointPage extends StatefulWidget { 
+class JiwaPointPage extends StatefulWidget {
   const JiwaPointPage({Key? key}) : super(key: key);
 
   @override
@@ -90,9 +88,7 @@ class _JiwaPointPageState extends State<JiwaPointPage>
                                 onTap: () {
                                   setState(() {
                                     isLeftSelected = true;
-                                    _tabController.animateTo(
-                                      0,
-                                    ); 
+                                    _tabController.animateTo(0);
                                   });
                                 },
                                 child: Container(
@@ -304,10 +300,10 @@ class _JiwaPointPageState extends State<JiwaPointPage>
           padding: const EdgeInsets.symmetric(vertical: 8),
           child: GestureDetector(
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => OrderDetailPage()),
-              );
+              // Navigator.push(
+              //   context,
+              //   MaterialPageRoute(builder: (context) => OrderDetailPage()),
+              // );
             },
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

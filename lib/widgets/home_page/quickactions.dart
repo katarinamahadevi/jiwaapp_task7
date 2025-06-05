@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jiwaapp_task7/pages/loyalty_membership_page.dart';
-import 'package:jiwaapp_task7/pages/subscription_page.dart';
+import 'package:jiwaapp_task7/pages/subscription_page/subscription_page.dart';
 import 'package:jiwaapp_task7/pages/jiwa_point_page.dart';
 import 'package:jiwaapp_task7/widgets/home_page/action_button.dart';
 

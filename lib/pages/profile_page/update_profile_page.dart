@@ -6,9 +6,9 @@ import 'package:jiwaapp_task7/controller/update_pin_controller.dart';
 import 'package:jiwaapp_task7/model/user_model.dart';
 import 'package:jiwaapp_task7/theme/color.dart';
 import 'package:jiwaapp_task7/widgets/appbar_primary.dart';
-import 'package:jiwaapp_task7/widgets/modal_bottom_country_register.dart';
-import 'package:jiwaapp_task7/widgets/modal_bottom_delete_account.dart';
-import 'package:jiwaapp_task7/widgets/modal_bottom_occupation.dart';
+import 'package:jiwaapp_task7/widgets/register_page/modal_bottom_country_register.dart';
+import 'package:jiwaapp_task7/widgets/profile_page.dart/modal_bottom_delete_account.dart';
+import 'package:jiwaapp_task7/widgets/register_page/modal_bottom_occupation.dart';
 import 'package:jiwaapp_task7/widgets/modal_bottom_pickerdate.dart';
 import 'package:jiwaapp_task7/widgets/auth_page/modal_bottom_verifyotp_register.dart';
 
