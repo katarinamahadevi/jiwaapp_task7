@@ -438,14 +438,11 @@ class OrderController extends GetxController {
   Future<void> navigateToOrderStatusPage() async {
     try {
       _isProcessingOrder.value = true;
-
-      // Ensure we have an order created
       if (_currentOrder.value == null) {
         print('No current order found, creating new order...');
         await _createOrUpdateOrder();
       }
 
-      // Double check if order was created successfully
       if (_currentOrder.value != null) {
         final orderId = _currentOrder.value!.id;
         print('Navigating to OrderStatusPage with orderId: $orderId');
@@ -493,6 +490,7 @@ class OrderController extends GetxController {
         ? 'Rp${deliveryFee.toStringAsFixed(0).replaceAllMapped(RegExp(r'(\d)(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]}.')}'
         : 'Gratis';
   }
+  
 
   Future<void> loadCouriers() async {
     try {

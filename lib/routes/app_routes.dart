@@ -7,8 +7,5 @@ class AppRoutes {
   static const profilepage = '/profile';
   static const menupage = '/menu';
   static const splash = '/splash';
-    static const orderpage = '/orderpage';
-
-
-
+  static const orderpage = '/orderpage';
 }

@@ -8,7 +8,7 @@ class ButtonPayment extends StatefulWidget {
   final VoidCallback onPressed;
   final String assetPath;
   final bool isLoading;
-  final bool isEnabled; 
+  final bool isEnabled;
   const ButtonPayment({
     Key? key,
     required this.onPressed,
@@ -176,28 +176,38 @@ class _ButtonPaymentState extends State<ButtonPayment> {
                 width: double.infinity,
                 height: 55,
                 child: ElevatedButton(
-                  onPressed: widget.isEnabled && !widget.isLoading ? widget.onPressed : null,
+                  onPressed:
+                      widget.isEnabled && !widget.isLoading
+                          ? widget.onPressed
+                          : null,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: widget.isEnabled ? BaseColors.primary : Colors.grey[400],
+                    backgroundColor:
+                        widget.isEnabled
+                            ? BaseColors.primary
+                            : Colors.grey[400],
                     foregroundColor: Colors.white,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30),
                     ),
                     elevation: 0,
                   ),
-                  child: widget.isLoading
-                      ? const SizedBox(
-                          width: 20,
-                          height: 20,
-                          child: CircularProgressIndicator(
-                            color: Colors.white,
-                            strokeWidth: 2,
+                  child:
+                      widget.isLoading
+                          ? const SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                              strokeWidth: 2,
+                            ),
+                          )
+                          : const Text(
+                            'Bayar',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        )
-                      : const Text(
-                          'Bayar',
-                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                        ),
                 ),
               ),
             ),

@@ -8,11 +8,22 @@ import 'package:jiwaapp_task7/widgets/add_to_cart_page/order_list.dart';
 import 'package:jiwaapp_task7/widgets/add_to_cart_page/payment_summary.dart';
 import 'package:jiwaapp_task7/widgets/add_to_cart_page/button_payment.dart';
 
-class AddToCartPage extends StatelessWidget {
+class AddToCartPage extends StatefulWidget {
   AddToCartPage({super.key});
+
+  @override
+  State<AddToCartPage> createState() => _AddToCartPageState();
+}
+
+class _AddToCartPageState extends State<AddToCartPage> {
   final OrderController controller = Get.put(OrderController());
 
   @override
+  void initState() {
+    super.initState();
+    controller.loadOrderItemsFromCart(); 
+  }
+
   Widget build(BuildContext context) {
     return Obx(
       () => Scaffold(

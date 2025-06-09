@@ -312,7 +312,6 @@ class MenuPage extends StatelessWidget {
                                 menuItem:
                                     menuController
                                         .selectedCategoryProducts[index],
-                                // Pass whether there are items in cart for StackViewOrder visibility
                                 showStackViewOrder:
                                     cartController.totalCartItems.value > 0,
                                 onAddToCart:

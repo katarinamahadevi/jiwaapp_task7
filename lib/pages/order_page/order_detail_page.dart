@@ -471,10 +471,11 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                               child: Row(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Image.asset(
-                                    'assets/image/image_menu.png',
+                                  Image.network(
+                                    item.product.imageUrlText,
                                     width: 80,
                                     height: 80,
+                                    fit: BoxFit.cover,
                                   ),
                                   const SizedBox(width: 16),
                                   Expanded(
