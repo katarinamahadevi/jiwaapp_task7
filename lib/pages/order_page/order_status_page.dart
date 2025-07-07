@@ -407,16 +407,16 @@ class _OrderStatusPageState extends State<OrderStatusPage> {
                                   Column(
                                     crossAxisAlignment: CrossAxisAlignment.end,
                                     children: [
-                                      Text(
-                                        orderController.formatPrice(
-                                          item.productId * item.quantity,
-                                        ),
-                                        style: const TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.black,
-                                        ),
-                                      ),
+                                      // Text(
+                                      //   orderController.formatPrice(
+                                      //     item.productId * item.quantity,
+                                      //   ),
+                                      //   style: const TextStyle(
+                                      //     fontSize: 16,
+                                      //     fontWeight: FontWeight.bold,
+                                      //     color: Colors.black,
+                                      //   ),
+                                      // ),
                                     ],
                                   ),
                                 ],
@@ -559,9 +559,7 @@ class _OrderStatusPageState extends State<OrderStatusPage> {
                     );
                   },
                   cancelPaymentFunction: (int orderId) async {
-                    await orderController.cancelPayment(
-                      orderId,
-                    ); 
+                    await orderController.cancelPayment(orderId);
                   },
                 ),
               ),

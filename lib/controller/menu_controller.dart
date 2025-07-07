@@ -105,7 +105,7 @@ class MenuItemController extends GetxController {
       for (var category in drinkCategories) {
         for (var product in category.products) {
           allDrinkOptions.add({
-            'id': product.id, 
+            'id': product.id,
             'name': product.name,
             'price': product.price,
             'category': category.name,
@@ -154,13 +154,13 @@ class MenuItemController extends GetxController {
   }
 
   void setSelectedFoodOption(String optionId) {
-    selectedFoodOption.value = optionId; 
-    print('Food option selected: $optionId'); 
+    selectedFoodOption.value = optionId;
+    print('Food option selected: $optionId');
   }
 
   void setSelectedDrinkOption(String optionId) {
-    selectedDrinkOption.value = optionId; 
-    print('Drink option selected: $optionId'); 
+    selectedDrinkOption.value = optionId;
+    print('Drink option selected: $optionId');
   }
 
   CategoryModel? get selectedCategory {

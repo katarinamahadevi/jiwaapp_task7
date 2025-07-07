@@ -504,16 +504,16 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                                           ),
                                         ],
                                         const SizedBox(height: 8),
-                                        Text(
-                                          orderController.formatPrice(
-                                            item.productId,
-                                          ),
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.black,
-                                          ),
-                                        ),
+                                        // Text(
+                                        //   orderController.formatPrice(
+                                        //     item.productId,
+                                        //   ),
+                                        //   style: TextStyle(
+                                        //     fontSize: 16,
+                                        //     fontWeight: FontWeight.bold,
+                                        //     color: Colors.black,
+                                        //   ),
+                                        // ),
                                       ],
                                     ),
                                   ),
